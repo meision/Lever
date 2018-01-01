@@ -57,11 +57,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Class.cs" />
+    <None Include="TestData.xlsx" />
     <None Include="TestDataExcel.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="TestDataExcel.vstemplate" />
+    <VSTemplate Include="TestDataExcel.vstemplate">
+      <OutputSubPath>Data</OutputSubPath>
+      <SubType>Designer</SubType>
+    </VSTemplate>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

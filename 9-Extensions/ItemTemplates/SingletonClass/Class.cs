@@ -5,7 +5,53 @@ $endif$using System.Text;
 
 namespace $rootnamespace$
 {
-	class $safeitemrootname$
-	{
-	}
+    public sealed class $safeitemrootname$ : IDisposable
+    {
+        #region Static
+        #endregion Static
+
+        #region Fields & Properites
+        #endregion Fields & Properites
+
+        #region Constructors & Destructors
+        private static readonly $safeitemrootname$ __instance = new $safeitemrootname$();
+        public static $safeitemrootname$ Instance
+        {
+            get
+            {
+                return $safeitemrootname$.__instance;
+            }
+        }
+
+        private $safeitemrootname$()
+        {
+        }
+        
+        public void Initialize()
+        {
+            // TODO: Add extra Initialize logic here.
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // TODO: Release managed resources
+            }
+
+            // TODO: Release unmanaged resources
+        }
+        #endregion Constructors & Destructors
+
+        #region Events
+        #endregion Events
+
+        #region Methods
+        #endregion Methods
+    }
 }
