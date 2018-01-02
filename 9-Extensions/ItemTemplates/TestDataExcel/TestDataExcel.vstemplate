@@ -4,7 +4,6 @@
     <Name>TestData Excel</Name>
     <Description>TestData Excel</Description>
     <Icon>TestDataExcel.ico</Icon>
-    <TemplateID>58bdca74-fde6-4e21-bf66-ef1e319a1893</TemplateID>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>

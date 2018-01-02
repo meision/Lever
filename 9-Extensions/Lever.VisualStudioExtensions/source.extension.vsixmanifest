@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="db27b497-c1b7-4fb5-af38-702c9fd65aba" Version="1.0" Language="en-US" Publisher="Jim Cai" />
+        <Identity Id="5e7ad079-1c6e-430e-95f4-5c8cf5a827a8" Version="1.0" Language="en-US" Publisher="Jim Cai" />
         <DisplayName>Lever VisualStudio Extension ToolSuite</DisplayName>
         <Description xml:space="preserve">Lever VisualStudio Extension ToolSuite</Description>
     </Metadata>

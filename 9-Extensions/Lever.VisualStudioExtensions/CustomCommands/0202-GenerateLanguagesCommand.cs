@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal sealed class GenerateLanguagesCommand : RunCustomToolCommand<ExcelTestDataAttributeGenerator>
+    internal sealed class GenerateLanguagesCommand : RunCustomToolCommand<ExcelLanguagesGenerator>
     {
         public GenerateLanguagesCommand()
         {
