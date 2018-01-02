@@ -45,10 +45,17 @@ namespace Meision.VisualStudio
             {
                 Project project = item.ContainingProject;
                 string projectRootNamespace = (string)project.Properties.Item("RootNamespace").Value;
-                string projectFolder = (string)project.Properties.Item("FullPath").Value;
+                string projectFolder = ((string)project.Properties.Item("FullPath").Value).Trim('\\', '/');
                 string itemFolder = Path.GetDirectoryName((string)item.Properties.Item("FullPath").Value);
-                string subNamespace = itemFolder.Substring(projectFolder.Length).Trim('\\', '/').Replace('\\', '.').Replace('/', '.');
-                @namespace = $"{projectRootNamespace}.{subNamespace}";
+                if (projectFolder == itemFolder)
+                {
+                    @namespace = $"{projectRootNamespace}";
+                }
+                else
+                {
+                    string subNamespace = itemFolder.Substring(projectFolder.Length).Trim('\\', '/').Replace('\\', '.').Replace('/', '.');
+                    @namespace = $"{projectRootNamespace}.{subNamespace}";
+                }
             }
             return @namespace;
         }
