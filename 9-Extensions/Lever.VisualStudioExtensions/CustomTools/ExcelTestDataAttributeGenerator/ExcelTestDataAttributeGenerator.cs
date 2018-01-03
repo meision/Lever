@@ -26,7 +26,7 @@ namespace Meision.VisualStudio.CustomTools
                 this.GeneratorError(1, "Input file should be excel file.", 0, 0);
                 return null;
             }
-            
+
             DTE dte = (DTE)this.GetService(typeof(DTE));
             ProjectItem projectItem = this.GetProjectItem();
             byte[] data = this.GenerateDataFromProjectItem(projectItem);
@@ -129,7 +129,7 @@ namespace Meision.VisualStudio.CustomTools
             string code = builder.ToString();
             return Encoding.UTF8.GetBytes(code);
         }
-        
+
         private CodeFunction FindMethod(FileCodeModel model, string className, string methodName)
         {
             foreach (CodeNamespace eNamespace in model.CodeElements.Cast<CodeElement>().OfType<CodeNamespace>())
@@ -190,13 +190,16 @@ namespace Meision.VisualStudio.CustomTools
             // [0xAA, ] = 6 = Lenght * 3
             StringBuilder builder = new StringBuilder("new byte[] {".Length + text.Length * 3 + "}".Length);
             builder.Append("new byte[] {");
-            for (int i = 0; i < text.Length; i += 2)
+            if (text.Length > 0)
             {
-                builder.Append("0x");
-                builder.Append(text.Substring(i, 2));
-                builder.Append(", ");
+                for (int i = 0; i < text.Length; i += 2)
+                {
+                    builder.Append("0x");
+                    builder.Append(text.Substring(i, 2));
+                    builder.Append(", ");
+                }
+                builder.Remove(builder.Length - 2, 2);
             }
-            builder.Remove(builder.Length - 2, 2);
             builder.Append("}");
             return builder.ToString();
         }
