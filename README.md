@@ -8,8 +8,10 @@
 Only support C# project currently.
 
 **Singleton Class**  
-Item Template. By clicking "Add -> New Item...", you could add a singleton class under "Code" category.
+Item Template. By clicking "", you could add a singleton class under "Code" category.
 It create a singleton class with standard template.
+1. Right click on project folder, and choose "Add -> New Item...".
+1. 
 
 **Languages Excel**  
 Item Template. By clicking "Add -> New Item...", you could add a languages excel file under "General" category.  
