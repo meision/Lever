@@ -7,6 +7,10 @@
 *Lever Visual Studio Extension ToolSuite* is a powerful visual studio extensions help developer improve velocity.  
 Only support C# project currently.
 
+**Open Containing Folder**  
+Custom Command. User could open containing folder for a project item (file) in "Solution Explorer" window.
+![Dia](Document/ReadMe/OpenContainingFolder/Menu.png)
+
 **Singleton Class**  
 Item Template. The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance.
 1. Right click on project folder, and choose "Add -> New Item...".
@@ -26,7 +30,7 @@ However, it is difficult to "aligning" entries, which means a string key may mis
    ![Dia](Document/ReadMe/LanguagesExcel/Excel.png)
 1. By cooperating with interpreter, edit "Languages" worksheet for your business requirement and save.
 1. Right click "Strings.xlsx" in "Solution Explorer" window, and choose "Run Custom Tool" (or "Generate Languages" if excel file is opened).
-   ![Dia](Document/ReadMe/LanguagesExcel/Generate.png)
+   ![Dia](Document/ReadMe/LanguagesExcel/Menu.png)
 
 **TestData Excel**  
 Item Template. TestData Excel used for provide test data for XUnit.Net ```[Theory]``` test method.  
@@ -59,4 +63,16 @@ namespace XUnitTestProject1
 }
 ```
 5. Edit "TestData.xlsx", make sure sheet name is match with test class name, and insert rows. Each row consist of Method name and Parameter0-9.
-1. 
+   ![Dia](Document/ReadMe/TestDataExcel/Excel.png)
+1. Right click "TestData.xlsx" in "Solution Explorer" window, and choose "Run Custom Tool" (or "Generate Test Data" if excel file is opened).
+   ![](Document/ReadMe/TestDataExcel/Menu.png)
+1. Finally, build the test project and Run Tests.
+   ![](Document/ReadMe/TestDataExcel/Result.png)
+
+**Lineup Images**  
+Custom Command. Combine all png files under folder (top level) as a line and generate a new png image.
+![](Document/ReadMe/LineupImages/Menu.png)
+
+**Format And Clean Codes**  
+Custom Command. Run "Format Document" and "Remove and Sort Usings" for all .cs files under solution.
+![](Document/ReadMe/FormatAndCleanCodes/Menu.png)
