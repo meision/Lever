@@ -5,4 +5,19 @@
     <RootNamespace>Meision</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\SR.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SR.xlsx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\SR.xlsx">
+      <Generator>ExcelLanguagesGenerator</Generator>
+      <LastGenOutput>SR.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
 </Project>
