@@ -12,9 +12,6 @@
   </TemplateData>
   <TemplateContent>
     <References>
-      <Reference>
-        <Assembly>System</Assembly>
-      </Reference>
     </References>
     <ProjectItem ReplaceParameters="true">Class.cs</ProjectItem>
   </TemplateContent>

@@ -11,9 +11,6 @@
   </TemplateData>
   <TemplateContent>
     <References>
-      <Reference>
-        <Assembly>System</Assembly>
-      </Reference>
     </References>
     <ProjectItem TargetFileName="$fileinputname$.xlsx" ItemType="None" OpenInEditor="false" CustomTool="ExcelTestDataAttributeGenerator">TestData.xlsx</ProjectItem>
   </TemplateContent>
