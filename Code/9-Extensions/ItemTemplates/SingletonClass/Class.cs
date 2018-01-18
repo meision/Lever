@@ -41,7 +41,7 @@ namespace $rootnamespace$
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
