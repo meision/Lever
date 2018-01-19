@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
@@ -43,12 +43,13 @@ namespace Meision.VisualStudio.CustomCommands
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
+            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
 
             TCustomTool generator = new TCustomTool();
             generator.CodeNamespace = Helper.GetNamespace(projectItem);
+            generator.InputFilePath = fullPath;
             byte[] data = generator.GenerateDataFromProjectItem(projectItem);
-
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
+            
             string csPath = Path.Combine(Path.GetDirectoryName(fullPath), Path.GetFileNameWithoutExtension(fullPath) + ".cs");
             File.WriteAllBytes(csPath, data);
         }
