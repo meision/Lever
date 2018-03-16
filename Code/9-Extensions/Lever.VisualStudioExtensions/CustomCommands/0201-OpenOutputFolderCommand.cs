@@ -27,9 +27,9 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
-            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            string directory = System.IO.Path.GetDirectoryName(fullPath);
+            Project project = this.DTE.SelectedItems.Item(1).Project;
+            string outputPath = project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString();
+            string directory = Path.Combine(Path.GetDirectoryName(project.FullName), outputPath);
             if (Directory.Exists(directory))
             {
                 System.Diagnostics.Process.Start(directory);
@@ -44,7 +44,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return;
             }
-            
+
             menuItem.Visible = true;
         }
 

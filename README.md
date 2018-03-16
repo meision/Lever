@@ -11,6 +11,9 @@ Only support C# project currently.
 Custom Command. User could open containing folder for a project item (file) in "Solution Explorer" window.
 ![Dia](Document/ReadMe/OpenContainingFolder/Menu.png)
 
+**Open Output Folder**
+Custom Command. User could open output folder for active configuration of selected project.
+
 **Singleton Class**  
 Item Template. The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance.
 1. Right click on project folder, and choose "Add -> New Item...".

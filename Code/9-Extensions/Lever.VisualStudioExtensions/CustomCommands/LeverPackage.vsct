@@ -28,7 +28,7 @@
       </Button>
 
       <Button guid="guidLeverCmdSet" id="cmdOpenOutputFolder" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_FOLDER_EXPLORE" />
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_EXPLORE" />
         <Icon guid="guidImages" id="bmpOpenOutputFolder" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
