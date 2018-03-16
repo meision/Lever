@@ -7,7 +7,7 @@ namespace Meision.VisualStudio.CustomCommands
     {
         public GenerateTestDataCommand()
         {
-            this.CommandId = 0x0201;
+            this.CommandId = 0x0301;
         }
     }
 }

@@ -47,12 +47,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CustomCommands\0202-GenerateLanguagesCommand.cs" />
-    <Compile Include="CustomCommands\0201-GenerateTestDataCommand.cs" />
     <Compile Include="CustomCommands\0101-OpenContainingFolderCommand.cs" />
-    <Compile Include="CustomCommands\0200-RunCustomToolCommand.cs" />
+    <Compile Include="CustomCommands\0201-OpenOutputFolderCommand.cs" />
+    <Compile Include="CustomCommands\0300-RunCustomToolCommand.cs" />
+    <Compile Include="CustomCommands\0301-GenerateTestDataCommand.cs" />
+    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
+    <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
-    <Compile Include="CustomCommands\0301-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
     <Compile Include="CustomTools\BaseCodeGenerator.cs" />
     <Compile Include="CustomTools\BaseCodeGeneratorWithSite.cs" />
@@ -202,15 +203,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CustomCommands\Images\0101-OpenContainingFolderCommand.png" />
-    <None Include="CustomCommands\Images\0201-GenerateTestDataCommand.png" />
-    <None Include="CustomCommands\Images\0202-GenerateLanguagesCommand.png" />
-    <None Include="CustomCommands\Images\0301-LineupImagesCommand.png" />
+    <None Include="CustomCommands\Images\0301-GenerateTestDataCommand.png" />
+    <None Include="CustomCommands\Images\0302-GenerateLanguagesCommand.png" />
+    <None Include="CustomCommands\Images\0401-LineupImagesCommand.png" />
     <None Include="CustomCommands\Images\0801-FormatAndCleanCodes.png" />
     <Content Include="CustomCommands\Images.png" />
     <VSCTCompile Include="CustomCommands\LeverPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>
+    <Content Include="CustomCommands\Images\0201-OpenOutputFolderCommand.png" />
     <Content Include="Resources\LeverPackage.ico" />
   </ItemGroup>
   <ItemGroup>

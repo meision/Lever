@@ -17,13 +17,13 @@ namespace Meision.VisualStudio.CustomCommands
     internal sealed class LineupImagesCommand : CustomCommand
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OpenContainingFolderCommand"/> class.
+        /// Initializes a new instance of the <see cref="LineupImagesCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         public LineupImagesCommand()
         {
-            this.CommandId = 0x0301;
+            this.CommandId = 0x0401;
         }
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)

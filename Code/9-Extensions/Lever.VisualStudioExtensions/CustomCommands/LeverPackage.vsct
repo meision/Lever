@@ -9,6 +9,9 @@
       <Group guid="guidLeverCmdSet" id="grpOpenContainingFolder" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
+      <Group guid="guidLeverCmdSet" id="grpOpenOutputFolder" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+      </Group>
       <Group guid="guidLeverCmdSet" id="grpCollectionFolder" priority="0x0400">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
       </Group>
@@ -26,6 +29,15 @@
           <ButtonText>Open Containing Folder</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidLeverCmdSet" id="cmdOpenOutputFolder" priority="0x0100" type="Button">
+        <Parent guid="guidLeverCmdSet" id="grpOpenOutputFolder" />
+        <Icon guid="guidImages" id="bmpOpenOutputFolder" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Open Output Folder</ButtonText>
+        </Strings>
+      </Button>   
 
       <Button guid="guidLeverCmdSet" id="cmdGenerateTestData" priority="0x0400" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
@@ -64,7 +76,7 @@
 
     </Buttons>
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpLineupImages,bmpFormatAndCleanCodes" />
+      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpLineupImages,bmpFormatAndCleanCodes" />
     </Bitmaps>
   </Commands>
 
@@ -75,11 +87,14 @@
       <IDSymbol name="grpOpenContainingFolder" value="0x0100" />
       <IDSymbol name="cmdOpenContainingFolder" value="0x0101" />
 
-      <IDSymbol name="cmdGenerateTestData" value="0x0201" />
-      <IDSymbol name="cmdGenerateLanguages" value="0x0202" />
+      <IDSymbol name="grpOpenOutputFolder" value="0x0200" />
+      <IDSymbol name="cmdOpenOutputFolder" value="0x0201" />
+      
+      <IDSymbol name="cmdGenerateTestData" value="0x0301" />
+      <IDSymbol name="cmdGenerateLanguages" value="0x0302" />
 
-      <IDSymbol name="grpCollectionFolder" value="0x0300" />
-      <IDSymbol name="cmdLineupImages" value="0x0301" />
+      <IDSymbol name="grpCollectionFolder" value="0x0400" />
+      <IDSymbol name="cmdLineupImages" value="0x0401" />
 
       <IDSymbol name="grpSolution" value="0x0800" />
       <IDSymbol name="cmdFormatAndCleanCodes" value="0x0801" />
@@ -87,10 +102,11 @@
 
     <GuidSymbol name="guidImages" value="{be27a6b0-e345-4882-96cf-5faf495fe866}">
       <IDSymbol name="bmpOpenContainingFolder" value="1" />
-      <IDSymbol name="bmpGenerateTestData" value="2" />
-      <IDSymbol name="bmpGenerateLanguages" value="3" />
-      <IDSymbol name="bmpLineupImages" value="4" />
-      <IDSymbol name="bmpFormatAndCleanCodes" value="5" />
+      <IDSymbol name="bmpOpenOutputFolder" value="2" />   
+      <IDSymbol name="bmpGenerateTestData" value="3" />
+      <IDSymbol name="bmpGenerateLanguages" value="4" />
+      <IDSymbol name="bmpLineupImages" value="5" />
+      <IDSymbol name="bmpFormatAndCleanCodes" value="6" />
     </GuidSymbol>
 
   </Symbols>

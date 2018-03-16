@@ -7,7 +7,7 @@ namespace Meision.VisualStudio.CustomCommands
     {
         public GenerateLanguagesCommand()
         {
-            this.CommandId = 0x0202;
+            this.CommandId = 0x0302;
         }
     }
 }
