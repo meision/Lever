@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSLangProj;
 using Meision.VisualStudio.CustomTools;
+using Microsoft.VisualStudio;
 
 namespace Meision.VisualStudio.CustomCommands
 {
@@ -107,7 +108,23 @@ namespace Meision.VisualStudio.CustomCommands
         {
         }
 
-
+        protected void ShowMessage(string title, string message)
+        {
+            IVsUIShell shell = (IVsUIShell)this.ServiceProvider.GetService(typeof(SVsUIShell));
+            Guid clsid = Guid.Empty;
+            int result = VSConstants.S_OK;
+            int hr = shell.ShowMessageBox(0,
+                ref clsid,
+                title,
+                message,
+                null,
+                0,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
+                OLEMSGICON.OLEMSGICON_INFO,
+                0,
+                out result);
+        }
 
     }
 }

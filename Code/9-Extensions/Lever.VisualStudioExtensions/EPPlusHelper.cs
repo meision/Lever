@@ -17,15 +17,15 @@ namespace Meision.VisualStudio
 {
     public static class EPPlusHelper
     {
-        public static DataSet ReadExcelToDataSet(string filePath)
+        public static DataSet ReadExcelToDataSet(string filePath, Predicate<string> sheetNameMatch = null)
         {
-            using (FileStream stream = File.OpenRead(filePath))
+            using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 return ReadExcelToDataSet(stream);
             }
         }
 
-        public static DataSet ReadExcelToDataSet(Stream stream)
+        public static DataSet ReadExcelToDataSet(Stream stream, Predicate<string> sheetNameMatch = null)
         {
             if (stream == null)
             {
@@ -38,6 +38,11 @@ namespace Meision.VisualStudio
                 package.Load(stream);
                 foreach (var sheet in package.Workbook.Worksheets)
                 {
+                    if ((sheetNameMatch != null) && (!sheetNameMatch(sheet.Name)))
+                    {
+                        continue;
+                    }
+
                     if (sheet.Dimension == null)
                     {
                         continue;
@@ -76,7 +81,7 @@ namespace Meision.VisualStudio
 
         public static bool ContainsSheet(string filePath, string sheetName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            using (FileStream stream = File.OpenRead(filePath))
+            using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 return ContainsSheet(stream, sheetName);
             }

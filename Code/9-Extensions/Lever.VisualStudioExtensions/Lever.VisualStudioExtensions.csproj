@@ -55,6 +55,13 @@
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
+    <Compile Include="ImportDatabase\ImportDatabaseConfig.cs" />
+    <Compile Include="ImportDatabase\ImportDatabaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportDatabase\ImportDatabaseForm.designer.cs">
+      <DependentUpon>ImportDatabaseForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
     <Compile Include="CustomTools\BaseCodeGenerator.cs" />
     <Compile Include="CustomTools\BaseCodeGeneratorWithSite.cs" />
@@ -62,6 +69,10 @@
     <Compile Include="EPPlusHelper.cs" />
     <Compile Include="CustomTools\ExcelLanguagesGenerator\ExcelLanguagesGenerator.cs" />
     <Compile Include="CustomTools\ExcelLanguagesGenerator\LanguageManager.cs" />
+    <Compile Include="ImportDatabase\SQL\SqlColumnInfo.cs" />
+    <Compile Include="ImportDatabase\SQL\SqlColumnType.cs" />
+    <Compile Include="ImportDatabase\SQL\SqlDatabaseHelper.cs" />
+    <Compile Include="ImportDatabase\SQL\SqlScriptHelper.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LeverPackage.cs" />
