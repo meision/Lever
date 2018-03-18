@@ -35,11 +35,11 @@ namespace Meision.VisualStudio.CustomCommands
             }
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
             string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            if (!fullPath.Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+            if (!fullPath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
-            if (!EPPlusHelper.ContainsSheet(fullPath, "__Config"))
+            if (!EPPlusHelper.ContainsSheet(fullPath, "__ImportDatabase"))
             {
                 return;
             }
