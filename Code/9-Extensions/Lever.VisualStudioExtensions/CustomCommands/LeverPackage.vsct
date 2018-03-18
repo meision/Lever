@@ -52,6 +52,14 @@
           <ButtonText>Generate Languages</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidLeverCmdSet" id="cmdImportDatabase" priority="0x0400" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
+        <Icon guid="guidImages" id="bmpImportDatabase" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Import Database</ButtonText>
+        </Strings>
+      </Button>
 
       <Button guid="guidLeverCmdSet" id="cmdLineupImages" priority="0x0000" type="Button">
         <Parent guid="guidLeverCmdSet" id="grpCollectionFolder" />
@@ -73,7 +81,7 @@
 
     </Buttons>
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpLineupImages,bmpFormatAndCleanCodes" />
+      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpImportDatabase,bmpLineupImages,bmpFormatAndCleanCodes" />
     </Bitmaps>
   </Commands>
 
@@ -88,6 +96,7 @@
       
       <IDSymbol name="cmdGenerateTestData" value="0x0301" />
       <IDSymbol name="cmdGenerateLanguages" value="0x0302" />
+      <IDSymbol name="cmdImportDatabase" value="0x0303" />
 
       <IDSymbol name="grpCollectionFolder" value="0x0400" />
       <IDSymbol name="cmdLineupImages" value="0x0401" />
@@ -101,8 +110,9 @@
       <IDSymbol name="bmpOpenOutputFolder" value="2" />   
       <IDSymbol name="bmpGenerateTestData" value="3" />
       <IDSymbol name="bmpGenerateLanguages" value="4" />
-      <IDSymbol name="bmpLineupImages" value="5" />
-      <IDSymbol name="bmpFormatAndCleanCodes" value="6" />
+      <IDSymbol name="bmpImportDatabase" value="5" />
+      <IDSymbol name="bmpLineupImages" value="6" />
+      <IDSymbol name="bmpFormatAndCleanCodes" value="7" />
     </GuidSymbol>
 
   </Symbols>

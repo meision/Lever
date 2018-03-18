@@ -25,17 +25,6 @@ namespace Meision.VisualStudio.CustomCommands
             this.CommandId = 0x0101;
         }
 
-        protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
-        {
-            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            string directory = System.IO.Path.GetDirectoryName(fullPath);
-            if (Directory.Exists(directory))
-            {
-                System.Diagnostics.Process.Start(directory);
-            }
-        }
-
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
             menuItem.Visible = false;
@@ -47,6 +36,18 @@ namespace Meision.VisualStudio.CustomCommands
             
             menuItem.Visible = true;
         }
+
+        protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
+        {
+            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
+            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
+            string directory = System.IO.Path.GetDirectoryName(fullPath);
+            if (Directory.Exists(directory))
+            {
+                System.Diagnostics.Process.Start(directory);
+            }
+        }
+
 
     }
 }

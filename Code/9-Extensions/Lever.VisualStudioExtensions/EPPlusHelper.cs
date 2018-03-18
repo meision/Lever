@@ -73,6 +73,36 @@ namespace Meision.VisualStudio
 
             return dataSet;
         }
+
+        public static bool ContainsSheet(string filePath, string sheetName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            using (FileStream stream = File.OpenRead(filePath))
+            {
+                return ContainsSheet(stream, sheetName);
+            }
+        }
+
+        public static bool ContainsSheet(Stream stream, string sheetName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                package.Load(stream);
+                foreach (ExcelWorksheet sheet in package.Workbook.Worksheets)
+                {
+                    if (sheet.Name.Equals(sheetName, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 
 
