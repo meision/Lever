@@ -463,7 +463,7 @@ namespace Meision.VisualStudio.CustomCommands
             using (ImportDatabaseForm dialog = new ImportDatabaseForm())
             {
                 dialog.Initialize(config, dataSet);
-                if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.Retry)
+                if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 {
                     return;
                 }
@@ -568,7 +568,7 @@ namespace Meision.VisualStudio.CustomCommands
                                                     }
                                                     break;
                                                 default:
-                                                    command.Parameters[i].Value = (object)value ?? DBNull.Value;
+                                                    command.Parameters[i].Value = DBNull.Value;
                                                     break;
                                             }
                                         }
