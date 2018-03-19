@@ -190,6 +190,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ItemTemplates\ImportDatabaseExcel\ImportDatabaseExcel.csproj">
+      <Project>{C324E8ED-F261-4702-8FC5-AA6DA787578D}</Project>
+      <Name>ImportDatabaseExcel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\LanguagesExcel\LanguagesExcel.csproj">
       <Project>{DA71E26B-FC78-41E5-99B9-732700A26A3D}</Project>
       <Name>LanguagesExcel</Name>
