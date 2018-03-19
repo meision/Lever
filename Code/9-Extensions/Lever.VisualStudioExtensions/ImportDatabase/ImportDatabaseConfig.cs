@@ -67,7 +67,7 @@ namespace Meision.VisualStudio
                             .Select(p =>
                             {
                                 string[] segments = p.Split('|');
-                                string connectionStringFile = Path.GetFullPath(Path.Combine(excelFilePath, segments[0]));
+                                string connectionStringFile = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(excelFilePath), segments[0]));
                                 Match match = Regex.Match(System.IO.File.ReadAllText(connectionStringFile), segments[1]);
                                 if (!match.Success)
                                 {
