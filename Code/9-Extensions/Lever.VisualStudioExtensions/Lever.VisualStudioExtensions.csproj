@@ -51,11 +51,41 @@
     <Compile Include="CustomCommands\0201-OpenOutputFolderCommand.cs" />
     <Compile Include="CustomCommands\0300-RunCustomToolCommand.cs" />
     <Compile Include="CustomCommands\0301-GenerateTestDataCommand.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-ImportDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand.cs" />
+    <Compile Include="Function\Database\CheckConstraintModel.cs" />
+    <Compile Include="Function\Database\ColumnModel.cs" />
+    <Compile Include="Function\Database\ColumnModelCollection.cs" />
+    <Compile Include="Function\Database\ColumnSortModel.cs" />
+    <Compile Include="Function\Database\ColumnSortModelCollection.cs" />
+    <Compile Include="Function\Database\ConstraintModel.cs" />
+    <Compile Include="Function\Database\ConstraintModelCollection.cs" />
+    <Compile Include="Function\Database\DatabaseHelper.cs" />
+    <Compile Include="Function\Database\DatabaseModel.cs" />
+    <Compile Include="Function\Database\DataModel.cs" />
+    <Compile Include="Function\Database\DefaultConstraintModel.cs" />
+    <Compile Include="Function\Database\EndModel.cs" />
+    <Compile Include="Function\Database\IdentityModel.cs" />
+    <Compile Include="Function\Database\IndexModel.cs" />
+    <Compile Include="Function\Database\IndexModelCollection.cs" />
+    <Compile Include="Function\Database\Multiplicity.cs" />
+    <Compile Include="Function\Database\PrimaryKeyConstraintModel.cs" />
+    <Compile Include="Function\Database\RelationshipModel.cs" />
+    <Compile Include="Function\Database\RelationshipModelCollection.cs" />
+    <Compile Include="Function\Database\SqlColumnType.cs" />
+    <Compile Include="Function\Database\SQLServerGenerator.cs" />
+    <Compile Include="Function\Database\TableModel.cs" />
+    <Compile Include="Function\Database\TableModelCollection.cs" />
+    <Compile Include="Function\Database\UniqueConstraintModel.cs" />
+    <Compile Include="Function\Database\ViewModel.cs" />
+    <Compile Include="Function\Database\ViewModelCollection.cs" />
+    <Compile Include="Function\IExpressible.cs" />
+    <Compile Include="Function\SortOrder.cs" />
+    <Compile Include="Function\SR.cs" />
     <Compile Include="ImportDatabase\ImportDatabaseConfig.cs" />
     <Compile Include="ImportDatabase\ImportDatabaseForm.cs">
       <SubType>Form</SubType>
@@ -70,10 +100,10 @@
     <Compile Include="EPPlusHelper.cs" />
     <Compile Include="CustomTools\ExcelLanguagesGenerator\ExcelLanguagesGenerator.cs" />
     <Compile Include="CustomTools\ExcelLanguagesGenerator\LanguageManager.cs" />
-    <Compile Include="ImportDatabase\SQL\SqlColumnInfo.cs" />
-    <Compile Include="ImportDatabase\SQL\SqlColumnType.cs" />
-    <Compile Include="ImportDatabase\SQL\SqlDatabaseHelper.cs" />
-    <Compile Include="ImportDatabase\SQL\SqlScriptHelper.cs" />
+    <Compile Include="Function\Database\SQL\SqlColumnInfo.cs" />
+    <Compile Include="Function\Database\SQL\SqlColumnType.cs" />
+    <Compile Include="Function\Database\SQL\SqlDatabaseHelper.cs" />
+    <Compile Include="Function\Database\SQL\SqlScriptHelper.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="LeverPackage.cs" />
@@ -184,6 +214,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="vslangproj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\packages\VSLangProj.7.0.3300\lib\net10\vslangproj.dll</HintPath>
@@ -233,6 +264,7 @@
     </VSCTCompile>
     <Content Include="CustomCommands\Images\0201-OpenOutputFolder.png" />
     <Content Include="CustomCommands\Images\0303-ImportDatabase.png" />
+    <Content Include="CustomCommands\Images\0304-GenerateDatabaseCode.png" />
     <Content Include="Resources\LeverPackage.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -241,9 +273,7 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Function\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <!--
     To specify a different registry root to register your package, uncomment the TargetRegistryRoot
