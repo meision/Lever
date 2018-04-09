@@ -55,6 +55,7 @@
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
+    <Compile Include="CustomCommands\9999-TestCommand.cs" />
     <Compile Include="ImportDatabase\ImportDatabaseConfig.cs" />
     <Compile Include="ImportDatabase\ImportDatabaseForm.cs">
       <SubType>Form</SubType>

@@ -79,6 +79,15 @@
         </Strings>
       </Button>
 
+
+      <!--<Button guid="guidLeverCmdSet" id="cmdTest" priority="0x0400" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Test Command</ButtonText>
+        </Strings>
+      </Button>-->
+      
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpImportDatabase,bmpLineupImages,bmpFormatAndCleanCodes" />
@@ -103,6 +112,8 @@
 
       <IDSymbol name="grpSolution" value="0x0800" />
       <IDSymbol name="cmdFormatAndCleanCodes" value="0x0801" />
+
+      <IDSymbol name="cmdTest" value="0x9999" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{be27a6b0-e345-4882-96cf-5faf495fe866}">
