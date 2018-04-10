@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="LanguagesExcel.vstemplate">
-      <OutputSubPath>General</OutputSubPath>
+      <OutputSubPath>Lever</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>
   </ItemGroup>

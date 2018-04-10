@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="SingletonClass.vstemplate">
-      <OutputSubPath>Code</OutputSubPath>
+      <OutputSubPath>Lever</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>
   </ItemGroup>

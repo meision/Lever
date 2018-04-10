@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="TestDataExcel.vstemplate">
-      <OutputSubPath>Data</OutputSubPath>
+      <OutputSubPath>Lever</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>
   </ItemGroup>
