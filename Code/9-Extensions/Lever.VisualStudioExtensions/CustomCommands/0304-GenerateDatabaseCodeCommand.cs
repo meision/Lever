@@ -47,14 +47,51 @@ namespace Meision.VisualStudio.CustomCommands
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
             string xmlPath = (string)projectItem.Properties.Item("FullPath").Value;
-            DatabaseConfig config = new DatabaseConfig();
-            XDocument document = XDocument.Parse(File.ReadAllText(xmlPath));
-            config.Load(document);
 
-            SQLServerGenerator generator = new SQLServerGenerator(config.Defination.Connection.ConnectionString);
-            DatabaseModel databaseModel = generator.CreateDatabaseModel();
-            List<DataModel> dataModels = new List<DataModel>();
-            List<RelationshipModel> relationshipModels = new List<RelationshipModel>();
+            // Delete all cs files
+            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(xmlPath), "*.cs", SearchOption.TopDirectoryOnly))
+            {
+                File.Delete(file);
+            }
+
+            DatabaseCodeGenerator generator = new DatabaseCodeGenerator(xmlPath);
+            generator.GenerateMain();
+            generator.GenerateEntites();
+
+            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(xmlPath), "*.cs", SearchOption.TopDirectoryOnly))
+            {
+                projectItem.Collection.AddFromFile(file);
+            }
+        }
+    }
+
+    internal class DatabaseCodeGenerator
+    {
+        private string _dictionary;
+        private DatabaseConfig _config;
+        private DatabaseModel _databaseModel;
+        private List<DataModel> _dataModels;
+        private List<RelationshipModel> _relationshipModels;
+
+        public DatabaseCodeGenerator(string xmlPath)
+        {
+            this._dictionary = Path.GetDirectoryName(xmlPath);
+
+            this._config = new DatabaseConfig();
+            XDocument document = XDocument.Parse(File.ReadAllText(xmlPath));
+            this._config.Load(document);
+
+            this.Initialize();
+
+        }
+
+        private void Initialize()
+        {
+            SQLServerGenerator generator = new SQLServerGenerator(this._config.Defination.Connection.ConnectionString);
+            this._databaseModel = generator.CreateDatabaseModel();
+            this._dataModels = new List<DataModel>();
+            this._relationshipModels = new List<RelationshipModel>();
+
             Func<string, string, bool> IsSchemaMatch = (schemaName, expression) =>
             {
                 if (expression == "*")
@@ -77,40 +114,40 @@ namespace Meision.VisualStudio.CustomCommands
                     return dataName.Equals(expression, StringComparison.OrdinalIgnoreCase);
                 }
             };
-            if ((databaseModel.Tables != null) && (config.Defination.Storages.Tables != null))
+            if ((this._databaseModel.Tables != null) && (this._config.Defination.Storages.Tables != null))
             {
-                foreach (DataModel item in databaseModel.Tables)
+                foreach (DataModel item in this._databaseModel.Tables)
                 {
-                    foreach (var storageConfig in config.Defination.Storages.Tables)
+                    foreach (var storageConfig in this._config.Defination.Storages.Tables)
                     {
                         if (IsSchemaMatch(item.Schema, storageConfig.Schema)
                          && IsNameMatch(item.Name, storageConfig.Expression))
                         {
-                            dataModels.Add(item);
+                            this._dataModels.Add(item);
                             break;
                         }
                     }
                 }
             }
-            if ((databaseModel.Views != null) && (config.Defination.Storages.Views != null))
+            if ((this._databaseModel.Views != null) && (this._config.Defination.Storages.Views != null))
             {
-                foreach (DataModel item in databaseModel.Views)
+                foreach (DataModel item in this._databaseModel.Views)
                 {
-                    foreach (var storageConfig in config.Defination.Storages.Views)
+                    foreach (var storageConfig in this._config.Defination.Storages.Views)
                     {
                         if (IsSchemaMatch(item.Schema, storageConfig.Schema)
                          && IsNameMatch(item.Name, storageConfig.Expression))
                         {
-                            dataModels.Add(item);
+                            this._dataModels.Add(item);
                             break;
                         }
                     }
                 }
             }
 
-            if (config.Defination.Models != null)
+            if (this._config.Defination.Models != null)
             {
-                foreach (var modelConfig in config.Defination.Models)
+                foreach (var modelConfig in this._config.Defination.Models)
                 {
                     switch (modelConfig.Action)
                     {
@@ -125,18 +162,18 @@ namespace Meision.VisualStudio.CustomCommands
                                     target.Name = modelConfig.Expression;
                                     target.Description = modelConfig.Description;
                                     targets.Add(target);
-                                    dataModels.AddRange(targets);
+                                    this._dataModels.AddRange(targets);
                                 }
                                 else
                                 {
-                                    for (int i = 0; i < dataModels.Count; i++)
+                                    for (int i = 0; i < this._dataModels.Count; i++)
                                     {
-                                        if (IsSchemaMatch(dataModels[i].Schema, modelConfig.Schema)
-                                         && IsNameMatch(dataModels[i].Name, modelConfig.Expression))
+                                        if (IsSchemaMatch(this._dataModels[i].Schema, modelConfig.Schema)
+                                         && IsNameMatch(this._dataModels[i].Name, modelConfig.Expression))
                                         {
-                                            if (modelConfig.Description != null) dataModels[i].Description = modelConfig.Description;
+                                            if (modelConfig.Description != null) this._dataModels[i].Description = modelConfig.Description;
 
-                                            targets.Add(dataModels[i]);
+                                            targets.Add(this._dataModels[i]);
                                         }
                                     }
                                 }
@@ -199,12 +236,12 @@ namespace Meision.VisualStudio.CustomCommands
                             }
                             break;
                         case DatabaseConfig.OperationAction.Remove:
-                            for (int i = dataModels.Count - 1; i >= 0; i--)
+                            for (int i = this._dataModels.Count - 1; i >= 0; i--)
                             {
-                                if (IsSchemaMatch(dataModels[i].Schema, modelConfig.Schema)
-                                 && IsNameMatch(dataModels[i].Name, modelConfig.Expression))
+                                if (IsSchemaMatch(this._dataModels[i].Schema, modelConfig.Schema)
+                                 && IsNameMatch(this._dataModels[i].Name, modelConfig.Expression))
                                 {
-                                    dataModels.RemoveAt(i);
+                                    this._dataModels.RemoveAt(i);
                                 }
                             }
                             break;
@@ -214,49 +251,400 @@ namespace Meision.VisualStudio.CustomCommands
                 }
             }
 
-            foreach (var relationshipMode in databaseModel.Relationships)
+            foreach (var relationshipMode in this._databaseModel.Relationships)
             {
-                if (dataModels.Any(p => IsSchemaMatch(p.Schema, relationshipMode.PrincipalEnd.Schema) && IsNameMatch(p.Name, relationshipMode.PrincipalEnd.Table))
-                 && dataModels.Any(p => IsSchemaMatch(p.Schema, relationshipMode.DependentEnd.Schema) && IsNameMatch(p.Name, relationshipMode.DependentEnd.Table)))
+                if (this._dataModels.Any(p => IsSchemaMatch(p.Schema, relationshipMode.PrincipalEnd.Schema) && IsNameMatch(p.Name, relationshipMode.PrincipalEnd.Table))
+                 && this._dataModels.Any(p => IsSchemaMatch(p.Schema, relationshipMode.DependentEnd.Schema) && IsNameMatch(p.Name, relationshipMode.DependentEnd.Table)))
                 {
-                    relationshipModels.Add(relationshipMode);
+                    this._relationshipModels.Add(relationshipMode);
                 }
             }
-
-            if (!config.Generation.Enable)
-            {
-                return;
-            }
-
-
-
-
         }
 
-        private string GenerateDbContext(DatabaseConfig config)
+        public void GenerateMain()
         {
-            if (!config.Generation.Enable)
+            string code = this.GenerateMainCode();
+            System.IO.File.WriteAllText(Path.Combine(this._dictionary, $"{this._config.Generation.Main.Class.Name}.cs"), code);
+        }
+
+        private string GenerateMainCode()
+        {
+            if (!this._config.Generation.Enable)
             {
                 return null;
             }
 
             StringBuilder builder = new StringBuilder();
             // Imports
-            if (config.Generation.Main.Imports != null)
+            if (this._config.Generation.Main.Imports != null)
             {
-                foreach (string import in config.Generation.Main.Imports)
+                foreach (string import in this._config.Generation.Main.Imports)
                 {
                     builder.AppendLine($"using {import};");
                 }
             }
             builder.AppendLine($"");
-            builder.AppendLine($"namespace {config.Generation.Main.Class.Namespace}");
+            builder.AppendLine($"namespace {this._config.Generation.Main.Class.Namespace}");
             builder.AppendLine($"{{");
-            builder.AppendLine($"    {config.Generation.Main.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {config.Generation.Main.Class.Name} : {config.Generation.Main.Class.Base}");
+            builder.AppendLine($"    {this._config.Generation.Main.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {this._config.Generation.Main.Class.Name} : {this._config.Generation.Main.Class.Base}");
             builder.AppendLine($"    {{");
-            return null;
+            builder.AppendLine($"        public {this._config.Generation.Main.Class.Name}()");
+            builder.AppendLine($"            : base(\"Default\")");
+            builder.AppendLine($"        {{");
+            builder.AppendLine($"        }}");
+            builder.AppendLine($"");
+            builder.AppendLine($"        public {this._config.Generation.Main.Class.Name}(string nameOrConnectionString)");
+            builder.AppendLine($"            : base(nameOrConnectionString)");
+            builder.AppendLine($"        {{");
+            builder.AppendLine($"        }}");
+            builder.AppendLine($"        ");
+            foreach (DataModel dataModel in this._dataModels)
+            {
+                builder.AppendLine($"public virtual IDbSet<{dataModel.Name}> {dataModel.Name} {{ get; set; }}");
+            }
+            builder.AppendLine($"");
+            builder.AppendLine($"        protected override void OnModelCreating(DbModelBuilder modelBuilder)");
+            builder.AppendLine($"        {{");
+            foreach (DataModel dataModel in this._dataModels)
+            {
+                builder.AppendLine($"            this.On{dataModel.Name}Creating(modelBuilder);");
+            }
+            builder.AppendLine($"");
+            builder.AppendLine($"            base.OnModelCreating(modelBuilder);");
+            builder.AppendLine($"        }}");
+            builder.AppendLine($"");
+            foreach (DataModel dataModel in this._dataModels)
+            {
+                builder.AppendLine($"        private void On{dataModel.Name}Creating(DbModelBuilder modelBuilder)");
+                builder.AppendLine($"        {{");
+                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().ToTable(\"{dataModel.Name}\");");
+                TableModel tableModel = dataModel as TableModel;
+                RelationshipModel[] principalModels = null;
+                PrimaryKeyConstraintModel primaryKeyModel = null;
+                IdentityModel identityModel = null;
+                IndexModelCollection indexesModel = null;
+                if (tableModel != null)
+                {
+                    principalModels = this._relationshipModels.Where(p => tableModel.Schema.Equals(p.PrincipalEnd.Schema, StringComparison.OrdinalIgnoreCase) && tableModel.Name.Equals(p.PrincipalEnd.Table, StringComparison.OrdinalIgnoreCase)).ToArray();
+                    primaryKeyModel = tableModel.Constraints.OfType<PrimaryKeyConstraintModel>().FirstOrDefault();
+                    if (primaryKeyModel != null)
+                    {
+                        if (primaryKeyModel.Columns.Length != 1)
+                        {
+                            throw new Exception("Only support PK for single column.");
+                        }
+                    }
+                    identityModel = tableModel.Identity;
+                    indexesModel = tableModel.Indexes;
+                }
+
+                foreach (ColumnModel columnModel in dataModel.Columns)
+                {
+                    string columnName = columnModel.Name;
+                    if ((primaryKeyModel != null) && (columnName == primaryKeyModel.Columns[0]))
+                    {
+                        columnName = "Id";
+                        builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().HasKey(_ => _.{columnName});");
+                        builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnName(\"{columnModel.Name}\");");
+                        if ((identityModel == null) || !columnModel.Name.Equals(identityModel.ColumnName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);");
+                        }
+                    }
+                    if ((identityModel != null) && columnModel.Name.Equals(identityModel.ColumnName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);");
+                    }
+                    if (!columnModel.Nullable)
+                    {
+                        builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsRequired();");
+                    }
+                    switch (columnModel.Type)
+                    {
+                        case DbType.AnsiString:
+                            if (columnModel.Precision >= 0)
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasMaxLength({columnModel.Precision});");
+                            }
+                            else
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsMaxLength();");
+                            }
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsUnicode(false);");
+                            break;
+                        case DbType.AnsiStringFixedLength:
+                            if (columnModel.Precision >= 0)
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasMaxLength({columnModel.Precision});");
+                            }
+                            else
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsMaxLength();");
+                            }
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsFixedLength();");
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsUnicode(false);");
+                            break;
+                        case DbType.Binary:
+                            if (columnModel.Length >= 0)
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasMaxLength({columnModel.Length});");
+                            }
+                            else
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsMaxLength();");
+                            }
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsFixedLength();");
+                            break;
+                        case DbType.Boolean:
+                            break;
+                        case DbType.Byte:
+                            break;
+                        case DbType.Currency:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnType(\"moeny\");");
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Precision}, {columnModel.Scale});");
+                            break;
+                        case DbType.Date:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnType(\"date\");");
+                            break;
+                        case DbType.DateTime:
+                            break;
+                        case DbType.DateTime2:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnType(\"datetime2\");");
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Scale});");
+                            break;
+                        case DbType.DateTimeOffset:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Scale});");
+                            break;
+                        case DbType.Decimal:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Precision}, {columnModel.Scale});");
+                            break;
+                        case DbType.Double:
+                            break;
+                        case DbType.Guid:
+                            break;
+                        case DbType.Object:
+                            break;
+                        case DbType.SByte:
+                            break;
+                        case DbType.Single:
+                            break;
+                        case DbType.String:
+                            if (columnModel.Precision >= 0)
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasMaxLength({columnModel.Precision});");
+                            }
+                            else
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsMaxLength();");
+                            }
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsUnicode(true);");
+                            break;
+                        case DbType.StringFixedLength:
+                            if (columnModel.Length >= 0)
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasMaxLength({columnModel.Precision});");
+                            }
+                            else
+                            {
+                                builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsMaxLength();");
+                            }
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsUnicode(true);");
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).IsFixedLength();");
+                            break;
+                        case DbType.Time:
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Scale});");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (indexesModel != null)
+                {
+                    // Index
+                    foreach (IndexModel indexModel in tableModel.Indexes)
+                    {
+                        for (int i = 0; i < indexModel.ColumnSorts.Count; i++)
+                        {
+                            ColumnSortModel sortModel = indexModel.ColumnSorts[i];
+                            builder.AppendLine($"            modelBuilder.Entity<{tableModel.Name}>().Property(_ => _.{sortModel.Column}).HasColumnAnnotation(IndexAnnotation.AnnotationName, new IndexAnnotation(new IndexAttribute(\"{indexModel.Name}\", {i}) {{ IsClustered = {indexModel.IsClustered.ToString().ToLowerInvariant()}, IsUnique = {indexModel.IsUnique.ToString().ToLowerInvariant()} }}));");
+                        }
+                    }
+                }
+
+                if (principalModels != null)
+                {
+                    foreach (RelationshipModel principalModel in principalModels)
+                    {
+                        string[] columns = principalModel.DependentEnd.Columns.Select(p => "_." + p).ToArray();
+                        builder.AppendLine($"            modelBuilder.Entity<{principalModel.PrincipalEnd.Table}>().HasMany(_ => _.{principalModel.DependentEnd.Table}).WithRequired(_ => _.{principalModel.PrincipalEnd.Table}).HasForeignKey(_ => new {{ {string.Join(", ", columns)} }}).WillCascadeOnDelete({principalModel.DeleteCascade.ToString().ToLowerInvariant()});");
+                    }
+                }
+                builder.AppendLine($"        }}");
+                builder.AppendLine($"");
+            }
+            builder.AppendLine($"    }}");
+            builder.AppendLine($"}}");
+            builder.AppendLine($"");
+
+            return builder.ToString();
         }
 
+        public void GenerateEntites()
+        {
+            foreach (DataModel dataModel in this._dataModels)
+            {
+                string code = this.GenerateEntityCode(dataModel);
+                System.IO.File.WriteAllText(Path.Combine(this._dictionary, $"{dataModel.Name}.cs"), code);
+            }
+        }
+        public string GenerateEntityCode(DataModel dataModel)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            TableModel tableModel = dataModel as TableModel;
+            RelationshipModel[] principalModels = null;
+            RelationshipModel[] dependentModels = null;
+            PrimaryKeyConstraintModel primaryKeyModel = null;
+            if (tableModel != null)
+            {
+                principalModels = this._relationshipModels.Where(p => tableModel.Schema.Equals(p.PrincipalEnd.Schema, StringComparison.OrdinalIgnoreCase) && tableModel.Name.Equals(p.PrincipalEnd.Table, StringComparison.OrdinalIgnoreCase)).ToArray();
+                dependentModels = this._relationshipModels.Where(p => tableModel.Schema.Equals(p.DependentEnd.Schema, StringComparison.OrdinalIgnoreCase) && tableModel.Name.Equals(p.DependentEnd.Table, StringComparison.OrdinalIgnoreCase)).ToArray();
+                primaryKeyModel = tableModel.Constraints.OfType<PrimaryKeyConstraintModel>().FirstOrDefault();
+            }
+
+            // Base class
+            string baseClass = null;
+            if (primaryKeyModel != null)
+            {
+                ColumnModel[] idColumnModels = dataModel.Columns.Where(p => primaryKeyModel.Columns.Contains(p.Name)).ToArray();
+                string[] idTypes = idColumnModels.Select(p => DatabaseHelper.GetCLRTypeString(p.Type, p.Nullable)).ToArray();
+                baseClass = "Entity<" + string.Join(", ", idTypes) + ">";
+            }
+            else
+            {
+                baseClass = "Entity";
+            }
+            // Interface
+            List<string> interfaceNames = new List<string>();
+            if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && !p.Nullable))
+            {
+                string interfaceName = "IMustHaveTenant";
+                interfaceNames.Add(interfaceName);
+            }
+            if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && p.Nullable))
+            {
+                string interfaceName = "IMayHaveTenant";
+                interfaceNames.Add(interfaceName);
+            }
+            if (dataModel.Columns.Any(p => (p.Name == "CreationTime") && (p.Type == DbType.DateTime) && !p.Nullable))
+            {
+                string interfaceName = "IHasCreationTime";
+                if (dataModel.Columns.Any(p => (p.Name == "CreatorUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                {
+                    interfaceName = "ICreationAudited";
+                }
+                interfaceNames.Add(interfaceName);
+            }
+            if (dataModel.Columns.Any(p => (p.Name == "LastModificationTime") && (p.Type == DbType.DateTime) && p.Nullable))
+            {
+                string interfaceName = "IHasModificationTime";
+                if (dataModel.Columns.Any(p => (p.Name == "LastModifierUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                {
+                    interfaceName = "IModificationAudited";
+                }
+                interfaceNames.Add(interfaceName);
+            }
+            if (dataModel.Columns.Any(p => (p.Name == "IsDeleted") && (p.Type == DbType.Boolean) && !p.Nullable))
+            {
+                string interfaceName = "ISoftDelete";
+                if (dataModel.Columns.Any(p => (p.Name == "DeletionTime") && (p.Type == DbType.DateTime) && p.Nullable))
+                {
+                    interfaceName = "IHasDeletionTime";
+                    if (dataModel.Columns.Any(p => (p.Name == "DeleterUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                    {
+                        interfaceName = "IDeletionAudited";
+                    }
+                }
+                interfaceNames.Add(interfaceName);
+            }
+            if (dataModel.Columns.Any(p => (p.Name == "IsActive") && (p.Type == DbType.Boolean) && !p.Nullable))
+            {
+                string interfaceName = "IPassivable";
+                interfaceNames.Add(interfaceName);
+            }
+
+            builder.AppendLine($"/*** This file is auto generated by T4 template, please do not modify manually. ***/");
+            if (this._config.Generation.Entity.Imports != null)
+            {
+                foreach (string import in this._config.Generation.Entity.Imports)
+                {
+                    builder.AppendLine($"using {import};");
+                }
+            }
+            builder.AppendLine($"");
+            builder.AppendLine($"namespace {this._config.Generation.Entity.Class.Namespace}");
+            builder.AppendLine($"{{");
+            builder.AppendLine($"    /// <summary>");
+            builder.AppendLine($"    /// {dataModel.Description ?? string.Empty}");
+            builder.AppendLine($"    /// </summary>");
+            builder.AppendLine($"    {this._config.Generation.Entity.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {dataModel.Name}{(!string.IsNullOrEmpty(baseClass) ? " : " + baseClass : string.Empty)}{((interfaceNames.Count > 0) ? ", " + string.Join(", ", interfaceNames.ToArray()) : string.Empty)}");
+            builder.AppendLine($"    {{");
+            builder.AppendLine($"        [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Usage\", \"CA2214: DoNotCallOverridableMethodsInConstructors\")]");
+            builder.AppendLine($"        public {dataModel.Name}()");
+            builder.AppendLine($"        {{");
+            if ((this._config.Generation.Entity.DefaultValues != null) && (this._config.Generation.Entity.DefaultValues.Count > 0))
+            {
+                builder.AppendLine($"            // Set default value");
+                foreach (ColumnModel columnModel in dataModel.Columns)
+                {
+                    string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
+                    if (this._config.Generation.Entity.DefaultValues.ContainsKey(type))
+                    {
+                        builder.AppendLine($"            this.{columnModel.Name} = {this._config.Generation.Entity.DefaultValues[type]};");
+                    }
+                }
+            }
+            builder.AppendLine($"");
+            if ((principalModels != null) && (principalModels.Length > 0))
+            {
+                foreach (RelationshipModel relationshipModel in principalModels)
+                {
+                    builder.AppendLine($"            this.{relationshipModel.DependentEnd.Table} = new HashSet<{relationshipModel.DependentEnd.Table}>();");
+                }
+            }
+            builder.AppendLine($"        }}");
+            builder.AppendLine($"");
+
+            foreach (ColumnModel columnModel in dataModel.Columns)
+            {
+                builder.AppendLine($"        /// <summary>");
+                builder.AppendLine($"        /// {columnModel.Description ?? string.Empty}");
+                builder.AppendLine($"        /// </summary>");
+                builder.AppendLine($"        {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable)} {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name)} {{ get; set; }}");
+            }
+            builder.AppendLine($"");
+            if (dependentModels != null)
+            {
+                foreach (RelationshipModel relationshipModel in dependentModels)
+                {
+                    builder.AppendLine($"        public virtual {relationshipModel.PrincipalEnd.Table} {relationshipModel.PrincipalEnd.Table} {{ get; set; }}");
+                }
+            }
+            if (principalModels != null)
+            {
+                foreach (RelationshipModel relationshipModel in principalModels)
+                {
+                    builder.AppendLine($"        [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Usage\", \"CA2227: CollectionPropertiesShouldBeReadOnly\")]");
+                    builder.AppendLine($"        public virtual ICollection<{relationshipModel.DependentEnd.Table}> {relationshipModel.DependentEnd.Table} {{ get; set; }}");
+                }
+            }
+            builder.AppendLine($"    }}");
+            builder.AppendLine($"}}");
+            builder.AppendLine($"");
+
+            return builder.ToString();
+        }
     }
 
     internal class DatabaseConfig
