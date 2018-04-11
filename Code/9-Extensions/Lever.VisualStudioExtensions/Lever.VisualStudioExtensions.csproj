@@ -54,6 +54,10 @@
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-ImportDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\DatabaseConfig.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreCodeGenerator.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EF6CodeGenerator.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\[A]DatabaseCodeGenerator.cs" />
     <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand.cs" />

@@ -18,7 +18,8 @@
     </models>
   </defination>
 
-  <generation enable="true">
+  <!--<generation enable="true|false" mode="EF6|EFCore">-->
+  <generation enable="true" mode="EF6">
     <main>
       <imports>
         <add import="System" />
