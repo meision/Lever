@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using Meision.Database;
 
 namespace Meision.VisualStudio.CustomCommands
@@ -61,7 +53,7 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"        ");
             foreach (DataModel dataModel in this.DataModels)
             {
-                builder.AppendLine($"public virtual IDbSet<{dataModel.Name}> {dataModel.Name} {{ get; set; }}");
+                builder.AppendLine($"        public virtual IDbSet<{dataModel.Name}> {dataModel.Name} {{ get; set; }}");
             }
             builder.AppendLine($"");
             builder.AppendLine($"        protected override void OnModelCreating(DbModelBuilder modelBuilder)");
@@ -161,7 +153,7 @@ namespace Meision.VisualStudio.CustomCommands
                         case DbType.Byte:
                             break;
                         case DbType.Currency:
-                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnType(\"moeny\");");
+                            builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasColumnType(\"money\");");
                             builder.AppendLine($"            modelBuilder.Entity<{dataModel.Name}>().Property(_ => _.{columnName}).HasPrecision({columnModel.Precision}, {columnModel.Scale});");
                             break;
                         case DbType.Date:
@@ -276,66 +268,81 @@ namespace Meision.VisualStudio.CustomCommands
 
             // Base class
             string baseClass = null;
-            if (primaryKeyModel != null)
+            if (!string.IsNullOrEmpty(this.Config.Generation.Entity.Class.Base))
             {
-                ColumnModel[] idColumnModels = dataModel.Columns.Where(p => primaryKeyModel.Columns.Contains(p.Name)).ToArray();
-                string[] idTypes = idColumnModels.Select(p => DatabaseHelper.GetCLRTypeString(p.Type, p.Nullable)).ToArray();
-                baseClass = "Entity<" + string.Join(", ", idTypes) + ">";
-            }
-            else
-            {
-                baseClass = "Entity";
+                if (this.Config.Generation.Entity.Class.Base.EndsWith("<>"))
+                {
+
+                    // generic type
+                    if (primaryKeyModel != null)
+                    {
+                        ColumnModel[] idColumnModels = dataModel.Columns.Where(p => primaryKeyModel.Columns.Contains(p.Name)).ToArray();
+                        string[] idTypes = idColumnModels.Select(p => DatabaseHelper.GetCLRTypeString(p.Type, p.Nullable)).ToArray();
+                        baseClass = $"{this.Config.Generation.Entity.Class.Base.Substring(0, this.Config.Generation.Entity.Class.Base.Length - "<>".Length)}<{string.Join(", ", idTypes)}>";
+                    }
+                    else
+                    {
+                        baseClass = this.Config.Generation.Entity.Class.Base.Substring(0, this.Config.Generation.Entity.Class.Base.Length - "<>".Length);
+                    }
+                }
+                else
+                {
+                    baseClass = this.Config.Generation.Entity.Class.Base;
+                }
             }
             // Interface
             List<string> interfaceNames = new List<string>();
-            if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && !p.Nullable))
+            if (this.Config.Generation.Entity.Class.UseConventionalInterfaces)
             {
-                string interfaceName = "IMustHaveTenant";
-                interfaceNames.Add(interfaceName);
-            }
-            if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && p.Nullable))
-            {
-                string interfaceName = "IMayHaveTenant";
-                interfaceNames.Add(interfaceName);
-            }
-            if (dataModel.Columns.Any(p => (p.Name == "CreationTime") && (p.Type == DbType.DateTime) && !p.Nullable))
-            {
-                string interfaceName = "IHasCreationTime";
-                if (dataModel.Columns.Any(p => (p.Name == "CreatorUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && !p.Nullable))
                 {
-                    interfaceName = "ICreationAudited";
+                    string interfaceName = "IMustHaveTenant";
+                    interfaceNames.Add(interfaceName);
                 }
-                interfaceNames.Add(interfaceName);
-            }
-            if (dataModel.Columns.Any(p => (p.Name == "LastModificationTime") && (p.Type == DbType.DateTime) && p.Nullable))
-            {
-                string interfaceName = "IHasModificationTime";
-                if (dataModel.Columns.Any(p => (p.Name == "LastModifierUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                if (dataModel.Columns.Any(p => (p.Name == "TenantId") && (p.Type == DbType.Int32) && p.Nullable))
                 {
-                    interfaceName = "IModificationAudited";
+                    string interfaceName = "IMayHaveTenant";
+                    interfaceNames.Add(interfaceName);
                 }
-                interfaceNames.Add(interfaceName);
-            }
-            if (dataModel.Columns.Any(p => (p.Name == "IsDeleted") && (p.Type == DbType.Boolean) && !p.Nullable))
-            {
-                string interfaceName = "ISoftDelete";
-                if (dataModel.Columns.Any(p => (p.Name == "DeletionTime") && (p.Type == DbType.DateTime) && p.Nullable))
+                if (dataModel.Columns.Any(p => (p.Name == "CreationTime") && (p.Type == DbType.DateTime) && !p.Nullable))
                 {
-                    interfaceName = "IHasDeletionTime";
-                    if (dataModel.Columns.Any(p => (p.Name == "DeleterUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                    string interfaceName = "IHasCreationTime";
+                    if (dataModel.Columns.Any(p => (p.Name == "CreatorUserId") && (p.Type == DbType.Int64) && p.Nullable))
                     {
-                        interfaceName = "IDeletionAudited";
+                        interfaceName = "ICreationAudited";
                     }
+                    interfaceNames.Add(interfaceName);
                 }
-                interfaceNames.Add(interfaceName);
-            }
-            if (dataModel.Columns.Any(p => (p.Name == "IsActive") && (p.Type == DbType.Boolean) && !p.Nullable))
-            {
-                string interfaceName = "IPassivable";
-                interfaceNames.Add(interfaceName);
+                if (dataModel.Columns.Any(p => (p.Name == "LastModificationTime") && (p.Type == DbType.DateTime) && p.Nullable))
+                {
+                    string interfaceName = "IHasModificationTime";
+                    if (dataModel.Columns.Any(p => (p.Name == "LastModifierUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                    {
+                        interfaceName = "IModificationAudited";
+                    }
+                    interfaceNames.Add(interfaceName);
+                }
+                if (dataModel.Columns.Any(p => (p.Name == "IsDeleted") && (p.Type == DbType.Boolean) && !p.Nullable))
+                {
+                    string interfaceName = "ISoftDelete";
+                    if (dataModel.Columns.Any(p => (p.Name == "DeletionTime") && (p.Type == DbType.DateTime) && p.Nullable))
+                    {
+                        interfaceName = "IHasDeletionTime";
+                        if (dataModel.Columns.Any(p => (p.Name == "DeleterUserId") && (p.Type == DbType.Int64) && p.Nullable))
+                        {
+                            interfaceName = "IDeletionAudited";
+                        }
+                    }
+                    interfaceNames.Add(interfaceName);
+                }
+                if (dataModel.Columns.Any(p => (p.Name == "IsActive") && (p.Type == DbType.Boolean) && !p.Nullable))
+                {
+                    string interfaceName = "IPassivable";
+                    interfaceNames.Add(interfaceName);
+                }
             }
 
-            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
             if (this.Config.Generation.Entity.Imports != null)
             {
                 foreach (string import in this.Config.Generation.Entity.Imports)
@@ -349,9 +356,8 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"    /// <summary>");
             builder.AppendLine($"    /// {dataModel.Description ?? string.Empty}");
             builder.AppendLine($"    /// </summary>");
-            builder.AppendLine($"    {this.Config.Generation.Entity.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {dataModel.Name}{(!string.IsNullOrEmpty(baseClass) ? " : " + baseClass : string.Empty)}{((interfaceNames.Count > 0) ? ", " + string.Join(", ", interfaceNames.ToArray()) : string.Empty)}");
+            builder.AppendLine($"    {this.Config.Generation.Entity.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {dataModel.Name}{((!string.IsNullOrEmpty(baseClass) || (interfaceNames.Count > 0)) ? " : " : string.Empty)}{(!string.IsNullOrEmpty(baseClass) ? baseClass : string.Empty)}{((interfaceNames.Count > 0) ? ", " + string.Join(", ", interfaceNames.ToArray()) : string.Empty)}");
             builder.AppendLine($"    {{");
-            builder.AppendLine($"        [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Usage\", \"CA2214:DoNotCallOverridableMethodsInConstructors\")]");
             builder.AppendLine($"        public {dataModel.Name}()");
             builder.AppendLine($"        {{");
             if ((this.Config.Generation.Entity.DefaultValues != null) && (this.Config.Generation.Entity.DefaultValues.Count > 0))
@@ -379,10 +385,8 @@ namespace Meision.VisualStudio.CustomCommands
 
             foreach (ColumnModel columnModel in dataModel.Columns)
             {
-                builder.AppendLine($"        /// <summary>");
-                builder.AppendLine($"        /// {columnModel.Description ?? string.Empty}");
-                builder.AppendLine($"        /// </summary>");
-                builder.AppendLine($"        {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable)} {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name)} {{ get; set; }}");
+                builder.AppendLine($"        /// <summary>{columnModel.Description ?? string.Empty}</summary>");
+                builder.AppendLine($"        {((!string.IsNullOrEmpty(baseClass) && (primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable)} {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name)} {{ get; set; }}");
             }
             builder.AppendLine($"");
             if (dependentModels != null)
@@ -396,7 +400,6 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 foreach (RelationshipModel relationshipModel in principalModels)
                 {
-                    builder.AppendLine($"        [System.Diagnostics.CodeAnalysis.SuppressMessage(\"Microsoft.Usage\", \"CA2227:CollectionPropertiesShouldBeReadOnly\")]");
                     builder.AppendLine($"        public virtual ICollection<{relationshipModel.DependentEnd.Table}> {relationshipModel.DependentEnd.Table} {{ get; set; }}");
                 }
             }

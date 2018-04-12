@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
 using Meision.Database;
 
 namespace Meision.VisualStudio.CustomCommands
@@ -48,7 +40,7 @@ namespace Meision.VisualStudio.CustomCommands
         protected DatabaseModel DatabaseModel { get; set; }
         protected List<DataModel> DataModels { get; set; }
         protected List<RelationshipModel> RelationshipModels { get; set; }
-        
+
         private void Initialize()
         {
             SQLServerGenerator generator = new SQLServerGenerator(this.Config.Defination.Connection.ConnectionString);

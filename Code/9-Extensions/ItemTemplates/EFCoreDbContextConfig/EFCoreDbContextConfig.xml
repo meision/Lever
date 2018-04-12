@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <defination>
+    <!--<connection providerName="System.Data.SqlClient" connectionString="Data Source=localhost; Initial Catalog=Database; Integrated Security=SSPI;" />-->
+    <connection providerName="System.Data.SqlClient" connectionString="Data Source=localhost;Initial Catalog=Database;User ID=sa;password=123456" />
+    <storages>
+      <tables>
+        <add schema="dbo" expression="^.+$" />
+      </tables>
+      <views>
+        <add schema="dbo" expression="^.+$" />
+      </views>
+    </storages>
+    <models>
+      <!--<model action="add" schema="dbo" expression="^.+$" description="" />
+      <model action="remove" schema ="*" expression="^.+$" />-->
+      <model action="remove" schema ="*" expression="sysdiagrams" />
+    </models>
+  </defination>
+
+  <generation enable="true" mode="EFCore">
+    <main>
+      <imports>
+        <add import="System" />
+        <add import="Microsoft.EntityFrameworkCore;" />
+        <add import="Microsoft.EntityFrameworkCore.Metadata;" />
+      </imports>
+      <class namespace="Meision.Core" accessModifier="public" name="RushQuantDbContext" base="DbContext" />
+    </main>
+    <entity>
+      <imports>
+        <add import="System" />
+        <add import="System.Collections.Generic" />
+      </imports>
+      <class namespace="Meision.Core" accessModifier="public" base="Entity&lt;&gt;" useConventionalInterfaces="false" />
+      <defaultValues>
+        <add type="DateTime" value="new DateTime(1900, 1, 1)" />
+      </defaultValues>
+    </entity>
+  </generation>
+
+</configuration>

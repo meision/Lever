@@ -1,18 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell;
-using Meision.Database;
 
 namespace Meision.VisualStudio.CustomCommands
 {
@@ -52,6 +41,7 @@ namespace Meision.VisualStudio.CustomCommands
             public AccessModifier AccessModifier { get; set; }
             public string Name { get; set; }
             public string Base { get; set; }
+            public bool UseConventionalInterfaces { get; set; }
         }
 
         public class ColumnConfig
@@ -400,6 +390,9 @@ namespace Meision.VisualStudio.CustomCommands
                             case "base":
                                 @class.Base = aItem.Value;
                                 break;
+                            case "useConventionalInterfaces":
+                                @class.UseConventionalInterfaces = Convert.ToBoolean(aItem.Value);
+                                break;
                         }
                     }
                     return @class;
@@ -417,7 +410,7 @@ namespace Meision.VisualStudio.CustomCommands
                     this.Generation.Enable = Convert.ToBoolean(aEnable.Value);
                 }
 
-                XAttribute aMode = eGeneration.Attribute("enable");
+                XAttribute aMode = eGeneration.Attribute("mode");
                 if (aMode == null)
                 {
                     throw new ArgumentException("Invalid mode attribute or not found.");
