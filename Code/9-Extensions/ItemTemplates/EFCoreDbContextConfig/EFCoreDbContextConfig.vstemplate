@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>EFCoreDbContextConfig</Name>
-    <Description>EFCoreDbContextConfig</Description>
+    <Name>EFCore DbContext Config</Name>
+    <Description>Generate DBContext and Entity files for EntityFramework Core.</Description>
     <Icon>EFCoreDbContextConfig.ico</Icon>
-    <TemplateID>f5cd2e39-f623-46f8-8a39-d7ce7add4f90</TemplateID>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <DefaultName>Class.cs</DefaultName>
+    <DefaultName>MyDbContext.xml</DefaultName>
   </TemplateData>
   <TemplateContent>
     <References>
@@ -16,6 +15,6 @@
         <Assembly>System</Assembly>
       </Reference>
     </References>
-    <ProjectItem ReplaceParameters="true">Class.cs</ProjectItem>
+    <ProjectItem CustomTool="DatabaseCodeGenerator" TargetFileName="$fileinputname$.xml" ItemType="None" ReplaceParameters="true">EFCoreDbContextConfig.xml</ProjectItem>
   </TemplateContent>
 </VSTemplate>

@@ -226,9 +226,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DatabaseContextConfig\DatabaseContextConfig.csproj">
-      <Project>{12E74987-9E8B-404E-9384-ED6173EB4E75}</Project>
-      <Name>DatabaseContextConfig</Name>
+    <ProjectReference Include="..\ItemTemplates\EF6DbContextConfig\EF6DbContextConfig.csproj">
+      <Project>{5E3000BF-B975-4D33-92DE-8616DDC7C209}</Project>
+      <Name>EF6DbContextConfig</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\EFCoreDbContextConfig\EFCoreDbContextConfig.csproj">
+      <Project>{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}</Project>
+      <Name>EFCoreDbContextConfig</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
