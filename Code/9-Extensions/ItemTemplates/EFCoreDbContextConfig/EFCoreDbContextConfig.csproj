@@ -61,10 +61,14 @@
     <None Include="EFCoreDbContextConfig.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="EFCoreDbContextConfig.vstemplate" />
+    <VSTemplate Include="EFCoreDbContextConfig.vstemplate">
+      <OutputSubPath>Lever</OutputSubPath>
+    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EFCoreDbContextConfig.xml" />
+    <Content Include="EFCoreDbContextConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

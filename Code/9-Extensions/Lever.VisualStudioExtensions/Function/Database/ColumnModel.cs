@@ -37,6 +37,19 @@ namespace Meision.Database
             }
         }
 
+        private string _originType;
+        public string OriginType
+        {
+            get
+            {
+                return this._originType;
+            }
+            set
+            {
+                this._originType = value;
+            }
+        }
+
         private DbType _type;
         public DbType Type
         {
@@ -49,7 +62,7 @@ namespace Meision.Database
                 this._type = value;
             }
         }
-
+        
         private int? _length;
         public int? Length
         {
@@ -166,6 +179,7 @@ namespace Meision.Database
         #region IXmlSerializable Members
         internal const string XmlElement_Tag = "Column";
         internal const string XmlAttribute_Name = "Name";
+        internal const string XmlAttribute_OriginType = "OriginType";
         internal const string XmlAttribute_Type = "Type";
         internal const string XmlAttribute_Length = "Length";
         internal const string XmlAttribute_Precision = "Precision";
@@ -192,6 +206,9 @@ namespace Meision.Database
                         break;
                     case XmlAttribute_Type:
                         this.Type = (DbType)Enum.Parse(typeof(DbType), reader.Value);
+                        break;
+                    case XmlAttribute_OriginType:
+                        this.OriginType = reader.Value;
                         break;
                     case XmlAttribute_Length:
                         if (reader.Value != "max")
@@ -242,6 +259,7 @@ namespace Meision.Database
         {
             writer.WriteAttributeString(XmlAttribute_Name, this.Name);
             writer.WriteAttributeString(XmlAttribute_Type, this.Type.ToString());
+            writer.WriteAttributeString(XmlAttribute_OriginType, this.OriginType);
             if (this.Length.HasValue)
             {
                 writer.WriteAttributeString(XmlAttribute_Length, this.Length.ToString());

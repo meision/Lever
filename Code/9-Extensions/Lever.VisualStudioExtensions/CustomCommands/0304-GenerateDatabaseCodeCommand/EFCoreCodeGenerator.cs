@@ -94,75 +94,85 @@ namespace Meision.VisualStudio.CustomCommands
                     switch (columnModel.Type)
                     {
                         case DbType.AnsiString:
-                            if (columnModel.Precision >= 0)
-                            {
-                                builder.Append($".HasMaxLength({columnModel.Precision})");
-                            }
-                            builder.Append($".IsUnicode(false)");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({((columnModel.Precision >= 0) ? columnModel.Precision.ToString() : "max")})\")");
                             break;
                         case DbType.AnsiStringFixedLength:
-                            if (columnModel.Precision >= 0)
-                            {
-                                builder.Append($".HasMaxLength({columnModel.Precision})");
-                            }
-                            builder.Append($".IsFixedLength()");
-                            builder.Append($".IsUnicode(false)");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({((columnModel.Precision >= 0) ? columnModel.Precision.ToString() : "max")})\")");
                             break;
                         case DbType.Binary:
-                            if (columnModel.Length >= 0)
-                            {
-                                builder.Append($".HasMaxLength({columnModel.Length})");
-                            }
-                            builder.Append($".IsFixedLength()");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({((columnModel.Precision >= 0) ? columnModel.Precision.ToString() : "max")})\")");
                             break;
                         case DbType.Boolean:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.Byte:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.Currency:
-                            builder.Append($".HasColumnType(\"money({columnModel.Precision}, {columnModel.Scale})\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Precision}, {columnModel.Scale})\")");
                             break;
                         case DbType.Date:
-                            builder.Append($".HasColumnType(\"date\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.DateTime:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.DateTime2:
-                            builder.Append($".HasColumnType(\"datetime2({columnModel.Scale})\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Scale})\")");
                             break;
                         case DbType.DateTimeOffset:
-                            builder.Append($".HasColumnType(\"datetimeoffset({columnModel.Scale})\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Scale})\")");
                             break;
                         case DbType.Decimal:
-                            builder.Append($".HasColumnType(\"decimal({columnModel.Precision}, {columnModel.Scale})\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Precision}, {columnModel.Scale})\")");
                             break;
                         case DbType.Double:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.Guid:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.Int16:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.Int32:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.Int64:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.Object:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.SByte:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.Single:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         case DbType.String:
-                            if (columnModel.Precision >= 0)
-                            {
-                                builder.Append($".HasMaxLength({columnModel.Precision})");
-                            }
-                            builder.Append($".IsUnicode(true)");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({((columnModel.Precision >= 0) ? columnModel.Precision.ToString() : "max")})\")");
                             break;
                         case DbType.StringFixedLength:
-                            if (columnModel.Length >= 0)
-                            {
-                                builder.Append($".HasMaxLength({columnModel.Precision})");
-                            }
-                            builder.Append($".IsUnicode(true)");
-                            builder.Append($".IsFixedLength()");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({((columnModel.Precision >= 0) ? columnModel.Precision.ToString() : "max")})\")");
                             break;
                         case DbType.Time:
-                            builder.Append($".HasColumnType(\"time({columnModel.Scale})\")");
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Scale})\")");
+                            break;
+                        case DbType.UInt16:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.UInt32:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.UInt64:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
+                            break;
+                        case DbType.VarNumeric:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}({columnModel.Precision}, {columnModel.Scale})\")");
+                            break;
+                        case DbType.Xml:
+                            builder.Append($".HasColumnType(\"{columnModel.OriginType}\")");
                             break;
                         default:
                             break;

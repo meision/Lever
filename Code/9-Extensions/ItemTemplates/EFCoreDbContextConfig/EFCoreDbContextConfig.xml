@@ -22,8 +22,8 @@
     <main>
       <imports>
         <add import="System" />
-        <add import="Microsoft.EntityFrameworkCore;" />
-        <add import="Microsoft.EntityFrameworkCore.Metadata;" />
+        <add import="Microsoft.EntityFrameworkCore" />
+        <add import="Microsoft.EntityFrameworkCore.Metadata" />
       </imports>
       <class namespace="Meision.Core" accessModifier="public" name="RushQuantDbContext" base="DbContext" />
     </main>

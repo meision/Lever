@@ -60,7 +60,9 @@
     <None Include="EF6DbContextConfig.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="EF6DbContextConfig.vstemplate" />
+    <VSTemplate Include="EF6DbContextConfig.vstemplate">
+      <OutputSubPath>Lever</OutputSubPath>
+    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
     <Content Include="EF6DbContextConfig.xml" />

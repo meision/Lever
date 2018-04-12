@@ -139,6 +139,7 @@ namespace Meision.Database
             ColumnModel columnModel = new ColumnModel();
             columnModel.Name = Convert.ToString(columnRow["ColumnName"]);
             columnModel.Type = DatabaseHelper.GetDbType((SqlColumnType)Enum.Parse(typeof(SqlColumnType), Convert.ToString(columnRow["Type"])));
+            columnModel.OriginType = Convert.ToString(columnRow["Type"]);
             columnModel.Length = Convert.ToInt32(columnRow["Length"]);
             columnModel.Precision = !Convert.IsDBNull(columnRow["Precision"]) ? (int?)Convert.ToInt32(columnRow["Precision"]) : null;
             columnModel.Scale = !Convert.IsDBNull(columnRow["Scale"]) ? (int?)Convert.ToInt32(columnRow["Scale"]) : null;
