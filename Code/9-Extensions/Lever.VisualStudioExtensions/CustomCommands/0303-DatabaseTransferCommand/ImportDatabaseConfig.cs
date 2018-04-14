@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal enum ImportDatabaseConnectionStringSource
+    internal enum DatabaseTransferConnectionStringSource
     {
         Static,
         FileRegex,
     }
 
-    internal enum ImportDatabaseModel
+    internal enum DatabaseTransferModel
     {
         None,
         IgnoreExists,
         Merge,
     }
 
-    internal class ImportDatabaseConfig
+    internal class DatabaseTransferConfig
     {
-        public const string DefaultSheetName = "__ImportDatabase";
+        public const string DefaultSheetName = "__Config";
 
-        public static ImportDatabaseConfig CreateFromExcel(string fullname)
+        public static DatabaseTransferConfig CreateFromExcel(string fullname)
         {
             DataSet dataSet = EPPlusHelper.ReadExcelToDataSet(fullname, (sheetName) => DefaultSheetName.Equals(sheetName, StringComparison.OrdinalIgnoreCase));
             return CreateFromExcel(fullname, dataSet);
         }
-        public static ImportDatabaseConfig CreateFromExcel(string excelFilePath, DataSet dataSet)
+        public static DatabaseTransferConfig CreateFromExcel(string excelFilePath, DataSet dataSet)
         {
             if (excelFilePath == null)
             {
@@ -47,7 +47,7 @@ namespace Meision.VisualStudio.CustomCommands
                 return null;
             }
 
-            ImportDatabaseConfig config = new ImportDatabaseConfig();
+            DatabaseTransferConfig config = new DatabaseTransferConfig();
             config.ConnectionProvider = Convert.ToString(table.Rows[0]["ConnectionProvider"]);
             // Source
             ImportDatabaseConnectionStringSource connectionStringSource = (ImportDatabaseConnectionStringSource)Enum.Parse(typeof(ImportDatabaseConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));

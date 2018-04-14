@@ -442,7 +442,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 dataSet = EPPlusHelper.ReadExcelToDataSet(stream);
             }
-            ImportDatabaseConfig config = ImportDatabaseConfig.CreateFromExcel(fullPath, dataSet);
+            DatabaseTransferConfig config = DatabaseTransferConfig.CreateFromExcel(fullPath, dataSet);
             if (config == null)
             {
                 this.ShowMessage("Error", "Could not load config.");
@@ -483,7 +483,7 @@ namespace Meision.VisualStudio.CustomCommands
                         foreach (DataTable table in dataSet.Tables)
                         {
                             string tableName = table.TableName;
-                            if (ImportDatabaseConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
+                            if (DatabaseTransferConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
                             {
                                 continue;
                             }

@@ -18,7 +18,7 @@ namespace Meision.VisualStudio.CustomCommands
             InitializeComponent();
         }
 
-        internal void Initialize(ImportDatabaseConfig config, DataSet dataSet)
+        internal void Initialize(DatabaseTransferConfig config, DataSet dataSet)
         {
             // Connection String
             this.cboConnectionString.Items.Clear();
@@ -32,7 +32,7 @@ namespace Meision.VisualStudio.CustomCommands
             for (int i = dataSet.Tables.Count - 1; i >= 0; i--)
             {
                 DataTable table = dataSet.Tables[i];
-                if (!ImportDatabaseConfig.DefaultSheetName.Equals(table.TableName, StringComparison.OrdinalIgnoreCase))
+                if (!DatabaseTransferConfig.DefaultSheetName.Equals(table.TableName, StringComparison.OrdinalIgnoreCase))
                 {
                     builder.AppendLine($"DELETE FROM [{table.TableName}]");
                 }
