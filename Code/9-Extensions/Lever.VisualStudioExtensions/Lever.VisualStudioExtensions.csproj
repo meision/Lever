@@ -258,6 +258,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\ServiceManagerClass\ServiceManagerClass.csproj">
+      <Project>{74F983CC-F882-451B-BC77-B0973334108E}</Project>
+      <Name>ServiceManagerClass</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\SingletonClass\SingletonClass.csproj">
       <Project>{F849CE13-C391-45BC-9F73-E066AF419568}</Project>
       <Name>SingletonClass</Name>

@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF6DbContextConfig", "9-Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreDbContextConfig", "9-Extensions\ItemTemplates\EFCoreDbContextConfig\EFCoreDbContextConfig.csproj", "{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceManagerClass", "9-Extensions\ItemTemplates\ServiceManagerClass\ServiceManagerClass.csproj", "{74F983CC-F882-451B-BC77-B0973334108E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F983CC-F882-451B-BC77-B0973334108E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F983CC-F882-451B-BC77-B0973334108E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F983CC-F882-451B-BC77-B0973334108E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F983CC-F882-451B-BC77-B0973334108E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{C324E8ED-F261-4702-8FC5-AA6DA787578D} = {7B48A080-ABAD-43EF-8BB5-5324273CDF9C}
 		{5E3000BF-B975-4D33-92DE-8616DDC7C209} = {7B48A080-ABAD-43EF-8BB5-5324273CDF9C}
 		{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C} = {7B48A080-ABAD-43EF-8BB5-5324273CDF9C}
+		{74F983CC-F882-451B-BC77-B0973334108E} = {7B48A080-ABAD-43EF-8BB5-5324273CDF9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11A517FE-3D4E-446F-946E-D35301B721BA}

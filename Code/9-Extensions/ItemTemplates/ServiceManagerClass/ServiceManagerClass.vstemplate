@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>Singleton Class</Name>
-    <Description>Singleton Class</Description>
-    <Icon>SingletonClass.ico</Icon>
+    <Name>ServiceManager Class</Name>
+    <Description>ServiceManager Class</Description>
+    <Icon>ServiceManagerClass.ico</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <DefaultName>Manager.cs</DefaultName>
+    <DefaultName>ServiceManager.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
     <References>
