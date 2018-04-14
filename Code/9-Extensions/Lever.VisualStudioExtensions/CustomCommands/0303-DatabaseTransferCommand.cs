@@ -408,7 +408,7 @@ namespace Meision.VisualStudio.CustomCommands
             return buffer;
         }
 
-        public ImportDatabaseCommand()
+        public DatabaseTransferCommand()
         {
             this.CommandId = 0x0303;
         }
@@ -425,7 +425,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return;
             }
-            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "ImportDatabase")
+            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "DatabaseTransfer")
             {
                 return;
             }
@@ -454,7 +454,7 @@ namespace Meision.VisualStudio.CustomCommands
                 return;
             }
 
-            using (ImportDatabaseForm dialog = new ImportDatabaseForm())
+            using (DatabaseTransferForm dialog = new DatabaseTransferForm())
             {
                 dialog.Initialize(config, dataSet);
                 if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -509,10 +509,10 @@ namespace Meision.VisualStudio.CustomCommands
                                 SqlCommand command = null;
                                 switch (dialog.GetImportModel())
                                 {
-                                    case ImportDatabaseModel.IgnoreExists:
+                                    case DatabaseTransferModel.IgnoreExists:
                                         command = SqlDatabaseHelper.GetInsertIfNotExistCommand(connection, usedColumnInfos, tableName);
                                         break;
-                                    case ImportDatabaseModel.Merge:
+                                    case DatabaseTransferModel.Merge:
                                         command = SqlDatabaseHelper.GetMergeCommand(connection, usedColumnInfos, tableName);
                                         break;
                                 }

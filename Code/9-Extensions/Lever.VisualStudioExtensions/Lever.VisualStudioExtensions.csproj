@@ -94,12 +94,12 @@
     <Compile Include="Function\Database\ViewModel.cs" />
     <Compile Include="Function\Database\ViewModelCollection.cs" />
     <Compile Include="Function\SR.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseConfig.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseForm.cs">
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferConfig.cs" />
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseForm.designer.cs">
-      <DependentUpon>ImportDatabaseForm.cs</DependentUpon>
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferForm.designer.cs">
+      <DependentUpon>DatabaseTransferForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
     <Compile Include="CustomTools\BaseCodeGenerator.cs" />

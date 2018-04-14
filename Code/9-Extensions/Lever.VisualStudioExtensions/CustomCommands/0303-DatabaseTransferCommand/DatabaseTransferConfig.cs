@@ -50,17 +50,17 @@ namespace Meision.VisualStudio.CustomCommands
             DatabaseTransferConfig config = new DatabaseTransferConfig();
             config.ConnectionProvider = Convert.ToString(table.Rows[0]["ConnectionProvider"]);
             // Source
-            ImportDatabaseConnectionStringSource connectionStringSource = (ImportDatabaseConnectionStringSource)Enum.Parse(typeof(ImportDatabaseConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));
+            DatabaseTransferConnectionStringSource connectionStringSource = (DatabaseTransferConnectionStringSource)Enum.Parse(typeof(DatabaseTransferConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));
             switch (connectionStringSource)
             {
-                case ImportDatabaseConnectionStringSource.Static:
+                case DatabaseTransferConnectionStringSource.Static:
                     {
                         config.ConnectionStrings = Convert.ToString(table.Rows[0]["ConnectionStringExpression"])
                             .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
                             .ToArray();
                     }
                     break;
-                case ImportDatabaseConnectionStringSource.FileRegex:
+                case DatabaseTransferConnectionStringSource.FileRegex:
                     {
                         config.ConnectionStrings = Convert.ToString(table.Rows[0]["ConnectionStringExpression"])
                             .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
@@ -88,7 +88,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             config.ClearTableBeforeImport = Convert.ToBoolean(table.Rows[0]["ClearTableBeforeImport"]);
-            config.ImportMode = (ImportDatabaseModel)Enum.Parse(typeof(ImportDatabaseModel), Convert.ToString(table.Rows[0]["ImportMode"]));
+            config.ImportMode = (DatabaseTransferModel)Enum.Parse(typeof(DatabaseTransferModel), Convert.ToString(table.Rows[0]["ImportMode"]));
             return config;
         }
 
@@ -96,6 +96,6 @@ namespace Meision.VisualStudio.CustomCommands
         public string ConnectionProvider { get; set; }
         public IList<string> ConnectionStrings { get; set; }
         public bool ClearTableBeforeImport { get; set; }
-        public ImportDatabaseModel ImportMode { get; set; }
+        public DatabaseTransferModel ImportMode { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Meision.VisualStudio.CustomCommands
 {
-    partial class ImportDatabaseForm
+    partial class DatabaseTransferForm
     {
         /// <summary>
         /// Required designer variable.

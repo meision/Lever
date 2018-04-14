@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal partial class ImportDatabaseForm : Form
+    internal partial class DatabaseTransferForm : Form
     {
-        public ImportDatabaseForm()
+        public DatabaseTransferForm()
         {
             InitializeComponent();
         }
@@ -42,10 +42,10 @@ namespace Meision.VisualStudio.CustomCommands
             // Model
             switch (config.ImportMode)
             {
-                case ImportDatabaseModel.IgnoreExists:
+                case DatabaseTransferModel.IgnoreExists:
                     this.rdoImportModeIgnoreExists.Checked = true;
                     break;
-                case ImportDatabaseModel.Merge:
+                case DatabaseTransferModel.Merge:
                     this.rdoImportModeMerge.Checked = true;
                     break;
                 default:
@@ -73,19 +73,19 @@ namespace Meision.VisualStudio.CustomCommands
             return this.txtClearSQL.Text;
         }
 
-        public ImportDatabaseModel GetImportModel()
+        public DatabaseTransferModel GetImportModel()
         {
             if (this.rdoImportModeIgnoreExists.Checked)
             {
-                return ImportDatabaseModel.IgnoreExists;
+                return DatabaseTransferModel.IgnoreExists;
             }
             else if (this.rdoImportModeMerge.Checked)
             {
-                return ImportDatabaseModel.Merge;
+                return DatabaseTransferModel.Merge;
             }
             else
             {
-                return ImportDatabaseModel.None;
+                return DatabaseTransferModel.None;
             }
         }
 
