@@ -5,6 +5,10 @@
     <RootNamespace>Meision</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Database\**" />
     <EmbeddedResource Remove="Database\**" />
@@ -24,6 +28,10 @@
       <Generator>ExcelLanguagesGenerator</Generator>
       <LastGenOutput>SR.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Net\Sockets\" />
   </ItemGroup>
 
 </Project>
