@@ -12,6 +12,6 @@
   <TemplateContent>
     <References>
     </References>
-    <ProjectItem TargetFileName="$fileinputname$.xlsx" ItemType="None" OpenInEditor="false">ImportDatabase.xlsx</ProjectItem>
+    <ProjectItem CustomTool="ImportDatabase" TargetFileName="$fileinputname$.xlsx" ItemType="None" OpenInEditor="false">ImportDatabase.xlsx</ProjectItem>
   </TemplateContent>
 </VSTemplate>

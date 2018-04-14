@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Meision.VisualStudio
+namespace Meision.VisualStudio.CustomCommands
 {
     internal enum ImportDatabaseConnectionStringSource
     {

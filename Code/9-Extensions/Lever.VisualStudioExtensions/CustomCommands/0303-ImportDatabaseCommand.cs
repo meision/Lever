@@ -425,13 +425,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return;
             }
-            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            if (!fullPath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-            if (!EPPlusHelper.ContainsSheet(fullPath, ImportDatabaseConfig.DefaultSheetName))
+            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "ImportDatabase")
             {
                 return;
             }

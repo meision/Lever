@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Meision.VisualStudio
+namespace Meision.VisualStudio.CustomCommands
 {
     internal partial class ImportDatabaseForm : Form
     {

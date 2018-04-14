@@ -1,4 +1,4 @@
-﻿namespace Meision.VisualStudio
+﻿namespace Meision.VisualStudio.CustomCommands
 {
     partial class ImportDatabaseForm
     {

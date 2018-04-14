@@ -47,6 +47,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\1-Foundation\Lever\[I]IExpressible.cs">
+      <Link>Function\[I]IExpressible.cs</Link>
+    </Compile>
+    <Compile Include="..\..\1-Foundation\Lever\[N]SortOrder.cs">
+      <Link>Function\[N]SortOrder.cs</Link>
+    </Compile>
     <Compile Include="CustomCommands\0101-OpenContainingFolderCommand.cs" />
     <Compile Include="CustomCommands\0201-OpenOutputFolderCommand.cs" />
     <Compile Include="CustomCommands\0300-RunCustomToolCommand.cs" />
@@ -87,14 +93,12 @@
     <Compile Include="Function\Database\UniqueConstraintModel.cs" />
     <Compile Include="Function\Database\ViewModel.cs" />
     <Compile Include="Function\Database\ViewModelCollection.cs" />
-    <Compile Include="Function\IExpressible.cs" />
-    <Compile Include="Function\SortOrder.cs" />
     <Compile Include="Function\SR.cs" />
-    <Compile Include="ImportDatabase\ImportDatabaseConfig.cs" />
-    <Compile Include="ImportDatabase\ImportDatabaseForm.cs">
+    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseConfig.cs" />
+    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImportDatabase\ImportDatabaseForm.designer.cs">
+    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseForm.designer.cs">
       <DependentUpon>ImportDatabaseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
