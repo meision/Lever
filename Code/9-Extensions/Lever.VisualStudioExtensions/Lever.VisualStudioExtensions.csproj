@@ -58,7 +58,7 @@
     <Compile Include="CustomCommands\0300-RunCustomToolCommand.cs" />
     <Compile Include="CustomCommands\0301-GenerateTestDataCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand.cs" />
-    <Compile Include="CustomCommands\0303-ImportDatabaseCommand.cs" />
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\DatabaseConfig.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreCodeGenerator.cs" />
@@ -94,11 +94,11 @@
     <Compile Include="Function\Database\ViewModel.cs" />
     <Compile Include="Function\Database\ViewModelCollection.cs" />
     <Compile Include="Function\SR.cs" />
-    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseConfig.cs" />
-    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseForm.cs">
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseConfig.cs" />
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CustomCommands\0303-ImportDatabaseCommand\ImportDatabaseForm.designer.cs">
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\ImportDatabaseForm.designer.cs">
       <DependentUpon>ImportDatabaseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
@@ -230,6 +230,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ItemTemplates\DatabaseTransferExcel\DatabaseTransferExcel.csproj">
+      <Project>{76D76130-A8D3-486C-8801-C727A54F3421}</Project>
+      <Name>DatabaseTransferExcel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\EF6DbContextConfig\EF6DbContextConfig.csproj">
       <Project>{5E3000BF-B975-4D33-92DE-8616DDC7C209}</Project>
       <Name>EF6DbContextConfig</Name>
@@ -240,13 +247,6 @@
     <ProjectReference Include="..\ItemTemplates\EFCoreDbContextConfig\EFCoreDbContextConfig.csproj">
       <Project>{FAA9BDF1-952D-4608-B6FF-1F36F0E7572C}</Project>
       <Name>EFCoreDbContextConfig</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\ImportDatabaseExcel\ImportDatabaseExcel.csproj">
-      <Project>{C324E8ED-F261-4702-8FC5-AA6DA787578D}</Project>
-      <Name>ImportDatabaseExcel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

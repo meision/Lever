@@ -16,7 +16,7 @@ using Meision.Database.SQL;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal sealed class ImportDatabaseCommand : CustomCommand
+    internal sealed class DatabaseTransferCommand : CustomCommand
     {
         public static byte GetHexValue(char high, char low)
         {
