@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace Meision.VisualStudio.CustomCommands
 {
+    internal enum DatabaseTransferAction
+    {
+        ImportDatabase,
+        GenerateScript
+    }
+
     internal enum DatabaseTransferConnectionStringSource
     {
         Static,
@@ -48,6 +54,9 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             DatabaseTransferConfig config = new DatabaseTransferConfig();
+            // Action
+            config.Action = (DatabaseTransferAction)Enum.Parse(typeof(DatabaseTransferAction), Convert.ToString(table.Rows[0]["Action"]));
+            // ConnectionProvider
             config.ConnectionProvider = Convert.ToString(table.Rows[0]["ConnectionProvider"]);
             // Source
             DatabaseTransferConnectionStringSource connectionStringSource = (DatabaseTransferConnectionStringSource)Enum.Parse(typeof(DatabaseTransferConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));
@@ -92,7 +101,7 @@ namespace Meision.VisualStudio.CustomCommands
             return config;
         }
 
-        
+        public DatabaseTransferAction Action { get; set; }
         public string ConnectionProvider { get; set; }
         public IList<string> ConnectionStrings { get; set; }
         public bool ClearTableBeforeImport { get; set; }
