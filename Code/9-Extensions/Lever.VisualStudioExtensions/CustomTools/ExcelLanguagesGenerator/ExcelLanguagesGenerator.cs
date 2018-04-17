@@ -63,7 +63,7 @@ namespace Meision.VisualStudio.CustomTools
             }
             // Generate code
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             builder.AppendLine($"using System;");
             builder.AppendLine($"using System.Collections.Generic;");
             builder.AppendLine($"using System.Collections.ObjectModel;");
