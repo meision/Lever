@@ -53,20 +53,20 @@
     <Compile Include="..\..\1-Foundation\Lever\[N]SortOrder.cs">
       <Link>Function\[N]SortOrder.cs</Link>
     </Compile>
-    <Compile Include="CustomCommands\0101-OpenContainingFolderCommand.cs" />
-    <Compile Include="CustomCommands\0201-OpenOutputFolderCommand.cs" />
-    <Compile Include="CustomCommands\0300-RunCustomToolCommand.cs" />
-    <Compile Include="CustomCommands\0301-GenerateTestDataCommand.cs" />
-    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand.cs" />
-    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand.cs" />
+    <Compile Include="CustomCommands\0101-OpenContainingFolderCommand\0101-OpenContainingFolderCommand.cs" />
+    <Compile Include="CustomCommands\0201-OpenOutputFolderCommand\0201-OpenOutputFolderCommand.cs" />
+    <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
+    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\0301-GenerateTestDataCommand.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
+    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\0303-DatabaseTransferCommand.cs" />
+    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\DatabaseConfig.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreCodeGenerator.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EF6CodeGenerator.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\[A]DatabaseCodeGenerator.cs" />
-    <Compile Include="CustomCommands\0401-LineupImagesCommand.cs" />
-    <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand.cs" />
-    <Compile Include="CustomCommands\9999-TestCommand.cs" />
+    <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
+    <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
+    <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />
     <Compile Include="Function\Database\CheckConstraintModel.cs" />
     <Compile Include="Function\Database\ColumnModel.cs" />
     <Compile Include="Function\Database\ColumnModelCollection.cs" />

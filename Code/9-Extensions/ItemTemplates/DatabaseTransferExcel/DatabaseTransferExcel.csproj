@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DatabaseTransferExcel.xlsx" />
+    <None Include="DatabaseTransfer.xlsx" />
     <None Include="DatabaseTransferExcel.ico" />
   </ItemGroup>
   <ItemGroup>
