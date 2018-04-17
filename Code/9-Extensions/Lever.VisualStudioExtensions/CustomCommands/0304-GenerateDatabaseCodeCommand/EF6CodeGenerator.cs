@@ -28,6 +28,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             StringBuilder builder = new StringBuilder();
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             // Imports
             if (this.Config.Generation.Main.Imports != null)
             {
