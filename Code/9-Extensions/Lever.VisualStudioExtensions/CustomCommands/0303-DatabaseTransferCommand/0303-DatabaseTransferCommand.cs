@@ -665,7 +665,7 @@ namespace Meision.VisualStudio.CustomCommands
                         }
                     }
 
-                    this.ShowMessage("Success", "Import Successfully");
+                    this.ShowMessage("Success", "Operation Successfully.");
                 }
                 catch (Exception exception)
                 {

@@ -88,13 +88,13 @@
       </Button>
 
 
-      <!--<Button guid="guidLeverCmdSet" id="cmdTest" priority="0x0400" type="Button">
+      <Button guid="guidLeverCmdSet" id="cmdTest" priority="0x0400" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Test Command</ButtonText>
         </Strings>
-      </Button>-->
+      </Button>
       
     </Buttons>
     <Bitmaps>

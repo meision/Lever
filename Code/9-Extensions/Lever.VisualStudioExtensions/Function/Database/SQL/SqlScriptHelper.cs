@@ -369,7 +369,7 @@ ORDER BY
             return builder.ToString();
         }
 
-        public static string GenerateInsertScript(string sourceTableName, IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
+        public static string GenerateInsertIntoScript(string sourceTableName, IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
         {
             if (sourceColumnInfos == null)
             {
