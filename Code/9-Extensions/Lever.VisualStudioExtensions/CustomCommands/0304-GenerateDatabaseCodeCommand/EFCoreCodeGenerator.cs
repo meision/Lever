@@ -28,6 +28,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             StringBuilder builder = new StringBuilder();
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             // Imports
             if (this.Config.Generation.Main.Imports != null)
             {
@@ -45,6 +46,14 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 builder.AppendLine($"        public virtual DbSet<{dataModel.Name}> {dataModel.Name} {{ get; set; }}");
             }
+            builder.AppendLine($"");
+            builder.AppendLine($"        public {this.Config.Generation.Main.Class.Name}()");
+            builder.AppendLine($"        {{");
+            builder.AppendLine($"        }}");
+            builder.AppendLine($"");
+            builder.AppendLine($"        public {this.Config.Generation.Main.Class.Name}(DbContextOptions options) : base(options)");
+            builder.AppendLine($"        {{");
+            builder.AppendLine($"        }}");
             builder.AppendLine($"");
             builder.AppendLine($"        protected override void OnModelCreating(ModelBuilder modelBuilder)");
             builder.AppendLine($"        {{");
@@ -333,7 +342,7 @@ namespace Meision.VisualStudio.CustomCommands
                 }
             }
 
-            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             if (this.Config.Generation.Entity.Imports != null)
             {
                 foreach (string import in this.Config.Generation.Entity.Imports)

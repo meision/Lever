@@ -28,6 +28,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             StringBuilder builder = new StringBuilder();
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             // Imports
             if (this.Config.Generation.Main.Imports != null)
             {
@@ -342,7 +343,7 @@ namespace Meision.VisualStudio.CustomCommands
                 }
             }
 
-            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            builder.AppendLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, Parameters.DO_NOT_MODIFY, this.GetType().Name));
             if (this.Config.Generation.Entity.Imports != null)
             {
                 foreach (string import in this.Config.Generation.Entity.Imports)
