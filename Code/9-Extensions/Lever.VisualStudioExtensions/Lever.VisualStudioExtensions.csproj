@@ -292,7 +292,7 @@
       <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="CustomCommands\Images\0201-OpenOutputFolder.png" />
-    <Content Include="CustomCommands\Images\0303-ImportDatabase.png" />
+    <Content Include="CustomCommands\Images\0303-DatabaseTransfer.png" />
     <Content Include="CustomCommands\Images\0304-GenerateDatabaseCode.png" />
     <Content Include="Resources\LeverPackage.ico" />
   </ItemGroup>

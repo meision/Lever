@@ -24,7 +24,8 @@ namespace Meision.VisualStudio.CustomCommands
     internal enum DatabaseTransferModel
     {
         None,
-        IgnoreExists,
+        Insert,
+        InsertNotExists,
         Merge,
     }
 

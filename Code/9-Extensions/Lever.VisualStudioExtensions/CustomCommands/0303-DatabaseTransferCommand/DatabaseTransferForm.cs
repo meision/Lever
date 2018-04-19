@@ -42,7 +42,7 @@ namespace Meision.VisualStudio.CustomCommands
             // Model
             switch (config.ImportMode)
             {
-                case DatabaseTransferModel.IgnoreExists:
+                case DatabaseTransferModel.InsertNotExists:
                     this.rdoImportModeIgnoreExists.Checked = true;
                     break;
                 case DatabaseTransferModel.Merge:
@@ -77,7 +77,7 @@ namespace Meision.VisualStudio.CustomCommands
         {
             if (this.rdoImportModeIgnoreExists.Checked)
             {
-                return DatabaseTransferModel.IgnoreExists;
+                return DatabaseTransferModel.InsertNotExists;
             }
             else if (this.rdoImportModeMerge.Checked)
             {

@@ -509,7 +509,7 @@ namespace Meision.VisualStudio.CustomCommands
                                 SqlCommand command = null;
                                 switch (dialog.GetImportModel())
                                 {
-                                    case DatabaseTransferModel.IgnoreExists:
+                                    case DatabaseTransferModel.InsertNotExists:
                                         command = SqlDatabaseHelper.GetInsertIfNotExistCommand(connection, usedColumnInfos, tableName);
                                         break;
                                     case DatabaseTransferModel.Merge:
