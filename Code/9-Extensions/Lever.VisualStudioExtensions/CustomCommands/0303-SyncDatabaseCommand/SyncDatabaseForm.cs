@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal partial class DatabaseTransferForm : Form
+    internal partial class SyncDatabaseForm : Form
     {
-        public DatabaseTransferForm()
+        public SyncDatabaseForm()
         {
             InitializeComponent();
         }
 
-        internal void Initialize(DatabaseTransferConfig config, DataSet dataSet)
+        internal void Initialize(SyncDatabaseConfig config, DataSet dataSet)
         {
             // Connection String
             this.cboConnectionString.Items.Clear();
@@ -32,7 +32,7 @@ namespace Meision.VisualStudio.CustomCommands
             for (int i = dataSet.Tables.Count - 1; i >= 0; i--)
             {
                 DataTable table = dataSet.Tables[i];
-                if (!DatabaseTransferConfig.DefaultSheetName.Equals(table.TableName, StringComparison.OrdinalIgnoreCase))
+                if (!SyncDatabaseConfig.DefaultSheetName.Equals(table.TableName, StringComparison.OrdinalIgnoreCase))
                 {
                     builder.AppendLine($"DELETE FROM [{table.TableName}]");
                 }
@@ -40,17 +40,8 @@ namespace Meision.VisualStudio.CustomCommands
             this.txtClearSQL.Text = builder.ToString();
             this.chkClear.Checked = config.ClearTableBeforeImport;
             // Model
-            switch (config.ImportMode)
-            {
-                case DatabaseTransferModel.InsertNotExists:
-                    this.rdoImportModeIgnoreExists.Checked = true;
-                    break;
-                case DatabaseTransferModel.Merge:
-                    this.rdoImportModeMerge.Checked = true;
-                    break;
-                default:
-                    break;
-            }
+            (this.panSyncDatabaseAction.Controls.Find($"rdoSyncDatabaseAction{config.Action}", false)[0] as RadioButton).Checked = true;
+            (this.panSyncDatabaseAction.Controls.Find($"rdoSyncDatabaseMode{config.Mode}", false)[0] as RadioButton).Checked = true;
         }
 
         private void chkClear_CheckedChanged(object sender, EventArgs e)
@@ -73,20 +64,30 @@ namespace Meision.VisualStudio.CustomCommands
             return this.txtClearSQL.Text;
         }
 
-        public DatabaseTransferModel GetImportModel()
+        public SyncDatabaseAction GetSyncAction()
         {
-            if (this.rdoImportModeIgnoreExists.Checked)
+            foreach (RadioButton button in this.panSyncDatabaseAction.Controls)
             {
-                return DatabaseTransferModel.InsertNotExists;
+                if (button.Checked)
+                {
+                    return (SyncDatabaseAction)Enum.Parse(typeof(SyncDatabaseAction), button.Name.Substring("rdoSyncDatabaseAction".Length));
+                }
             }
-            else if (this.rdoImportModeMerge.Checked)
+
+            return SyncDatabaseAction.None;
+        }
+
+        public SyncDatabaseModel GetSyncModel()
+        {
+            foreach (RadioButton button in this.panSyncDatabaseMode.Controls)
             {
-                return DatabaseTransferModel.Merge;
+                if (button.Checked)
+                {
+                    return (SyncDatabaseModel)Enum.Parse(typeof(SyncDatabaseModel), button.Name.Substring("rdoSyncDatabaseMode".Length));
+                }
             }
-            else
-            {
-                return DatabaseTransferModel.None;
-            }
+
+            return SyncDatabaseModel.None;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

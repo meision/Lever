@@ -16,7 +16,7 @@ using Meision.Database.SQL;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal sealed class DatabaseTransferCommand : CustomCommand
+    internal sealed class SyncDatabaseCommand : CustomCommand
     {
         public static byte GetHexValue(char high, char low)
         {
@@ -408,7 +408,7 @@ namespace Meision.VisualStudio.CustomCommands
             return buffer;
         }
 
-        public DatabaseTransferCommand()
+        public SyncDatabaseCommand()
         {
             this.CommandId = 0x0303;
         }
@@ -425,7 +425,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return;
             }
-            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "DatabaseTransfer")
+            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "SyncDatabase")
             {
                 return;
             }
@@ -442,7 +442,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 dataSet = EPPlusHelper.ReadExcelToDataSet(stream);
             }
-            DatabaseTransferConfig config = DatabaseTransferConfig.CreateFromExcel(fullPath, dataSet);
+            SyncDatabaseConfig config = SyncDatabaseConfig.CreateFromExcel(fullPath, dataSet);
             if (config == null)
             {
                 this.ShowMessage("Error", "Could not load config.");
@@ -454,7 +454,7 @@ namespace Meision.VisualStudio.CustomCommands
                 return;
             }
 
-            using (DatabaseTransferForm dialog = new DatabaseTransferForm())
+            using (SyncDatabaseForm dialog = new SyncDatabaseForm())
             {
                 dialog.Initialize(config, dataSet);
                 if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
@@ -483,7 +483,7 @@ namespace Meision.VisualStudio.CustomCommands
                         foreach (DataTable table in dataSet.Tables)
                         {
                             string tableName = table.TableName;
-                            if (DatabaseTransferConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
+                            if (SyncDatabaseConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
                             {
                                 continue;
                             }
@@ -507,12 +507,12 @@ namespace Meision.VisualStudio.CustomCommands
                             using (SqlTransaction transcation = connection.BeginTransaction())
                             {
                                 SqlCommand command = null;
-                                switch (dialog.GetImportModel())
+                                switch (dialog.GetSyncModel())
                                 {
-                                    case DatabaseTransferModel.InsertNotExists:
+                                    case SyncDatabaseModel.InsertNotExists:
                                         command = SqlDatabaseHelper.GetInsertIfNotExistCommand(connection, usedColumnInfos, tableName);
                                         break;
-                                    case DatabaseTransferModel.Merge:
+                                    case SyncDatabaseModel.Merge:
                                         command = SqlDatabaseHelper.GetMergeCommand(connection, usedColumnInfos, tableName);
                                         break;
                                 }
