@@ -58,7 +58,7 @@
     <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
     <Compile Include="CustomCommands\0301-GenerateTestDataCommand\0301-GenerateTestDataCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\0303-DatabaseTransferCommand.cs" />
+    <Compile Include="CustomCommands\0303-SyncDatabaseCommand\0303-SyncDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\DatabaseConfig.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreCodeGenerator.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />
+    <Compile Include="Function\Bytes.cs" />
     <Compile Include="Function\Database\CheckConstraintModel.cs" />
     <Compile Include="Function\Database\ColumnModel.cs" />
     <Compile Include="Function\Database\ColumnModelCollection.cs" />
@@ -94,12 +95,12 @@
     <Compile Include="Function\Database\ViewModel.cs" />
     <Compile Include="Function\Database\ViewModelCollection.cs" />
     <Compile Include="Function\SR.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferConfig.cs" />
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferForm.cs">
+    <Compile Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseConfig.cs" />
+    <Compile Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CustomCommands\0303-DatabaseTransferCommand\DatabaseTransferForm.designer.cs">
-      <DependentUpon>DatabaseTransferForm.cs</DependentUpon>
+    <Compile Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseForm.designer.cs">
+      <DependentUpon>SyncDatabaseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
     <Compile Include="CustomTools\BaseCodeGenerator.cs" />
@@ -292,11 +293,14 @@
       <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="CustomCommands\Images\0201-OpenOutputFolder.png" />
-    <Content Include="CustomCommands\Images\0303-ImportDatabase.png" />
+    <Content Include="CustomCommands\Images\0303-SyncDatabase.png" />
     <Content Include="CustomCommands\Images\0304-GenerateDatabaseCode.png" />
     <Content Include="Resources\LeverPackage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseForm.resx">
+      <DependentUpon>SyncDatabaseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>

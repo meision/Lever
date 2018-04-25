@@ -9,35 +9,37 @@ using System.Threading.Tasks;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal enum DatabaseTransferAction
+    internal enum SyncDatabaseAction
     {
-        ImportDatabase,
-        GenerateScript
+        None = 0,
+        GenerateScript = 1,
+        ImportDatabase = 2,
     }
 
-    internal enum DatabaseTransferConnectionStringSource
+    internal enum SyncDatabaseConnectionStringSource
     {
         Static,
         FileRegex,
     }
 
-    internal enum DatabaseTransferModel
+    internal enum SyncDatabaseModel
     {
         None,
-        IgnoreExists,
+        Insert,
+        InsertNotExists,
         Merge,
     }
 
-    internal class DatabaseTransferConfig
+    internal class SyncDatabaseConfig
     {
         public const string DefaultSheetName = "__Config";
 
-        public static DatabaseTransferConfig CreateFromExcel(string fullname)
+        public static SyncDatabaseConfig CreateFromExcel(string fullname)
         {
             DataSet dataSet = EPPlusHelper.ReadExcelToDataSet(fullname, (sheetName) => DefaultSheetName.Equals(sheetName, StringComparison.OrdinalIgnoreCase));
             return CreateFromExcel(fullname, dataSet);
         }
-        public static DatabaseTransferConfig CreateFromExcel(string excelFilePath, DataSet dataSet)
+        public static SyncDatabaseConfig CreateFromExcel(string excelFilePath, DataSet dataSet)
         {
             if (excelFilePath == null)
             {
@@ -53,23 +55,23 @@ namespace Meision.VisualStudio.CustomCommands
                 return null;
             }
 
-            DatabaseTransferConfig config = new DatabaseTransferConfig();
+            SyncDatabaseConfig config = new SyncDatabaseConfig();
             // Action
-            config.Action = (DatabaseTransferAction)Enum.Parse(typeof(DatabaseTransferAction), Convert.ToString(table.Rows[0]["Action"]));
+            config.Action = (SyncDatabaseAction)Enum.Parse(typeof(SyncDatabaseAction), Convert.ToString(table.Rows[0]["Action"]));
             // ConnectionProvider
             config.ConnectionProvider = Convert.ToString(table.Rows[0]["ConnectionProvider"]);
             // Source
-            DatabaseTransferConnectionStringSource connectionStringSource = (DatabaseTransferConnectionStringSource)Enum.Parse(typeof(DatabaseTransferConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));
+            SyncDatabaseConnectionStringSource connectionStringSource = (SyncDatabaseConnectionStringSource)Enum.Parse(typeof(SyncDatabaseConnectionStringSource), Convert.ToString(table.Rows[0]["ConnectionStringSource"]));
             switch (connectionStringSource)
             {
-                case DatabaseTransferConnectionStringSource.Static:
+                case SyncDatabaseConnectionStringSource.Static:
                     {
                         config.ConnectionStrings = Convert.ToString(table.Rows[0]["ConnectionStringExpression"])
                             .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
                             .ToArray();
                     }
                     break;
-                case DatabaseTransferConnectionStringSource.FileRegex:
+                case SyncDatabaseConnectionStringSource.FileRegex:
                     {
                         config.ConnectionStrings = Convert.ToString(table.Rows[0]["ConnectionStringExpression"])
                             .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
@@ -97,14 +99,14 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             config.ClearTableBeforeImport = Convert.ToBoolean(table.Rows[0]["ClearTableBeforeImport"]);
-            config.ImportMode = (DatabaseTransferModel)Enum.Parse(typeof(DatabaseTransferModel), Convert.ToString(table.Rows[0]["ImportMode"]));
+            config.Mode = (SyncDatabaseModel)Enum.Parse(typeof(SyncDatabaseModel), Convert.ToString(table.Rows[0]["ImportMode"]));
             return config;
         }
 
-        public DatabaseTransferAction Action { get; set; }
+        public SyncDatabaseAction Action { get; set; }
         public string ConnectionProvider { get; set; }
         public IList<string> ConnectionStrings { get; set; }
         public bool ClearTableBeforeImport { get; set; }
-        public DatabaseTransferModel ImportMode { get; set; }
+        public SyncDatabaseModel Mode { get; set; }
     }
 }

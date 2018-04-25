@@ -52,12 +52,12 @@
           <ButtonText>Generate Languages</ButtonText>
         </Strings>
       </Button>
-      <Button guid="guidLeverCmdSet" id="cmdDatabaseTransfer" priority="0x0400" type="Button">
+      <Button guid="guidLeverCmdSet" id="cmdSyncDatabase" priority="0x0400" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
-        <Icon guid="guidImages" id="bmpDatabaseTransfer" />
+        <Icon guid="guidImages" id="bmpSyncDatabase" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Import Database</ButtonText>
+          <ButtonText>Sync Database</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidLeverCmdSet" id="cmdGenerateDatabaseCode" priority="0x0400" type="Button">
@@ -88,17 +88,17 @@
       </Button>
 
 
-      <!--<Button guid="guidLeverCmdSet" id="cmdTest" priority="0x0400" type="Button">
+      <Button guid="guidLeverCmdSet" id="cmdTest" priority="0x0400" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>Test Command</ButtonText>
         </Strings>
-      </Button>-->
+      </Button>
       
     </Buttons>
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpDatabaseTransfer,bmpGenerateDatabaseCode,bmpLineupImages,bmpFormatAndCleanCodes" />
+      <Bitmap guid="guidImages" href="Images.png" usedList="bmpOpenContainingFolder,bmpOpenOutputFolder,bmpGenerateTestData,bmpGenerateLanguages,bmpSyncDatabase,bmpGenerateDatabaseCode,bmpLineupImages,bmpFormatAndCleanCodes" />
     </Bitmaps>
   </Commands>
 
@@ -113,7 +113,7 @@
       
       <IDSymbol name="cmdGenerateTestData" value="0x0301" />
       <IDSymbol name="cmdGenerateLanguages" value="0x0302" />
-      <IDSymbol name="cmdDatabaseTransfer" value="0x0303" />
+      <IDSymbol name="cmdSyncDatabase" value="0x0303" />
       <IDSymbol name="cmdGenerateDatabaseCode" value="0x0304" />
 
       <IDSymbol name="grpCollectionFolder" value="0x0400" />
@@ -130,7 +130,7 @@
       <IDSymbol name="bmpOpenOutputFolder" value="2" />   
       <IDSymbol name="bmpGenerateTestData" value="3" />
       <IDSymbol name="bmpGenerateLanguages" value="4" />
-      <IDSymbol name="bmpDatabaseTransfer" value="5" />
+      <IDSymbol name="bmpSyncDatabase" value="5" />
       <IDSymbol name="bmpGenerateDatabaseCode" value="6" />
       <IDSymbol name="bmpLineupImages" value="7" />
       <IDSymbol name="bmpFormatAndCleanCodes" value="8" />
