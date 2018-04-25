@@ -67,6 +67,7 @@
     <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Function\Bytes.cs" />
     <Compile Include="Function\Database\CheckConstraintModel.cs" />
     <Compile Include="Function\Database\ColumnModel.cs" />
