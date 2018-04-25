@@ -60,7 +60,7 @@
             this.panBottom.Location = new System.Drawing.Point(0, 338);
             this.panBottom.Name = "panBottom";
             this.panBottom.Size = new System.Drawing.Size(755, 63);
-            this.panBottom.TabIndex = 2;
+            this.panBottom.TabIndex = 9;
             // 
             // btnCancel
             // 
@@ -99,7 +99,7 @@
             this.lblConnectionString.Location = new System.Drawing.Point(21, 46);
             this.lblConnectionString.Name = "lblConnectionString";
             this.lblConnectionString.Size = new System.Drawing.Size(112, 13);
-            this.lblConnectionString.TabIndex = 3;
+            this.lblConnectionString.TabIndex = 0;
             this.lblConnectionString.Text = "Destination Database:";
             // 
             // lblClear
@@ -108,7 +108,7 @@
             this.lblClear.Location = new System.Drawing.Point(64, 87);
             this.lblClear.Name = "lblClear";
             this.lblClear.Size = new System.Drawing.Size(69, 13);
-            this.lblClear.TabIndex = 5;
+            this.lblClear.TabIndex = 2;
             this.lblClear.Text = "Clear Tables:";
             // 
             // cboConnectionString
@@ -117,7 +117,7 @@
             this.cboConnectionString.Location = new System.Drawing.Point(153, 41);
             this.cboConnectionString.Name = "cboConnectionString";
             this.cboConnectionString.Size = new System.Drawing.Size(580, 21);
-            this.cboConnectionString.TabIndex = 6;
+            this.cboConnectionString.TabIndex = 1;
             // 
             // chkClear
             // 
@@ -125,7 +125,7 @@
             this.chkClear.Location = new System.Drawing.Point(153, 86);
             this.chkClear.Name = "chkClear";
             this.chkClear.Size = new System.Drawing.Size(248, 17);
-            this.chkClear.TabIndex = 7;
+            this.chkClear.TabIndex = 3;
             this.chkClear.Text = "Execute Command to clear tables before import";
             this.chkClear.UseVisualStyleBackColor = true;
             this.chkClear.CheckedChanged += new System.EventHandler(this.chkClear_CheckedChanged);
@@ -138,7 +138,8 @@
             this.txtClearSQL.Name = "txtClearSQL";
             this.txtClearSQL.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtClearSQL.Size = new System.Drawing.Size(580, 141);
-            this.txtClearSQL.TabIndex = 8;
+            this.txtClearSQL.TabIndex = 4;
+            this.txtClearSQL.WordWrap = false;
             // 
             // lblSyncDatabaseMode
             // 
@@ -146,7 +147,7 @@
             this.lblSyncDatabaseMode.Location = new System.Drawing.Point(69, 305);
             this.lblSyncDatabaseMode.Name = "lblSyncDatabaseMode";
             this.lblSyncDatabaseMode.Size = new System.Drawing.Size(64, 13);
-            this.lblSyncDatabaseMode.TabIndex = 9;
+            this.lblSyncDatabaseMode.TabIndex = 7;
             this.lblSyncDatabaseMode.Text = "Sync Mode:";
             // 
             // rdoSyncDatabaseModeMerge
@@ -155,7 +156,7 @@
             this.rdoSyncDatabaseModeMerge.Location = new System.Drawing.Point(359, 8);
             this.rdoSyncDatabaseModeMerge.Name = "rdoSyncDatabaseModeMerge";
             this.rdoSyncDatabaseModeMerge.Size = new System.Drawing.Size(108, 17);
-            this.rdoSyncDatabaseModeMerge.TabIndex = 10;
+            this.rdoSyncDatabaseModeMerge.TabIndex = 2;
             this.rdoSyncDatabaseModeMerge.Text = "Merge for all rows";
             this.rdoSyncDatabaseModeMerge.UseVisualStyleBackColor = true;
             // 
@@ -165,7 +166,7 @@
             this.rdoSyncDatabaseModeInsertNotExists.Location = new System.Drawing.Point(175, 8);
             this.rdoSyncDatabaseModeInsertNotExists.Name = "rdoSyncDatabaseModeInsertNotExists";
             this.rdoSyncDatabaseModeInsertNotExists.Size = new System.Drawing.Size(131, 17);
-            this.rdoSyncDatabaseModeInsertNotExists.TabIndex = 11;
+            this.rdoSyncDatabaseModeInsertNotExists.TabIndex = 1;
             this.rdoSyncDatabaseModeInsertNotExists.Text = "Insert rows if not exists";
             this.rdoSyncDatabaseModeInsertNotExists.UseVisualStyleBackColor = true;
             // 
@@ -176,7 +177,7 @@
             this.rdoSyncDatabaseActionGenerateScript.Location = new System.Drawing.Point(3, 7);
             this.rdoSyncDatabaseActionGenerateScript.Name = "rdoSyncDatabaseActionGenerateScript";
             this.rdoSyncDatabaseActionGenerateScript.Size = new System.Drawing.Size(99, 17);
-            this.rdoSyncDatabaseActionGenerateScript.TabIndex = 14;
+            this.rdoSyncDatabaseActionGenerateScript.TabIndex = 0;
             this.rdoSyncDatabaseActionGenerateScript.TabStop = true;
             this.rdoSyncDatabaseActionGenerateScript.Text = "Generate Script";
             this.rdoSyncDatabaseActionGenerateScript.UseVisualStyleBackColor = true;
@@ -187,7 +188,7 @@
             this.rdoSyncDatabaseActionImportDatabase.Location = new System.Drawing.Point(175, 7);
             this.rdoSyncDatabaseActionImportDatabase.Name = "rdoSyncDatabaseActionImportDatabase";
             this.rdoSyncDatabaseActionImportDatabase.Size = new System.Drawing.Size(119, 17);
-            this.rdoSyncDatabaseActionImportDatabase.TabIndex = 13;
+            this.rdoSyncDatabaseActionImportDatabase.TabIndex = 1;
             this.rdoSyncDatabaseActionImportDatabase.Text = "Import To Database";
             this.rdoSyncDatabaseActionImportDatabase.UseVisualStyleBackColor = true;
             // 
@@ -197,7 +198,7 @@
             this.lblSyncDatabaseActioin.Location = new System.Drawing.Point(66, 264);
             this.lblSyncDatabaseActioin.Name = "lblSyncDatabaseActioin";
             this.lblSyncDatabaseActioin.Size = new System.Drawing.Size(67, 13);
-            this.lblSyncDatabaseActioin.TabIndex = 12;
+            this.lblSyncDatabaseActioin.TabIndex = 5;
             this.lblSyncDatabaseActioin.Text = "Sync Action:";
             // 
             // rdoSyncDatabaseModeInsert
@@ -207,7 +208,8 @@
             this.rdoSyncDatabaseModeInsert.Location = new System.Drawing.Point(3, 8);
             this.rdoSyncDatabaseModeInsert.Name = "rdoSyncDatabaseModeInsert";
             this.rdoSyncDatabaseModeInsert.Size = new System.Drawing.Size(76, 17);
-            this.rdoSyncDatabaseModeInsert.TabIndex = 15;
+            this.rdoSyncDatabaseModeInsert.TabIndex = 0;
+            this.rdoSyncDatabaseModeInsert.TabStop = true;
             this.rdoSyncDatabaseModeInsert.Text = "Insert rows";
             this.rdoSyncDatabaseModeInsert.UseVisualStyleBackColor = true;
             // 
@@ -218,7 +220,7 @@
             this.panSyncDatabaseAction.Location = new System.Drawing.Point(153, 255);
             this.panSyncDatabaseAction.Name = "panSyncDatabaseAction";
             this.panSyncDatabaseAction.Size = new System.Drawing.Size(580, 32);
-            this.panSyncDatabaseAction.TabIndex = 16;
+            this.panSyncDatabaseAction.TabIndex = 6;
             // 
             // panSyncDatabaseMode
             // 
@@ -228,7 +230,7 @@
             this.panSyncDatabaseMode.Location = new System.Drawing.Point(153, 296);
             this.panSyncDatabaseMode.Name = "panSyncDatabaseMode";
             this.panSyncDatabaseMode.Size = new System.Drawing.Size(580, 33);
-            this.panSyncDatabaseMode.TabIndex = 17;
+            this.panSyncDatabaseMode.TabIndex = 8;
             // 
             // SyncDatabaseForm
             // 

@@ -35,13 +35,14 @@ namespace Meision.VisualStudio.CustomCommands
                 if (!SyncDatabaseConfig.DefaultSheetName.Equals(table.TableName, StringComparison.OrdinalIgnoreCase))
                 {
                     builder.AppendLine($"DELETE FROM [{table.TableName}]");
+                    builder.AppendLine($"IF EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = object_id('{table.TableName}')) DBCC CHECKIDENT('{table.TableName}', RESEED, 0)");
                 }
             }
             this.txtClearSQL.Text = builder.ToString();
             this.chkClear.Checked = config.ClearTableBeforeImport;
             // Model
             (this.panSyncDatabaseAction.Controls.Find($"rdoSyncDatabaseAction{config.Action}", false)[0] as RadioButton).Checked = true;
-            (this.panSyncDatabaseAction.Controls.Find($"rdoSyncDatabaseMode{config.Mode}", false)[0] as RadioButton).Checked = true;
+            (this.panSyncDatabaseMode.Controls.Find($"rdoSyncDatabaseMode{config.Mode}", false)[0] as RadioButton).Checked = true;                                       
         }
 
         private void chkClear_CheckedChanged(object sender, EventArgs e)

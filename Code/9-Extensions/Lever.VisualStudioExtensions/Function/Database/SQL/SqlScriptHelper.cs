@@ -368,7 +368,7 @@ ORDER BY
 
             return builder.ToString();
         }
-
+        
         public static string GenerateInsertIntoScript(string sourceTableName, IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
         {
             if (sourceColumnInfos == null)
@@ -420,6 +420,33 @@ ORDER BY
             }
             builder.AppendLine($"FROM [{sourceTableName}]");
 
+            return builder.ToString();
+        }
+
+        public static string GenerateInsertScript(IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
+        {
+            if (sourceColumnInfos == null)
+            {
+                throw new ArgumentNullException("sourceColumnInfos");
+            }
+            if (destinationTableName == null)
+            {
+                throw new ArgumentNullException("destinationTableName");
+            }
+            if (sourceColumnInfos.Count == 0)
+            {
+                return null;
+            }
+
+            // Exclude timestamp column
+            List<SqlColumnInfo> columnInfos = sourceColumnInfos.Where(p => p.Type != SqlColumnType.@timestamp).ToList();
+            
+            StringBuilder builder = new StringBuilder();
+            string columnList = string.Join(", ", columnInfos.Select(p => $"[{p.Name}]"));
+            builder.Append($"INSERT INTO [{destinationTableName}]({columnList})");
+            builder.Append(" ");
+            string parameterList = string.Join(", ", columnInfos.Select(p => $"@{p.Name}"));
+            builder.Append($"VALUES({parameterList})");
             return builder.ToString();
         }
 

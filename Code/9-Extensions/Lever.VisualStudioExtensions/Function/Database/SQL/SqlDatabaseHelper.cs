@@ -219,14 +219,14 @@ namespace Meision.Database.SQL
             return columnInfos.ToArray();
         }
 
-        public static SqlCommand GetMergeCommand(SqlConnection connection, IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
+        public static SqlCommand GetInsertCommand(SqlConnection connection, IList<SqlColumnInfo> destinationColumnInfos, string destinationTableName)
         {
             SqlCommand command = connection.CreateCommand();
-            command.CommandText = SqlScriptHelper.GenerateMergeScript(null, sourceColumnInfos, destinationTableName);
-            foreach (SqlColumnInfo sourceColumnInfo in sourceColumnInfos)
+            command.CommandText = SqlScriptHelper.GenerateInsertScript(destinationColumnInfos, destinationTableName);
+            foreach (SqlColumnInfo sourceColumnInfo in destinationColumnInfos)
             {
                 SqlParameter parameter = new SqlParameter();
-                parameter.ParameterName = @"{sourceColumnInfo.Name}";
+                parameter.ParameterName = $"@{sourceColumnInfo.Name}";
                 parameter.SqlDbType = SqlDatabaseHelper.GetDbType(sourceColumnInfo.Type);
                 command.Parameters.Add(parameter);
             }
@@ -246,5 +246,20 @@ namespace Meision.Database.SQL
             }
             return command;
         }
+
+        public static SqlCommand GetMergeCommand(SqlConnection connection, IList<SqlColumnInfo> sourceColumnInfos, string destinationTableName)
+        {
+            SqlCommand command = connection.CreateCommand();
+            command.CommandText = SqlScriptHelper.GenerateMergeScript(null, sourceColumnInfos, destinationTableName);
+            foreach (SqlColumnInfo sourceColumnInfo in sourceColumnInfos)
+            {
+                SqlParameter parameter = new SqlParameter();
+                parameter.ParameterName = @"{sourceColumnInfo.Name}";
+                parameter.SqlDbType = SqlDatabaseHelper.GetDbType(sourceColumnInfo.Type);
+                command.Parameters.Add(parameter);
+            }
+            return command;
+        }
+
     }
 }
