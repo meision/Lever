@@ -188,6 +188,8 @@ namespace Meision.Database
             relationshipModel.Name = Convert.ToString(relationshipRows[0]["ForeignKeyName"]);
             relationshipModel.PrincipalEnd = new EndModel(Convert.ToString(relationshipRows[0]["PrincipalTableSchema"]), Convert.ToString(relationshipRows[0]["PrincipalTableName"]), relationshipRows.Select(p => Convert.ToString(p["PrincipalColumnName"])).ToArray());
             relationshipModel.DependentEnd = new EndModel(Convert.ToString(relationshipRows[0]["DependentTableSchema"]), Convert.ToString(relationshipRows[0]["DependentTableName"]), relationshipRows.Select(p => Convert.ToString(p["DependentColumnName"])).ToArray());
+            relationshipModel.UpdateCascade = Convert.ToBoolean(relationshipRows[0]["UpdateCascade"]);
+            relationshipModel.DeleteCascade = Convert.ToBoolean(relationshipRows[0]["DeleteCascade"]);
             return relationshipModel;
         }
     }

@@ -85,12 +85,16 @@ namespace Meision.VisualStudio.CustomCommands
                 // Columns
                 builder.AppendLine($"                // Columns");
                 foreach (ColumnModel columnModel in dataModel.Columns)
-                {         
+                {
                     string columnName = columnModel.Name;
                     builder.Append($"                entity.Property(_ => _.{columnName})");
                     if ((identityModel != null) && columnModel.Name.Equals(identityModel.ColumnName, StringComparison.OrdinalIgnoreCase))
                     {
                         builder.Append($".ValueGeneratedOnAdd()");
+                    }
+                    else
+                    {
+                        builder.Append($".ValueGeneratedNever()");
                     }
                     if (!columnModel.Nullable)
                     {
@@ -221,6 +225,10 @@ namespace Meision.VisualStudio.CustomCommands
                         if (dependentModel.DeleteCascade)
                         {
                             builder.Append($".OnDelete(DeleteBehavior.Cascade)");
+                        }
+                        else
+                        {
+                            builder.Append($".OnDelete(DeleteBehavior.ClientSetNull)");
                         }
                         if (!string.IsNullOrEmpty(dependentModel.Name))
                         {
