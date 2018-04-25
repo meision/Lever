@@ -231,13 +231,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ItemTemplates\DatabaseTransferExcel\DatabaseTransferExcel.csproj">
-      <Project>{76D76130-A8D3-486C-8801-C727A54F3421}</Project>
-      <Name>DatabaseTransferExcel</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\EF6DbContextConfig\EF6DbContextConfig.csproj">
       <Project>{5E3000BF-B975-4D33-92DE-8616DDC7C209}</Project>
       <Name>EF6DbContextConfig</Name>
@@ -269,6 +262,13 @@
     <ProjectReference Include="..\ItemTemplates\SingletonClass\SingletonClass.csproj">
       <Project>{F849CE13-C391-45BC-9F73-E066AF419568}</Project>
       <Name>SingletonClass</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\SyncDatabaseExcel\SyncDatabaseExcel.csproj">
+      <Project>{1270CBE4-B1DD-4EF4-B211-BB86CE999534}</Project>
+      <Name>SyncDatabaseExcel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
