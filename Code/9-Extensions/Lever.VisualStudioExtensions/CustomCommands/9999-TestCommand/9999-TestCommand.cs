@@ -47,8 +47,8 @@ namespace Meision.VisualStudio.CustomCommands
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
             string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            projectItem.ProjectItems.AddFromFileCopy(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "1.txt"));
-            projectItem.Collection.AddFromFile(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "2.txt"));
+            projectItem.ProjectItems.AddDependentFromFiles(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "Class1.cs"));
+            //projectItem.Collection.AddFromFile(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "2.txt"));
      
         }
     }
