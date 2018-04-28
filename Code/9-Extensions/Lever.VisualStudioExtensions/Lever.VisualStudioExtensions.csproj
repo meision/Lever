@@ -56,7 +56,8 @@
     <Compile Include="CustomCommands\0101-OpenContainingFolderCommand\0101-OpenContainingFolderCommand.cs" />
     <Compile Include="CustomCommands\0201-OpenOutputFolderCommand\0201-OpenOutputFolderCommand.cs" />
     <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
-    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\0301-GenerateTestDataCommand.cs" />
+    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\0301-XUnitTestData.cs" />
+    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\XUnitTestDataGenerator.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-SyncDatabaseCommand\0303-SyncDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />
+    <Compile Include="CustomCommands\Generator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Function\Bytes.cs" />
     <Compile Include="Function\Database\CheckConstraintModel.cs" />
