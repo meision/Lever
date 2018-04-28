@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TestDataExcel")]
+[assembly: AssemblyTitle("XUnitTestDataExcel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Jim Cai")]
-[assembly: AssemblyProduct("TestDataExcel")]
-[assembly: AssemblyCopyright("Copyright © Jim Cai 2018")]
+[assembly: AssemblyCompany("蔡晓晖")]
+[assembly: AssemblyProduct("XUnitTestDataExcel")]
+[assembly: AssemblyCopyright("Copyright © 蔡晓晖 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("21227faa-902f-443b-adec-1dc2936bdd63")]
+[assembly: Guid("0bd469bd-5313-4030-8334-6bd7eb7a9279")]
 
 // Version information for an assembly consists of the following four values:
 //

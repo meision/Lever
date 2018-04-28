@@ -56,8 +56,8 @@
     <Compile Include="CustomCommands\0101-OpenContainingFolderCommand\0101-OpenContainingFolderCommand.cs" />
     <Compile Include="CustomCommands\0201-OpenOutputFolderCommand\0201-OpenOutputFolderCommand.cs" />
     <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
-    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\0301-XUnitTestData.cs" />
-    <Compile Include="CustomCommands\0301-GenerateTestDataCommand\XUnitTestDataGenerator.cs" />
+    <Compile Include="CustomCommands\0301-XUnitTestDataCommand\0301-XUnitTestData.cs" />
+    <Compile Include="CustomCommands\0301-XUnitTestDataCommand\XUnitTestDataGenerator.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-SyncDatabaseCommand\0303-SyncDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
@@ -276,9 +276,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\TestDataExcel\TestDataExcel.csproj">
-      <Project>{21227FAA-902F-443B-ADEC-1DC2936BDD63}</Project>
-      <Name>TestDataExcel</Name>
+    <ProjectReference Include="..\ItemTemplates\XUnitTestDataExcel\XUnitTestDataExcel.csproj">
+      <Project>{0BD469BD-5313-4030-8334-6BD7EB7A9279}</Project>
+      <Name>XUnitTestDataExcel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

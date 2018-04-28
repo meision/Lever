@@ -9,11 +9,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{21227FAA-902F-443B-ADEC-1DC2936BDD63}</ProjectGuid>
+    <ProjectGuid>{0BD469BD-5313-4030-8334-6BD7EB7A9279}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestDataExcel</RootNamespace>
-    <AssemblyName>TestDataExcel</AssemblyName>
+    <RootNamespace>XUnitTestDataExcel</RootNamespace>
+    <AssemblyName>XUnitTestDataExcel</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -57,14 +57,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestData.xlsx" />
-    <None Include="TestDataExcel.ico" />
+    <None Include="XUnitTestData.xlsx" />
+    <None Include="XUnitTestDataExcel.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="TestDataExcel.vstemplate">
-      <OutputSubPath>Lever</OutputSubPath>
-      <SubType>Designer</SubType>
-    </VSTemplate>
+    <VSTemplate Include="XUnitTestDataExcel.vstemplate" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
