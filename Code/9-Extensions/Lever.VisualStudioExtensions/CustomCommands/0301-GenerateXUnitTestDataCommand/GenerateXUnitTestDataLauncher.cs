@@ -12,13 +12,13 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    public class XUnitTestDataGenerator : Generator
+    public class GenerateXUnitTestDataLauncher : Launcher
     {
-        public XUnitTestDataGenerator(ProjectItem projectItem) : base(projectItem)
+        public GenerateXUnitTestDataLauncher(ProjectItem projectItem) : base(projectItem)
         {
         }
 
-        public override void Execute()
+        public override void Launch()
         {
             if (!this.InputFilePath.EndsWith(".xlsx"))
             {

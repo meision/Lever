@@ -8,13 +8,13 @@ using EnvDTE;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    public abstract class Generator
+    public abstract class Launcher
     {
         public ProjectItem ProjectItem { get; }
         public string InputFilePath { get; }
         public string CodeNamespace { get; }
 
-        public Generator(ProjectItem projectItem)
+        public Launcher(ProjectItem projectItem)
         {
             if (projectItem == null)
             {
@@ -26,7 +26,7 @@ namespace Meision.VisualStudio.CustomCommands
             this.CodeNamespace = Helper.GetNamespace(this.ProjectItem);
         }
 
-        public abstract void Execute();
+        public abstract void Launch();
 
         protected string GetOutputFilePathByExtension(string extensions)
         {

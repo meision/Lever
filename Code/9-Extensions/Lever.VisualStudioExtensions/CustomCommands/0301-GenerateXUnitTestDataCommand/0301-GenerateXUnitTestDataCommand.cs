@@ -10,9 +10,9 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal sealed class XUnitTestDataCommand : CustomCommand
+    internal sealed class GenerateXUnitTestDataCommand : CustomCommand
     {
-        public XUnitTestDataCommand()
+        public GenerateXUnitTestDataCommand()
         {
             this.CommandId = 0x0301;
         }
@@ -24,8 +24,8 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
-            XUnitTestDataGenerator generator = new XUnitTestDataGenerator(this.DTE.SelectedItems.Item(1).ProjectItem);
-            generator.Execute();
+            GenerateXUnitTestDataLauncher generator = new GenerateXUnitTestDataLauncher(this.DTE.SelectedItems.Item(1).ProjectItem);
+            generator.Launch();
         }
 
 

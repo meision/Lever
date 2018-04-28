@@ -3,47 +3,49 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
-namespace Meision.VisualStudio.CustomTools
+namespace Meision.VisualStudio.CustomCommands
 {
-    [ComVisible(true)]
-    [Guid("B1CED36B-722E-4339-A211-6FD31BFA5101")]
-    [CodeGeneratorRegistration(typeof(ExcelLanguagesGenerator), nameof(ExcelLanguagesGenerator), Parameters.guidCSharpProject, GeneratesDesignTimeSource = true)]
-    [CodeGeneratorRegistration(typeof(ExcelLanguagesGenerator), nameof(ExcelLanguagesGenerator), Parameters.guidDotNetCoreProject, GeneratesDesignTimeSource = true)]
-    [ProvideObject(typeof(ExcelLanguagesGenerator))]
-    public class ExcelLanguagesGenerator : BaseCodeGeneratorWithSite
+    public class GenerateLanguagesLauncher : Launcher
     {
         private const string TABLENAME_LANGUAGES = "Languages";
-        
-        protected override byte[] GenerateData(string inputFileContent)
+
+        public GenerateLanguagesLauncher(ProjectItem projectItem) : base(projectItem)
+        {
+        }
+
+        public override void Launch()
         {
             if (!this.InputFilePath.EndsWith(".xlsx"))
             {
-                this.GeneratorError(1, "Input file should be excel file.", 0, 0);
-                return null;
+                throw new InvalidDataException("Input file should be excel file.");
             }
 
-            DTE dte = (DTE)this.GetService(typeof(DTE));
-            ProjectItem projectItem = this.GetProjectItem();
-            byte[] data = this.GenerateDataFromProjectItem(projectItem);
-            return data;
+            this.ProjectItem.DeleteDependentFiles();
+
+            string outputFilePath = this.GetOutputFilePathByExtension(".cs");
+            byte[] data = this.GenerateData();
+            System.IO.File.WriteAllBytes(outputFilePath, data);
+            this.ProjectItem.Collection.AddFromFile(outputFilePath);
+
+            this.ProjectItem.AddDependentFromFiles(outputFilePath);
         }
 
-        internal protected override byte[] GenerateDataFromProjectItem(ProjectItem projectItem)
+        private byte[] GenerateData()
         {
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
             DataTable table;
-            using (FileStream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream stream = new FileStream(this.InputFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 DataSet dataSet = EPPlusHelper.ReadExcelToDataSet(stream);
                 if (!dataSet.Tables.Contains(TABLENAME_LANGUAGES))
                 {
-                    this.GeneratorError(1, "Excel sheet \"Languages\" could not be found.", 0, 0);
-                    return null;
+                    throw new InvalidDataException("Excel sheet \"Languages\" could not be found.");            
                 }
 
                 table = dataSet.Tables[TABLENAME_LANGUAGES];

@@ -15,12 +15,12 @@
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="SingletonClass" d:TargetPath="|SingletonClass;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="LanguagesExcel" d:TargetPath="|LanguagesExcel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-		<Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="XUnitTestDataExcel" d:TargetPath="|XUnitTestDataExcel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EF6DbContextConfig" d:TargetPath="|EF6DbContextConfig;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="EFCoreDbContextConfig" d:TargetPath="|EFCoreDbContextConfig;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="ServiceManagerClass" d:TargetPath="|ServiceManagerClass;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="SyncDatabaseExcel" d:TargetPath="|SyncDatabaseExcel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="GenerateXUnitTestDataExcel" d:TargetPath="|GenerateXUnitTestDataExcel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="GenerateLanguagesExcel" d:TargetPath="|GenerateLanguagesExcel;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

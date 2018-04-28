@@ -56,8 +56,10 @@
     <Compile Include="CustomCommands\0101-OpenContainingFolderCommand\0101-OpenContainingFolderCommand.cs" />
     <Compile Include="CustomCommands\0201-OpenOutputFolderCommand\0201-OpenOutputFolderCommand.cs" />
     <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
-    <Compile Include="CustomCommands\0301-XUnitTestDataCommand\0301-XUnitTestData.cs" />
-    <Compile Include="CustomCommands\0301-XUnitTestDataCommand\XUnitTestDataGenerator.cs" />
+    <Compile Include="CustomCommands\0301-GenerateXUnitTestDataCommand\0301-GenerateXUnitTestDataCommand.cs" />
+    <Compile Include="CustomCommands\0301-GenerateXUnitTestDataCommand\GenerateXUnitTestDataLauncher.cs" />
+    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\GenerateLanguagesLauncher.cs" />
+    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\LanguageManager.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-SyncDatabaseCommand\0303-SyncDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
@@ -68,7 +70,8 @@
     <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />
-    <Compile Include="CustomCommands\Generator.cs" />
+    <Compile Include="CustomCommands\Launcher.cs" />
+    <Compile Include="CustomTools\XXXGenerator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Function\Bytes.cs" />
     <Compile Include="Function\Database\CheckConstraintModel.cs" />
@@ -108,10 +111,7 @@
     <Compile Include="CustomCommands\[A]CustomCommand.cs" />
     <Compile Include="CustomTools\BaseCodeGenerator.cs" />
     <Compile Include="CustomTools\BaseCodeGeneratorWithSite.cs" />
-    <Compile Include="CustomTools\ExcelTestDataAttributeGenerator\ExcelTestDataAttributeGenerator.cs" />
     <Compile Include="EPPlusHelper.cs" />
-    <Compile Include="CustomTools\ExcelLanguagesGenerator\ExcelLanguagesGenerator.cs" />
-    <Compile Include="CustomTools\ExcelLanguagesGenerator\LanguageManager.cs" />
     <Compile Include="Function\Database\SQL\SqlColumnInfo.cs" />
     <Compile Include="Function\Database\SQL\SqlColumnType.cs" />
     <Compile Include="Function\Database\SQL\SqlDatabaseHelper.cs" />
@@ -248,9 +248,16 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\LanguagesExcel\LanguagesExcel.csproj">
-      <Project>{DA71E26B-FC78-41E5-99B9-732700A26A3D}</Project>
-      <Name>LanguagesExcel</Name>
+    <ProjectReference Include="..\ItemTemplates\GenerateLanguagesExcel\GenerateLanguagesExcel.csproj">
+      <Project>{0585750C-0159-44F0-B5F3-F8495B09223E}</Project>
+      <Name>GenerateLanguagesExcel</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\GenerateXUnitTestDataExcel\GenerateXUnitTestDataExcel.csproj">
+      <Project>{9FBC3488-06B3-4122-A45D-762EBCA840D2}</Project>
+      <Name>GenerateXUnitTestDataExcel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
@@ -272,13 +279,6 @@
     <ProjectReference Include="..\ItemTemplates\SyncDatabaseExcel\SyncDatabaseExcel.csproj">
       <Project>{1270CBE4-B1DD-4EF4-B211-BB86CE999534}</Project>
       <Name>SyncDatabaseExcel</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\ItemTemplates\XUnitTestDataExcel\XUnitTestDataExcel.csproj">
-      <Project>{0BD469BD-5313-4030-8334-6BD7EB7A9279}</Project>
-      <Name>XUnitTestDataExcel</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

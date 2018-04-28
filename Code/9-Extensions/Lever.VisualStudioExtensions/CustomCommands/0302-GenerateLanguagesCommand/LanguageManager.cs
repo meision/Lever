@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Meision.VisualStudio
+namespace Meision.VisualStudio.CustomCommands
 {
     public enum CultureDisplayMode
     {

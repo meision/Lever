@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>GenerateLanguages Excel</Name>
+    <Description>GenerateLanguages Excel</Description>
+    <Icon>GenerateLanguagesExcel.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>Strings.xlsx</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References>
+    </References>
+    <ProjectItem TargetFileName="$fileinputname$.xlsx" ItemType="None" OpenInEditor="false" CustomTool="GenerateLanguages">Strings.xlsx</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

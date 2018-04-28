@@ -9,11 +9,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{0BD469BD-5313-4030-8334-6BD7EB7A9279}</ProjectGuid>
+    <ProjectGuid>{9FBC3488-06B3-4122-A45D-762EBCA840D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XUnitTestDataExcel</RootNamespace>
-    <AssemblyName>XUnitTestDataExcel</AssemblyName>
+    <RootNamespace>GenerateXUnitTestDataExcel</RootNamespace>
+    <AssemblyName>GenerateXUnitTestDataExcel</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -57,11 +57,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenerateXUnitTestDataExcel.ico" />
     <None Include="TestData.xlsx" />
-    <None Include="XUnitTestDataExcel.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="XUnitTestDataExcel.vstemplate">
+    <VSTemplate Include="GenerateXUnitTestDataExcel.vstemplate">
       <OutputSubPath>Lever</OutputSubPath>
     </VSTemplate>
   </ItemGroup>
