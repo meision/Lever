@@ -11,7 +11,7 @@ namespace Meision.VisualStudio
 {
     public static class Extensions
     {
-        public static void AddDependentFromFiles(this ProjectItems instance, params string[] files)
+        public static void AddDependentFromFiles(this ProjectItem instance, params string[] files)
         {
             if (instance == null)
             {
@@ -24,49 +24,51 @@ namespace Meision.VisualStudio
 
             if (instance.ContainingProject.Kind == Parameters.guidDotNetCoreProject)
             {
-                ProjectItem projectItem = instance.Parent as ProjectItem;
+                ProjectItem projectItem = instance;
                 string projectItemIdentity = (string)projectItem.Properties.Item("Identity").Value;
-                //projectItem.Properties.Print();
+                string projectItemName = (string)projectItem.Properties.Item("FileName").Value;
+                projectItem.Properties.Print();
                 Project project = projectItem.ContainingProject;
                 string projectPath = System.IO.Path.Combine((string)project.Properties.Item("LocalPath").Value, (string)project.Properties.Item("FileName").Value);
                 // Filter files in same directory.
                 string directory = Path.GetDirectoryName((string)projectItem.Properties.Item("LocalPath").Value);
                 IEnumerable<string> validFiles = files.Where(p => directory.Equals(Path.GetDirectoryName(p), StringComparison.OrdinalIgnoreCase));
 
-                // Parse XML from project file
                 XDocument document = XDocument.Load(projectPath);
-                // Element
-                XElement element = document.XPathSelectElements($"//ItemGroup/Compile/DependentUpon[text()='{projectItemIdentity}']").FirstOrDefault();
-                if (element == null)
+                // Item Group
+                XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
+                if (eItemGroup == null)
                 {
-                    XElement eItemGroup = XElement.Parse($"<ItemGroup><Compile Update=\"\"><DesignTime>True</DesignTime><AutoGen>True</AutoGen><DependentUpon>{projectItemIdentity}</DependentUpon></Compile></ItemGroup>");
+                    eItemGroup = XElement.Parse($"<ItemGroup Label='DependentUpon:{projectItemIdentity}'></ItemGroup>");
                     document.Root.Add(eItemGroup);
-                    element = document.XPathSelectElements($"//ItemGroup/Compile/DependentUpon[text()='{projectItemIdentity}']").FirstOrDefault();
                 }
-                XElement eOwner = element.Parent;
 
-                List<string> updates = new List<string>();
-                // Add old updates.
-                string value = eOwner.Attribute("Update")?.Value;
-                if (value != null)
-                {
-                    updates.AddRange(value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()));
-                }
                 // Merge new updates
-                string basePath = Path.GetDirectoryName(projectItemIdentity);
-                foreach (string file in validFiles)
+                string baseIdentity = Path.GetDirectoryName(projectItemIdentity);
+                if (!string.IsNullOrEmpty(baseIdentity))
                 {
-                    string item = $"{basePath}\\{Path.GetFileName(file)}";
-                    if (!updates.Any(p => item.Equals(p, StringComparison.OrdinalIgnoreCase)))
+                    baseIdentity += "\\";
+                }
+                // Parse XML from project file
+                foreach (string validFile in validFiles)
+                {
+                    string name = Path.GetFileName(validFile);
+                    string itemIdentity = $"{baseIdentity}{name}";
+                    ProjectItem pFile = projectItem.Collection.Item(name);
+                    if (pFile == null)
                     {
-                        updates.Add(item);
+                        continue;
                     }
+
+                    // Remove all exists update element
+                    foreach (XElement element in eItemGroup.XPathSelectElements($"*[@Update='{itemIdentity}']"))
+                    {
+                        element.Remove();
+                    }
+
+                    XElement eItem = XElement.Parse($"<{pFile.Properties.Item("ItemType").Value} Update=\"{itemIdentity}\"><DesignTime>True</DesignTime><AutoGen>True</AutoGen><DependentUpon>{projectItemName}</DependentUpon></{pFile.Properties.Item("ItemType").Value}>");
+                    eItemGroup.Add(eItem);
                 }
-                if (eOwner.Attribute("Update") == null)
-                {
-                    eOwner.Add(new XAttribute("Update", ""));
-                }
-                eOwner.Attribute("Update").Value = string.Join(";", updates);
 
                 document.Save(projectPath);
             }
@@ -74,12 +76,44 @@ namespace Meision.VisualStudio
             {
                 foreach (string file in files)
                 {
-                    instance.AddFromFile(file);
+                    instance.ProjectItems.AddFromFile(file);
                 }
             }
         }
 
-        internal static void Print(this Properties properties)
+        public static string[] GetDependents(this ProjectItem instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            // .net core project same with no
+            string[] items = new string[instance.ProjectItems.Count];
+            for (int i = 1; i <= items.Length; i++)
+            {
+                items[i - 1] = (string)instance.ProjectItems.Item(i).Properties.Item("LocalPath").Value;
+            }
+            return items;
+        }
+
+        public static void DeleteDependentFiles(this ProjectItem instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            // .net core project same with no
+            for (int i = instance.ProjectItems.Count; i >= 1; i--)
+            {
+                instance.ProjectItems.Item(i).Delete();
+            }
+        }
+
+
+
+            internal static void Print(this Properties properties)
         {
             foreach (Property item in properties)
             {

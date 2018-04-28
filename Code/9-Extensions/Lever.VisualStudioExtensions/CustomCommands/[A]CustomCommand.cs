@@ -126,5 +126,12 @@ namespace Meision.VisualStudio.CustomCommands
                 out result);
         }
 
+        protected void EnsureNotDirty(Project project)
+        {
+            if (project.IsDirty)
+            {
+                throw new Exception("You should save project file before this operation.");
+            }
+        }
     }
 }

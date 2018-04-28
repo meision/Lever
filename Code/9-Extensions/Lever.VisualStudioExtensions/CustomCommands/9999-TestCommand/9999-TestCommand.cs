@@ -46,10 +46,31 @@ namespace Meision.VisualStudio.CustomCommands
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            projectItem.ProjectItems.AddDependentFromFiles(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "Class1.cs"));
+            this.EnsureNotDirty(projectItem.ContainingProject);
+            
+            if (string.IsNullOrEmpty((string)projectItem.Properties.Item("CustomToolNamespace").Value))
+            {
+                projectItem.DeleteDependentFiles();
+            }
+            else
+            {
+                string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
+                string directory = Path.GetDirectoryName(fullPath);
+                System.IO.File.WriteAllBytes(Path.Combine(directory, "1.cs"), new byte[0]);
+                projectItem.Collection.AddFromFile(Path.Combine(directory, "1.cs"));
+                projectItem.AddDependentFromFiles(Path.Combine(directory, "1.cs"));
+    
+
+                System.IO.File.WriteAllBytes(Path.Combine(directory, "2.txt"), new byte[0]);
+                projectItem.Collection.AddFromFile(Path.Combine(directory, "2.txt"));
+                projectItem.AddDependentFromFiles(Path.Combine(directory, "2.txt"));
+            }
+
+
+            //projectItem.ProjectItems.AddDependentFromFiles(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "Class1.cs"));
+            //string[] s = projectItem.GetDependents();
             //projectItem.Collection.AddFromFile(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "2.txt"));
-     
+
         }
     }
 }
