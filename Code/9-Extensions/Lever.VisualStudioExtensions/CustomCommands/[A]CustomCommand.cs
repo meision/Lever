@@ -126,6 +126,24 @@ namespace Meision.VisualStudio.CustomCommands
                 out result);
         }
 
+        protected bool IsSelectedSingleFileWithCustomTool(string customToolName)
+        {
+            if (this.DTE.SelectedItems.Count != 1)
+            {
+                return false;
+            }
+            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)EnvDTE.Constants.vsProjectItemKindPhysicalFile)
+            {
+                return false;
+            }
+            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != customToolName)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         protected void EnsureNotDirty(Project project)
         {
             if (project.IsDirty)
