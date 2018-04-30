@@ -22,22 +22,7 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
-            menuItem.Visible = false;
-
-            if (this.DTE.SelectedItems.Count != 1)
-            {
-                return;
-            }
-            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)EnvDTE.Constants.vsProjectItemKindPhysicalFile)
-            {
-                return;
-            }
-            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != typeof(TCustomTool).Name)
-            {
-                return;
-            }
-
-            menuItem.Visible = true;
+            menuItem.Visible = IsSelectedSingleFileWithCustomTool(typeof(TCustomTool).Name);            
         }
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)

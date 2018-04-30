@@ -22,7 +22,7 @@ namespace Meision.VisualStudio.CustomCommands
         FileRegex,
     }
 
-    internal enum SyncDatabaseModel
+    internal enum SyncDatabaseMode
     {
         None,
         Insert,
@@ -99,7 +99,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
 
             config.ClearTableBeforeImport = Convert.ToBoolean(table.Rows[0]["ClearTableBeforeImport"]);
-            config.Mode = (SyncDatabaseModel)Enum.Parse(typeof(SyncDatabaseModel), Convert.ToString(table.Rows[0]["ImportMode"]));
+            config.Mode = (SyncDatabaseMode)Enum.Parse(typeof(SyncDatabaseMode), Convert.ToString(table.Rows[0]["ImportMode"]));
             return config;
         }
 
@@ -107,6 +107,6 @@ namespace Meision.VisualStudio.CustomCommands
         public string ConnectionProvider { get; set; }
         public IList<string> ConnectionStrings { get; set; }
         public bool ClearTableBeforeImport { get; set; }
-        public SyncDatabaseModel Mode { get; set; }
+        public SyncDatabaseMode Mode { get; set; }
     }
 }

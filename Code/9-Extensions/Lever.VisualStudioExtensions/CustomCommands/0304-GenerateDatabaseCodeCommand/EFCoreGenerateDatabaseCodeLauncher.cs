@@ -4,23 +4,18 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EnvDTE;
 using Meision.Database;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal class EFCoreCodeGenerator : DatabaseCodeGenerator
+    internal class EFCoreGenerateDatabaseCodeLauncher : GenerateDatabaseCodeLauncher
     {
-        public EFCoreCodeGenerator()
+        public EFCoreGenerateDatabaseCodeLauncher(ProjectItem projectItem) : base(projectItem)
         {
         }
 
-        public override void GenerateMain()
-        {
-            string code = this.GenerateMainCode();
-            System.IO.File.WriteAllText(Path.Combine(this.WorkingDictionary, $"{this.Config.Generation.Main.Class.Name}.cs"), code);
-        }
-
-        private string GenerateMainCode()
+        protected override string GenerateMainCode()
         {
             if (!this.Config.Generation.Enable)
             {
@@ -251,15 +246,7 @@ namespace Meision.VisualStudio.CustomCommands
             return builder.ToString();
         }
 
-        public override void GenerateEntites()
-        {
-            foreach (DataModel dataModel in this.DataModels)
-            {
-                string code = this.GenerateEntityCode(dataModel);
-                System.IO.File.WriteAllText(Path.Combine(this.WorkingDictionary, $"{dataModel.Name}.cs"), code);
-            }
-        }
-        public string GenerateEntityCode(DataModel dataModel)
+        protected override string GenerateEntityCode(DataModel dataModel)
         {
             StringBuilder builder = new StringBuilder();
 

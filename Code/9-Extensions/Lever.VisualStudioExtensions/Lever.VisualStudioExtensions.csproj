@@ -60,13 +60,14 @@
     <Compile Include="CustomCommands\0301-GenerateXUnitTestDataCommand\GenerateXUnitTestDataLauncher.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\GenerateLanguagesLauncher.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\LanguageManager.cs" />
+    <Compile Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseLauncher.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\0304-GenerateDatabaseCodeCommand.cs" />
     <Compile Include="CustomCommands\0303-SyncDatabaseCommand\0303-SyncDatabaseCommand.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\0302-GenerateLanguagesCommand.cs" />
     <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\DatabaseConfig.cs" />
-    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreCodeGenerator.cs" />
-    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EF6CodeGenerator.cs" />
-    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\[A]DatabaseCodeGenerator.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EFCoreGenerateDatabaseCodeLauncher.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\EF6GenerateDatabaseCodeLauncher.cs" />
+    <Compile Include="CustomCommands\0304-GenerateDatabaseCodeCommand\[A]GenerateDatabaseCodeLauncher.cs" />
     <Compile Include="CustomCommands\0401-LineupImagesCommand\0401-LineupImagesCommand.cs" />
     <Compile Include="CustomCommands\0801-FormatAndCleanCodesCommand\0801-FormatAndCleanCodesCommand.cs" />
     <Compile Include="CustomCommands\9999-TestCommand\9999-TestCommand.cs" />

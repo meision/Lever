@@ -27,7 +27,6 @@ namespace Meision.VisualStudio
                 ProjectItem projectItem = instance;
                 string projectItemIdentity = (string)projectItem.Properties.Item("Identity").Value;
                 string projectItemName = (string)projectItem.Properties.Item("FileName").Value;
-                projectItem.Properties.Print();
                 Project project = projectItem.ContainingProject;
                 string projectPath = System.IO.Path.Combine((string)project.Properties.Item("LocalPath").Value, (string)project.Properties.Item("FileName").Value);
                 // Filter files in same directory.
@@ -111,9 +110,13 @@ namespace Meision.VisualStudio
             }
         }
 
+        public static string GetFullPath(this ProjectItem instance)
+        {
+            string fullPath = (string)instance.Properties.Item("FullPath").Value;
+            return fullPath;
+        }
 
-
-            internal static void Print(this Properties properties)
+        public static void Print(this Properties properties)
         {
             foreach (Property item in properties)
             {
@@ -127,15 +130,6 @@ namespace Meision.VisualStudio
                 }
             }
         }
+        
     }
 }
-
-        /*
-          <ItemGroup>
-    <Compile Update="NewFolder\Class1.cs;NewFolder\Class2.cs;NewFolder\Class3.cs">
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>*/
-   

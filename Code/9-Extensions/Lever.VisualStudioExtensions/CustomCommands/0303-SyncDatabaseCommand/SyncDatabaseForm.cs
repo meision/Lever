@@ -78,17 +78,17 @@ namespace Meision.VisualStudio.CustomCommands
             return SyncDatabaseAction.None;
         }
 
-        public SyncDatabaseModel GetSyncModel()
+        public SyncDatabaseMode GetSyncMode()
         {
             foreach (RadioButton button in this.panSyncDatabaseMode.Controls)
             {
                 if (button.Checked)
                 {
-                    return (SyncDatabaseModel)Enum.Parse(typeof(SyncDatabaseModel), button.Name.Substring("rdoSyncDatabaseMode".Length));
+                    return (SyncDatabaseMode)Enum.Parse(typeof(SyncDatabaseMode), button.Name.Substring("rdoSyncDatabaseMode".Length));
                 }
             }
 
-            return SyncDatabaseModel.None;
+            return SyncDatabaseMode.None;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

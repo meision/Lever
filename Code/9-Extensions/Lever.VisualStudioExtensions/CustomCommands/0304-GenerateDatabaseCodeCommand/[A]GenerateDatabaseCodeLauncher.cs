@@ -4,35 +4,40 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using EnvDTE;
 using Meision.Database;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal abstract class DatabaseCodeGenerator
+    public abstract class GenerateDatabaseCodeLauncher : Launcher
     {
-        public static DatabaseCodeGenerator Create(string xmlPath)
+        public static GenerateDatabaseCodeLauncher Create(ProjectItem projectItem)
         {
             DatabaseConfig config = new DatabaseConfig();
-            XDocument document = XDocument.Parse(File.ReadAllText(xmlPath));
+            XDocument document = XDocument.Parse(File.ReadAllText(projectItem.GetFullPath()));
             config.Load(document);
 
-            DatabaseCodeGenerator generator = null;
+            GenerateDatabaseCodeLauncher launcher = null;
             switch (config.Generation.Mode)
             {
                 case DatabaseConfig.GenerateMode.EF6:
-                    generator = new EF6CodeGenerator();
+                    launcher = new EF6GenerateDatabaseCodeLauncher(projectItem);
                     break;
                 case DatabaseConfig.GenerateMode.EFCore:
-                    generator = new EFCoreCodeGenerator();
+                    launcher = new EFCoreGenerateDatabaseCodeLauncher(projectItem);
                     break;
                 default:
                     return null;
             }
 
-            generator.Config = config;
-            generator.WorkingDictionary = Path.GetDirectoryName(xmlPath);
-            generator.Initialize();
-            return generator;
+            launcher.Config = config;
+            launcher.WorkingDictionary = Path.GetDirectoryName(launcher.InputFilePath);
+            launcher.Initialize();
+            return launcher;
+        }
+
+        public GenerateDatabaseCodeLauncher(ProjectItem projectItem) : base(projectItem)
+        {
         }
 
         protected string WorkingDictionary { get; set; }
@@ -217,7 +222,47 @@ namespace Meision.VisualStudio.CustomCommands
             }
         }
 
-        public abstract void GenerateMain();
-        public abstract void GenerateEntites();
+        public override bool Launch()
+        {
+            if (!this.InputFilePath.EndsWith(".xml"))
+            {
+                throw new InvalidDataException("Input file should be xml file.");
+            }
+            
+            List<string> files = new List<string>();
+            files.Add(this.GenerateMainFile());
+            files.AddRange(this.GenerateEntityFiles());
+
+            this.ProjectItem.DeleteDependentFiles();
+            foreach (string file in files)
+            {
+                this.ProjectItem.Collection.AddFromFile(file);
+            }
+            this.ProjectItem.AddDependentFromFiles(files.ToArray());
+            return true;
+        }
+        
+        public virtual string GenerateMainFile()
+        {
+            string file = Path.Combine(this.WorkingDictionary, $"{this.Config.Generation.Main.Class.Name}.cs");
+            string code = this.GenerateMainCode();
+            System.IO.File.WriteAllText(file, code);
+            return file;
+        }
+        protected abstract string GenerateMainCode();
+
+        public virtual List<string> GenerateEntityFiles()
+        {
+            List<string> files = new List<string>();
+            foreach (DataModel dataModel in this.DataModels)
+            {
+                string file = Path.Combine(this.WorkingDictionary, $"{dataModel.Name}.cs");
+                string code = this.GenerateEntityCode(dataModel);
+                System.IO.File.WriteAllText(file, code);
+                files.Add(file);
+            }
+            return files;
+        }
+        protected abstract string GenerateEntityCode(DataModel dataModel);
     }
 }

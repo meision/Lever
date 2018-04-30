@@ -23,24 +23,7 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
-            menuItem.Visible = false;
-
-            if (this.DTE.SelectedItems.Count != 1)
-            {
-                return;
-            }
-            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)EnvDTE.Constants.vsProjectItemKindPhysicalFile)
-            {
-                return;
-            }
-            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
-            if (Path.GetFileNameWithoutExtension(fullPath) != "Test")
-            {
-                return;
-            }
-
-            menuItem.Visible = true;
+            menuItem.Visible = this.IsSelectedSingleFileWithCustomTool("Test");
         }
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)

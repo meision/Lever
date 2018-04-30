@@ -26,6 +26,18 @@ namespace Meision.VisualStudio.CustomCommands
             this.CommandId = 0x0401;
         }
 
+        protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
+        {
+            menuItem.Visible = false;
+
+            if (this.DTE.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            menuItem.Visible = true;
+        }
+
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
@@ -47,19 +59,7 @@ namespace Meision.VisualStudio.CustomCommands
             File.WriteAllBytes(pngPath, data);
             projectItem.Collection.AddFromFile(pngPath);
         }
-
-        protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
-        {
-            menuItem.Visible = false;
-
-            if (this.DTE.SelectedItems.Count != 1)
-            {
-                return;
-            }
-
-            menuItem.Visible = true;
-        }
-
+        
         private byte[] LineupImages(string directory)
         {
             var files = Directory.GetFiles(directory, "*.png", SearchOption.TopDirectoryOnly);

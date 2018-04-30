@@ -20,21 +20,22 @@ namespace Meision.VisualStudio.CustomCommands
         {
         }
 
-        public override void Launch()
+        public override bool Launch()
         {
             if (!this.InputFilePath.EndsWith(".xlsx"))
             {
                 throw new InvalidDataException("Input file should be excel file.");
             }
-
-            this.ProjectItem.DeleteDependentFiles();
-
+            
             string outputFilePath = this.GetOutputFilePathByExtension(".cs");
             byte[] data = this.GenerateData();
+
+            this.ProjectItem.DeleteDependentFiles();
             System.IO.File.WriteAllBytes(outputFilePath, data);
             this.ProjectItem.Collection.AddFromFile(outputFilePath);
-
             this.ProjectItem.AddDependentFromFiles(outputFilePath);
+
+            return true;
         }
 
         private byte[] GenerateData()

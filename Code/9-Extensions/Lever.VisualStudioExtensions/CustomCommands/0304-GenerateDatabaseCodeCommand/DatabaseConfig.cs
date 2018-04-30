@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace Meision.VisualStudio.CustomCommands
 {
-    internal class DatabaseConfig
+    public class DatabaseConfig
     {
         public enum GenerateMode
         {

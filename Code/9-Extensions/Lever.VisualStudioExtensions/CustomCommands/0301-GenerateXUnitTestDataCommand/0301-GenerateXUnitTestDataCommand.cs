@@ -19,12 +19,14 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
-            menuItem.Visible = this.IsSelectedSingleFileWithCustomTool("XUnitTestData");
+            menuItem.Visible = this.IsSelectedSingleFileWithCustomTool("GenerateXUnitTestData");
         }
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
-            GenerateXUnitTestDataLauncher generator = new GenerateXUnitTestDataLauncher(this.DTE.SelectedItems.Item(1).ProjectItem);
+            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
+            this.EnsureNotDirty(projectItem.ContainingProject);
+            GenerateXUnitTestDataLauncher generator = new GenerateXUnitTestDataLauncher(projectItem);
             generator.Launch();
         }
 

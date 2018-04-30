@@ -25,47 +25,22 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
-            menuItem.Visible = false;
-
-            if (this.DTE.SelectedItems.Count != 1)
-            {
-                return;
-            }
-            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)EnvDTE.Constants.vsProjectItemKindPhysicalFile)
-            {
-                return;
-            }
-            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != "DatabaseCodeGenerator")
-            {
-                return;
-            }
-
-            menuItem.Visible = true;
+            menuItem.Visible = this.IsSelectedSingleFileWithCustomTool("GenerateDatabaseCode");
         }
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
-            string xmlPath = (string)projectItem.Properties.Item("FullPath").Value;
-            
-            DatabaseCodeGenerator generator = DatabaseCodeGenerator.Create(xmlPath);
-            if (generator == null)
+            this.EnsureNotDirty(projectItem.ContainingProject);
+            GenerateDatabaseCodeLauncher launcher = GenerateDatabaseCodeLauncher.Create(projectItem);
+            if (launcher == null)
             {
                 return;
             }
-
-            // Delete all cs files
-            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(xmlPath), "*.cs", SearchOption.TopDirectoryOnly))
+            bool result = launcher.Launch();
+            if (result)
             {
-                File.Delete(file);
-            }
-
-            generator.GenerateMain();
-            generator.GenerateEntites();
-
-            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(xmlPath), "*.cs", SearchOption.TopDirectoryOnly))
-            {
-                projectItem.Collection.AddFromFile(file);
+                this.ShowMessage("Success", "Operation Successfully.");
             }
         }
     }

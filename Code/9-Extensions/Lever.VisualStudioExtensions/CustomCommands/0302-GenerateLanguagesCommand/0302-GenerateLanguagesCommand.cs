@@ -1,4 +1,5 @@
-﻿using Meision.VisualStudio.CustomTools;
+﻿using EnvDTE;
+using Meision.VisualStudio.CustomTools;
 using Microsoft.VisualStudio.Shell;
 
 namespace Meision.VisualStudio.CustomCommands
@@ -17,7 +18,9 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemInvoke(OleMenuCommand menuItem)
         {
-            GenerateLanguagesLauncher generator = new GenerateLanguagesLauncher(this.DTE.SelectedItems.Item(1).ProjectItem);
+            ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
+            this.EnsureNotDirty(projectItem.ContainingProject);
+            GenerateLanguagesLauncher generator = new GenerateLanguagesLauncher(projectItem);
             generator.Launch();
         }
     }

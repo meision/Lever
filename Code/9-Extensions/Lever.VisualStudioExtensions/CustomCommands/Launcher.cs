@@ -26,7 +26,7 @@ namespace Meision.VisualStudio.CustomCommands
             this.CodeNamespace = Helper.GetNamespace(this.ProjectItem);
         }
 
-        public abstract void Launch();
+        public abstract bool Launch();
 
         protected string GetOutputFilePathByExtension(string extensions)
         {

@@ -57,7 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Class.cs" />
     <None Include="EFCoreDbContextConfig.ico" />
   </ItemGroup>
   <ItemGroup>
