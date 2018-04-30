@@ -48,7 +48,7 @@ namespace Meision.VisualStudio.CustomCommands
                 projectItem.Collection.AddFromFile(Path.Combine(directory, "2.txt"));
                 projectItem.AddDependentFromFiles(Path.Combine(directory, "2.txt"));
             }
-
+            projectItem.ContainingProject.Save();
 
             //projectItem.ProjectItems.AddDependentFromFiles(System.IO.Path.Combine(Path.GetDirectoryName(fullPath), "Class1.cs"));
             //string[] s = projectItem.GetDependents();

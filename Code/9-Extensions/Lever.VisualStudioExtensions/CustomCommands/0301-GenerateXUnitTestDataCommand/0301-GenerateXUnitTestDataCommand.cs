@@ -28,6 +28,7 @@ namespace Meision.VisualStudio.CustomCommands
             this.EnsureNotDirty(projectItem.ContainingProject);
             GenerateXUnitTestDataLauncher generator = new GenerateXUnitTestDataLauncher(projectItem);
             generator.Launch();
+            projectItem.ContainingProject.Save();
         }
 
 

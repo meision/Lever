@@ -22,6 +22,7 @@ namespace Meision.VisualStudio.CustomCommands
             this.EnsureNotDirty(projectItem.ContainingProject);
             GenerateLanguagesLauncher generator = new GenerateLanguagesLauncher(projectItem);
             generator.Launch();
+            projectItem.ContainingProject.Save();
         }
     }
 }

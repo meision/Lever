@@ -33,6 +33,8 @@ namespace Meision.VisualStudio
                 string directory = Path.GetDirectoryName((string)projectItem.Properties.Item("LocalPath").Value);
                 IEnumerable<string> validFiles = files.Where(p => directory.Equals(Path.GetDirectoryName(p), StringComparison.OrdinalIgnoreCase));
 
+                System.Diagnostics.Debug.WriteLine("b: " + project.IsDirty);
+
                 XDocument document = XDocument.Load(projectPath);
                 // Item Group
                 XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
@@ -53,10 +55,21 @@ namespace Meision.VisualStudio
                 {
                     string name = Path.GetFileName(validFile);
                     string itemIdentity = $"{baseIdentity}{name}";
-                    ProjectItem pFile = projectItem.Collection.Item(name);
-                    if (pFile == null)
+                    //ProjectItem pFile = projectItem.Collection.Item(name);
+                    //if (pFile == null)
+                    //{
+                    //    continue;
+                    //}
+                    //string itemType = pFile.Properties.Item("ItemType").Value;
+                    string itemType = null;
+                    string extension = System.IO.Path.GetExtension(validFile);
+                    if (extension.Equals(".cs", StringComparison.OrdinalIgnoreCase))
                     {
-                        continue;
+                        itemType = "Compile";
+                    }
+                    else
+                    {
+                        itemType = "None";
                     }
 
                     // Remove all exists update element
@@ -65,11 +78,14 @@ namespace Meision.VisualStudio
                         element.Remove();
                     }
 
-                    XElement eItem = XElement.Parse($"<{pFile.Properties.Item("ItemType").Value} Update=\"{itemIdentity}\"><DesignTime>True</DesignTime><AutoGen>True</AutoGen><DependentUpon>{projectItemName}</DependentUpon></{pFile.Properties.Item("ItemType").Value}>");
+                    XElement eItem = XElement.Parse($"<{itemType} Update=\"{itemIdentity}\"><DesignTime>True</DesignTime><AutoGen>True</AutoGen><DependentUpon>{projectItemName}</DependentUpon></{itemType}>");
                     eItemGroup.Add(eItem);
                 }
-
+                 
+                //project.Save();
+                //project.IsDirty = false;
                 document.Save(projectPath);
+                //project.DTE.ExecuteCommand("Project.ReloadProject", "");
             }
             else
             {
@@ -102,11 +118,37 @@ namespace Meision.VisualStudio
             {
                 throw new ArgumentNullException(nameof(instance));
             }
-
-            // .net core project same with no
-            for (int i = instance.ProjectItems.Count; i >= 1; i--)
+                     
+            if (instance.ContainingProject.Kind == Parameters.guidDotNetCoreProject)
             {
-                instance.ProjectItems.Item(i).Delete();
+                for (int i = instance.ProjectItems.Count; i >= 1; i--)
+                {
+                    System.IO.File.Delete(instance.ProjectItems.Item(i).GetFullPath());
+                }
+
+                ProjectItem projectItem = instance;
+                string projectItemIdentity = (string)projectItem.Properties.Item("Identity").Value;
+                string projectItemName = (string)projectItem.Properties.Item("FileName").Value;
+                Project project = projectItem.ContainingProject;
+                string projectPath = System.IO.Path.Combine((string)project.Properties.Item("LocalPath").Value, (string)project.Properties.Item("FileName").Value);
+
+                System.Diagnostics.Debug.WriteLine("a: " + project.IsDirty);
+
+                XDocument document = XDocument.Load(projectPath);
+                // Item Group
+                XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
+                if (eItemGroup != null)
+                {
+                    eItemGroup.Remove();
+                    document.Save(projectPath);
+                }
+            }
+            else
+            {
+                for (int i = instance.ProjectItems.Count; i >= 1; i--)
+                {
+                    instance.ProjectItems.Item(i).Delete();
+                }
             }
         }
 
@@ -130,6 +172,6 @@ namespace Meision.VisualStudio
                 }
             }
         }
-        
+
     }
 }

@@ -22,6 +22,7 @@ namespace Meision.VisualStudio.CustomCommands
             this.EnsureNotDirty(projectItem.ContainingProject);
             SyncDatabaseLauncher generator = new SyncDatabaseLauncher(projectItem);
             generator.Launch();
+            projectItem.ContainingProject.Save();
         }
     }
 }

@@ -37,11 +37,8 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return;
             }
-            bool result = launcher.Launch();
-            if (result)
-            {
-                this.ShowMessage("Success", "Operation Successfully.");
-            }
+            launcher.Launch();
+            projectItem.ContainingProject.Save();
         }
     }
 

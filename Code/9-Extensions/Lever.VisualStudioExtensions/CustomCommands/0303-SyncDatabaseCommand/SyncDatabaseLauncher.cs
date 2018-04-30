@@ -92,6 +92,7 @@ namespace Meision.VisualStudio.CustomCommands
                                 command.Transaction = transcation;
                                 command.ExecuteNonQuery();
                                 transcation.Commit();
+                                System.Windows.Forms.MessageBox.Show("Operation Successfully.");
                             }
                             finally
                             {
