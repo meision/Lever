@@ -228,40 +228,37 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 throw new InvalidDataException("Input file should be xml file.");
             }
-            
-            List<string> files = new List<string>();
-            files.Add(this.GenerateMainFile());
-            files.AddRange(this.GenerateEntityFiles());
+
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            this.GenerateMain(dict);
+            this.GenerateEntities(dict);
 
             this.ProjectItem.DeleteDependentFiles();
-            foreach (string file in files)
+            foreach (var pair in dict)
             {
-                this.ProjectItem.Collection.AddFromFile(file);
+                System.IO.File.WriteAllText(pair.Key, pair.Value);
+                this.ProjectItem.Collection.AddFromFile(pair.Key);
             }
-            this.ProjectItem.AddDependentFromFiles(files.ToArray());
+            this.ProjectItem.AddDependentFromFiles(dict.Keys.ToArray());
             return true;
         }
         
-        public virtual string GenerateMainFile()
+        public virtual void GenerateMain(Dictionary<string, string> dict)
         {
-            string file = Path.Combine(this.WorkingDictionary, $"{this.Config.Generation.Main.Class.Name}.cs");
+            string filename = Path.Combine(this.WorkingDictionary, $"{this.Config.Generation.Main.Class.Name}.cs");
             string code = this.GenerateMainCode();
-            System.IO.File.WriteAllText(file, code);
-            return file;
+            dict.Add(filename, code);
         }
         protected abstract string GenerateMainCode();
 
-        public virtual List<string> GenerateEntityFiles()
+        public virtual void GenerateEntities(Dictionary<string, string> dict)
         {
-            List<string> files = new List<string>();
             foreach (DataModel dataModel in this.DataModels)
             {
-                string file = Path.Combine(this.WorkingDictionary, $"{dataModel.Name}.cs");
+                string filename = Path.Combine(this.WorkingDictionary, $"{dataModel.Name}.cs");
                 string code = this.GenerateEntityCode(dataModel);
-                System.IO.File.WriteAllText(file, code);
-                files.Add(file);
+                dict.Add(filename, code);
             }
-            return files;
         }
         protected abstract string GenerateEntityCode(DataModel dataModel);
     }
