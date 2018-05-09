@@ -22,7 +22,7 @@ namespace Meision.VisualStudio
                 throw new ArgumentNullException(nameof(files));
             }
 
-            if (instance.ContainingProject.Kind == Parameters.guidDotNetCoreProject)
+            if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
             {
                 ProjectItem projectItem = instance;
                 string projectItemIdentity = (string)projectItem.Properties.Item("Identity").Value;
@@ -32,9 +32,7 @@ namespace Meision.VisualStudio
                 // Filter files in same directory.
                 string directory = Path.GetDirectoryName((string)projectItem.Properties.Item("LocalPath").Value);
                 IEnumerable<string> validFiles = files.Where(p => directory.Equals(Path.GetDirectoryName(p), StringComparison.OrdinalIgnoreCase));
-
-                System.Diagnostics.Debug.WriteLine("b: " + project.IsDirty);
-
+                
                 XDocument document = XDocument.Load(projectPath);
                 // Item Group
                 XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
@@ -119,7 +117,7 @@ namespace Meision.VisualStudio
                 throw new ArgumentNullException(nameof(instance));
             }
                      
-            if (instance.ContainingProject.Kind == Parameters.guidDotNetCoreProject)
+            if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
             {
                 for (int i = instance.ProjectItems.Count; i >= 1; i--)
                 {
@@ -131,9 +129,7 @@ namespace Meision.VisualStudio
                 string projectItemName = (string)projectItem.Properties.Item("FileName").Value;
                 Project project = projectItem.ContainingProject;
                 string projectPath = System.IO.Path.Combine((string)project.Properties.Item("LocalPath").Value, (string)project.Properties.Item("FileName").Value);
-
-                System.Diagnostics.Debug.WriteLine("a: " + project.IsDirty);
-
+                
                 XDocument document = XDocument.Load(projectPath);
                 // Item Group
                 XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
@@ -156,22 +152,7 @@ namespace Meision.VisualStudio
         {
             string fullPath = (string)instance.Properties.Item("FullPath").Value;
             return fullPath;
-        }
-
-        public static void Print(this Properties properties)
-        {
-            foreach (Property item in properties)
-            {
-                try
-                {
-                    System.Diagnostics.Debug.WriteLine($"{item.Name}: {item.Value}");
-                }
-                catch
-                {
-
-                }
-            }
-        }
+        }        
 
     }
 }

@@ -13,6 +13,17 @@ namespace Meision.VisualStudio.CustomCommands
 
         protected override void PerformMenuItemBeforeQueryStatus(OleMenuCommand menuItem)
         {
+            if (this.DTE.SelectedItems.Count != 1)
+            {
+                menuItem.Visible = false;
+                return;
+            }
+            if (this.DTE.SelectedItems.Item(1).ProjectItem.ContainingProject.Kind.Equals(Parameters.guidSQLServerDatabaseProject, System.StringComparison.OrdinalIgnoreCase))
+            {
+                menuItem.Visible = true;
+                return;
+            }
+
             menuItem.Visible = this.IsSelectedSingleFileWithCustomTool("SyncDatabase");            
         }
 

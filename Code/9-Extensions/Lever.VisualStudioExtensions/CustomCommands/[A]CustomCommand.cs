@@ -136,7 +136,12 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return false;
             }
-            if ((string)this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool").Value != customToolName)
+            Property property = this.DTE.SelectedItems.Item(1).ProjectItem.Properties.Item("CustomTool");
+            if (property == null)
+            {
+                return false;
+            }
+            if ((string)property.Value != customToolName)
             {
                 return false;
             }

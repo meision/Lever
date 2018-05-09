@@ -16,11 +16,11 @@ namespace Meision.VisualStudio
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine((string)property.Name + ":" + (string)property.Value);
+                    System.Diagnostics.Debug.WriteLine($"{property.Name}: {property.Value}");
                 }
                 catch
                 {
-                    System.Diagnostics.Debug.WriteLine((string)property.Name + ":?");
+                    System.Diagnostics.Debug.WriteLine($"{property.Name}:");
                 }
             }
         }
@@ -36,28 +36,37 @@ namespace Meision.VisualStudio
 
         public static string GetNamespace(ProjectItem item)
         {
-            string @namespace = (string)item.Properties.Item("CustomToolNamespace").Value;
-            if (string.IsNullOrWhiteSpace(@namespace))
+            if (item.ContainingProject.Kind.Equals(Parameters.guidCSharpProject, StringComparison.OrdinalIgnoreCase)
+             || item.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
             {
-                @namespace = (string)item.Properties.Item("DefaultNamespace").Value;
+                string @namespace = (string)item.Properties.Item("CustomToolNamespace")?.Value;
+                if (string.IsNullOrWhiteSpace(@namespace))
+                {
+                    @namespace = (string)item.Properties.Item("DefaultNamespace")?.Value;
+                }
+                if (string.IsNullOrWhiteSpace(@namespace))
+                {
+                    Project project = item.ContainingProject;
+                    string projectRootNamespace = (string)project.Properties.Item("RootNamespace").Value;
+                    string projectFolder = ((string)project.Properties.Item("FullPath").Value).Trim('\\', '/');
+                    string itemFolder = Path.GetDirectoryName((string)item.Properties.Item("FullPath").Value);
+                    if (projectFolder == itemFolder)
+                    {
+                        @namespace = $"{projectRootNamespace}";
+                    }
+                    else
+                    {
+                        string subNamespace = itemFolder.Substring(projectFolder.Length).Trim('\\', '/').Replace('\\', '.').Replace('/', '.');
+                        @namespace = $"{projectRootNamespace}.{subNamespace}";
+                    }
+                }
+
+                return @namespace;
             }
-            if (string.IsNullOrWhiteSpace(@namespace))
+            else
             {
-                Project project = item.ContainingProject;
-                string projectRootNamespace = (string)project.Properties.Item("RootNamespace").Value;
-                string projectFolder = ((string)project.Properties.Item("FullPath").Value).Trim('\\', '/');
-                string itemFolder = Path.GetDirectoryName((string)item.Properties.Item("FullPath").Value);
-                if (projectFolder == itemFolder)
-                {
-                    @namespace = $"{projectRootNamespace}";
-                }
-                else
-                {
-                    string subNamespace = itemFolder.Substring(projectFolder.Length).Trim('\\', '/').Replace('\\', '.').Replace('/', '.');
-                    @namespace = $"{projectRootNamespace}.{subNamespace}";
-                }
+                return null;
             }
-            return @namespace;
         }
     }
 }

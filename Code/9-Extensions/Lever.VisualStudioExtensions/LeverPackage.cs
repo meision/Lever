@@ -70,7 +70,6 @@ namespace Meision.VisualStudio
             Type[] types = this.GetType().Assembly.GetTypes().Where(p => typeof(CustomCommand).IsAssignableFrom(p) && !p.IsAbstract).ToArray();
             foreach (Type type in types)
             {
-                System.Diagnostics.Debug.WriteLine(type);
                 CustomCommand command = Activator.CreateInstance(type) as CustomCommand;
                 command.Initialize(this);
                 this._customCommands.Add(command);

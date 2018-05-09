@@ -61,7 +61,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return false;
             }
-            
+
             string script = this.GenerateScript(executeConfig);
             if (script == null)
             {
@@ -74,10 +74,17 @@ namespace Meision.VisualStudio.CustomCommands
                     {
                         string outputFilePath = this.GetOutputFilePathByExtension(".sql");
 
-                        this.ProjectItem.DeleteDependentFiles();              
-                        System.IO.File.WriteAllText(outputFilePath, script);
-                        this.ProjectItem.Collection.AddFromFile(outputFilePath);
-                        this.ProjectItem.AddDependentFromFiles(outputFilePath);
+                        if (this.ProjectItem.Kind.Equals(Parameters.guidSQLServerDatabaseProject, StringComparison.OrdinalIgnoreCase))
+                        {
+                            System.IO.File.WriteAllText(outputFilePath, script);
+                        }
+                        else
+                        {
+                            this.ProjectItem.DeleteDependentFiles();
+                            System.IO.File.WriteAllText(outputFilePath, script);
+                            this.ProjectItem.Collection.AddFromFile(outputFilePath);
+                            this.ProjectItem.AddDependentFromFiles(outputFilePath);
+                        }
                     }
                     break;
                 case SyncDatabaseAction.ImportDatabase:
@@ -99,7 +106,7 @@ namespace Meision.VisualStudio.CustomCommands
                                 transcation.Rollback();
                             }
                         }
-                      
+
                     }
                     break;
             }
@@ -129,199 +136,199 @@ namespace Meision.VisualStudio.CustomCommands
 
         private string GenerateScript(SyncDatabaseExecuteConfig executeConfig)
         {
-                StringBuilder builder = new StringBuilder();
-                using (SqlConnection connection = new SqlConnection(executeConfig.ConnectionString))
+            StringBuilder builder = new StringBuilder();
+            using (SqlConnection connection = new SqlConnection(executeConfig.ConnectionString))
+            {
+                connection.Open();
+                // Clear script
+                if (executeConfig.ClearSQL != null)
                 {
-                    connection.Open();
-                    // Clear script
-                    if (executeConfig.ClearSQL != null)
-                    {
-                        builder.AppendLine(executeConfig.ClearSQL);
-                    }
-
-                    foreach (DataTable table in this._dataSet.Tables)
-                    {
-                        string tableName = table.TableName;
-                        if (SyncDatabaseConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }
-
-                        SqlColumnInfo[] allColumnInfos = SqlDatabaseHelper.GetColumnInfos(connection, tableName);
-                        // Filter available columns
-                        List<SqlColumnInfo> usedColumnInfos = new List<SqlColumnInfo>();
-
-                        List<int> usedColumnIndices = new List<int>();
-                        for (int columnIndex = 0; columnIndex < table.Columns.Count; columnIndex++)
-                        {
-                            string columnName = table.Columns[columnIndex].ColumnName;
-                            SqlColumnInfo columnInfo = allColumnInfos.FirstOrDefault(p => p.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
-                            if (columnInfo != null)
-                            {
-                                usedColumnInfos.Add(columnInfo);
-                                usedColumnIndices.Add(columnIndex);
-                            }
-                        }
-
-                        string template = null;
-                        switch (executeConfig.Mode)
-                        {
-                            case SyncDatabaseMode.Insert:
-                                template = SqlScriptHelper.GenerateInsertScript(usedColumnInfos, tableName);
-                                break;
-                            case SyncDatabaseMode.InsertNotExists:
-                                template = SqlScriptHelper.GenerateInsertIfNotExistsScript(usedColumnInfos, tableName);
-                                break;
-                            case SyncDatabaseMode.Merge:
-                                template = SqlScriptHelper.GenerateMergeScript(null, usedColumnInfos, tableName);
-                                break;
-                        }
-
-                        builder.AppendLine($"-- {tableName}");
-                        builder.AppendLine($"IF EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = object_id('{tableName}')) SET IDENTITY_INSERT [{tableName}] ON");
-                        foreach (DataRow row in table.Rows)
-                        {
-                            string command = template;
-                            for (int i = 0; i < usedColumnIndices.Count; i++)
-                            {
-                                int columnIndex = usedColumnIndices[i];
-                                string value = (string)row[columnIndex];
-                                string text = string.Empty;
-                                SqlColumnInfo columnInfo = usedColumnInfos[i];
-                                if (value == "NULL" || string.IsNullOrEmpty(value))
-                                {
-                                    switch (columnInfo.Type)
-                                    {
-                                        case SqlColumnType.@text:
-                                        case SqlColumnType.@ntext:
-                                        case SqlColumnType.@varchar:
-                                        case SqlColumnType.@char:
-                                        case SqlColumnType.@nvarchar:
-                                        case SqlColumnType.@nchar:
-                                        case SqlColumnType.@xml:
-                                            if (columnInfo.Nullable)
-                                            {
-                                                text = "null";
-                                            }
-                                            else
-                                            {
-                                                text = "''";
-                                            }
-                                            break;
-                                        case SqlColumnType.@tinyint:
-                                        case SqlColumnType.@smallint:
-                                        case SqlColumnType.@int:
-                                        case SqlColumnType.@real:
-                                        case SqlColumnType.@money:
-                                        case SqlColumnType.@float:
-                                        case SqlColumnType.@bit:
-                                        case SqlColumnType.@decimal:
-                                        case SqlColumnType.@numeric:
-                                        case SqlColumnType.@smallmoney:
-                                        case SqlColumnType.@bigint:
-                                            if (columnInfo.Nullable)
-                                            {
-                                                text = "null";
-                                            }
-                                            else
-                                            {
-                                                text = "0";
-                                            }
-                                            break;
-                                        case SqlColumnType.@date:
-                                        case SqlColumnType.@datetime2:
-                                        case SqlColumnType.@time:
-                                        case SqlColumnType.@datetimeoffset:
-                                        case SqlColumnType.@smalldatetime:
-                                        case SqlColumnType.@datetime:
-                                            text = "null";
-                                            break;
-                                        case SqlColumnType.@image:
-                                        case SqlColumnType.@varbinary:
-                                        case SqlColumnType.@binary:
-                                            if (columnInfo.Nullable)
-                                            {
-                                                text = "null";
-                                            }
-                                            else
-                                            {
-                                                text = "0x";
-                                            }
-                                            break;
-                                        case SqlColumnType.@uniqueidentifier:
-                                            if (columnInfo.Nullable)
-                                            {
-                                                text = "null";
-                                            }
-                                            else
-                                            {
-                                                text = "'00000000-0000-0000-0000-000000000000'";
-                                            }
-                                            break;
-                                        default:
-                                            throw new NotSupportedException();
-                                    }
-                                }
-                                else
-                                {
-                                    switch (columnInfo.Type)
-                                    {
-                                        case SqlColumnType.@text:
-                                        case SqlColumnType.@ntext:
-                                        case SqlColumnType.@varchar:
-                                        case SqlColumnType.@char:
-                                        case SqlColumnType.@nvarchar:
-                                        case SqlColumnType.@nchar:
-                                        case SqlColumnType.@xml:
-                                            text = $"'{value}'";
-                                            break;
-                                        case SqlColumnType.@bit:
-                                            text = $"{Convert.ToInt32(Convert.ToBoolean(value))}";
-                                            break;
-                                        case SqlColumnType.@tinyint:
-                                        case SqlColumnType.@smallint:
-                                        case SqlColumnType.@int:
-                                        case SqlColumnType.@real:
-                                        case SqlColumnType.@money:
-                                        case SqlColumnType.@float:
-                                        case SqlColumnType.@decimal:
-                                        case SqlColumnType.@numeric:
-                                        case SqlColumnType.@smallmoney:
-                                        case SqlColumnType.@bigint:
-                                            text = $"{value}";
-                                            break;
-                                        case SqlColumnType.@date:
-                                        case SqlColumnType.@datetime2:
-                                        case SqlColumnType.@time:
-                                        case SqlColumnType.@datetimeoffset:
-                                        case SqlColumnType.@smalldatetime:
-                                        case SqlColumnType.@datetime:
-                                            text = $"'{value}'";
-                                            break;
-                                        case SqlColumnType.@image:
-                                        case SqlColumnType.@varbinary:
-                                        case SqlColumnType.@binary:
-                                            text = $"{value}";
-                                            break;
-                                        case SqlColumnType.@uniqueidentifier:
-                                            text = $"'{value}'";
-                                            break;
-                                        default:
-                                            throw new NotSupportedException();
-                                    }
-                                }
-
-                                command = Regex.Replace(command, $@"@{columnInfo.Name}\b", (m) =>
-                                {
-                                    return text;
-                                });
-                            }
-                            builder.AppendLine(command);
-                        }
-                        builder.AppendLine($"IF EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = object_id('{tableName}')) SET IDENTITY_INSERT [{tableName}] OFF");
-                    }
-                    
+                    builder.AppendLine(executeConfig.ClearSQL);
                 }
+
+                foreach (DataTable table in this._dataSet.Tables)
+                {
+                    string tableName = table.TableName;
+                    if (SyncDatabaseConfig.DefaultSheetName.Equals(tableName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    SqlColumnInfo[] allColumnInfos = SqlDatabaseHelper.GetColumnInfos(connection, tableName);
+                    // Filter available columns
+                    List<SqlColumnInfo> usedColumnInfos = new List<SqlColumnInfo>();
+
+                    List<int> usedColumnIndices = new List<int>();
+                    for (int columnIndex = 0; columnIndex < table.Columns.Count; columnIndex++)
+                    {
+                        string columnName = table.Columns[columnIndex].ColumnName;
+                        SqlColumnInfo columnInfo = allColumnInfos.FirstOrDefault(p => p.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+                        if (columnInfo != null)
+                        {
+                            usedColumnInfos.Add(columnInfo);
+                            usedColumnIndices.Add(columnIndex);
+                        }
+                    }
+
+                    string template = null;
+                    switch (executeConfig.Mode)
+                    {
+                        case SyncDatabaseMode.Insert:
+                            template = SqlScriptHelper.GenerateInsertScript(usedColumnInfos, tableName);
+                            break;
+                        case SyncDatabaseMode.InsertNotExists:
+                            template = SqlScriptHelper.GenerateInsertIfNotExistsScript(usedColumnInfos, tableName);
+                            break;
+                        case SyncDatabaseMode.Merge:
+                            template = SqlScriptHelper.GenerateMergeScript(null, usedColumnInfos, tableName);
+                            break;
+                    }
+
+                    builder.AppendLine($"-- {tableName}");
+                    builder.AppendLine($"IF EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = object_id('{tableName}')) SET IDENTITY_INSERT [{tableName}] ON");
+                    foreach (DataRow row in table.Rows)
+                    {
+                        string command = template;
+                        for (int i = 0; i < usedColumnIndices.Count; i++)
+                        {
+                            int columnIndex = usedColumnIndices[i];
+                            string value = (string)row[columnIndex];
+                            string text = string.Empty;
+                            SqlColumnInfo columnInfo = usedColumnInfos[i];
+                            if (value == "NULL" || string.IsNullOrEmpty(value))
+                            {
+                                switch (columnInfo.Type)
+                                {
+                                    case SqlColumnType.@text:
+                                    case SqlColumnType.@ntext:
+                                    case SqlColumnType.@varchar:
+                                    case SqlColumnType.@char:
+                                    case SqlColumnType.@nvarchar:
+                                    case SqlColumnType.@nchar:
+                                    case SqlColumnType.@xml:
+                                        if (columnInfo.Nullable)
+                                        {
+                                            text = "null";
+                                        }
+                                        else
+                                        {
+                                            text = "''";
+                                        }
+                                        break;
+                                    case SqlColumnType.@tinyint:
+                                    case SqlColumnType.@smallint:
+                                    case SqlColumnType.@int:
+                                    case SqlColumnType.@real:
+                                    case SqlColumnType.@money:
+                                    case SqlColumnType.@float:
+                                    case SqlColumnType.@bit:
+                                    case SqlColumnType.@decimal:
+                                    case SqlColumnType.@numeric:
+                                    case SqlColumnType.@smallmoney:
+                                    case SqlColumnType.@bigint:
+                                        if (columnInfo.Nullable)
+                                        {
+                                            text = "null";
+                                        }
+                                        else
+                                        {
+                                            text = "0";
+                                        }
+                                        break;
+                                    case SqlColumnType.@date:
+                                    case SqlColumnType.@datetime2:
+                                    case SqlColumnType.@time:
+                                    case SqlColumnType.@datetimeoffset:
+                                    case SqlColumnType.@smalldatetime:
+                                    case SqlColumnType.@datetime:
+                                        text = "null";
+                                        break;
+                                    case SqlColumnType.@image:
+                                    case SqlColumnType.@varbinary:
+                                    case SqlColumnType.@binary:
+                                        if (columnInfo.Nullable)
+                                        {
+                                            text = "null";
+                                        }
+                                        else
+                                        {
+                                            text = "0x";
+                                        }
+                                        break;
+                                    case SqlColumnType.@uniqueidentifier:
+                                        if (columnInfo.Nullable)
+                                        {
+                                            text = "null";
+                                        }
+                                        else
+                                        {
+                                            text = "'00000000-0000-0000-0000-000000000000'";
+                                        }
+                                        break;
+                                    default:
+                                        throw new NotSupportedException();
+                                }
+                            }
+                            else
+                            {
+                                switch (columnInfo.Type)
+                                {
+                                    case SqlColumnType.@text:
+                                    case SqlColumnType.@ntext:
+                                    case SqlColumnType.@varchar:
+                                    case SqlColumnType.@char:
+                                    case SqlColumnType.@nvarchar:
+                                    case SqlColumnType.@nchar:
+                                    case SqlColumnType.@xml:
+                                        text = $"'{value}'";
+                                        break;
+                                    case SqlColumnType.@bit:
+                                        text = $"{Convert.ToInt32(Convert.ToBoolean(value))}";
+                                        break;
+                                    case SqlColumnType.@tinyint:
+                                    case SqlColumnType.@smallint:
+                                    case SqlColumnType.@int:
+                                    case SqlColumnType.@real:
+                                    case SqlColumnType.@money:
+                                    case SqlColumnType.@float:
+                                    case SqlColumnType.@decimal:
+                                    case SqlColumnType.@numeric:
+                                    case SqlColumnType.@smallmoney:
+                                    case SqlColumnType.@bigint:
+                                        text = $"{value}";
+                                        break;
+                                    case SqlColumnType.@date:
+                                    case SqlColumnType.@datetime2:
+                                    case SqlColumnType.@time:
+                                    case SqlColumnType.@datetimeoffset:
+                                    case SqlColumnType.@smalldatetime:
+                                    case SqlColumnType.@datetime:
+                                        text = $"'{value}'";
+                                        break;
+                                    case SqlColumnType.@image:
+                                    case SqlColumnType.@varbinary:
+                                    case SqlColumnType.@binary:
+                                        text = $"{value}";
+                                        break;
+                                    case SqlColumnType.@uniqueidentifier:
+                                        text = $"'{value}'";
+                                        break;
+                                    default:
+                                        throw new NotSupportedException();
+                                }
+                            }
+
+                            command = Regex.Replace(command, $@"@{columnInfo.Name}\b", (m) =>
+                            {
+                                return text;
+                            });
+                        }
+                        builder.AppendLine(command);
+                    }
+                    builder.AppendLine($"IF EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = object_id('{tableName}')) SET IDENTITY_INSERT [{tableName}] OFF");
+                }
+
+            }
 
             return builder.ToString();
         }
