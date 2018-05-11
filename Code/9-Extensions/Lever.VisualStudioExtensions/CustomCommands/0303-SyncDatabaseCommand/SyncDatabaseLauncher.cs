@@ -74,7 +74,7 @@ namespace Meision.VisualStudio.CustomCommands
                     {
                         string outputFilePath = this.GetOutputFilePathByExtension(".sql");
 
-                        if (this.ProjectItem.Kind.Equals(Parameters.guidSQLServerDatabaseProject, StringComparison.OrdinalIgnoreCase))
+                        if (this.ProjectItem.ContainingProject.Kind.Equals(Parameters.guidSQLServerDatabaseProject, StringComparison.OrdinalIgnoreCase))
                         {
                             System.IO.File.WriteAllText(outputFilePath, script);
                         }
