@@ -327,12 +327,6 @@ ORDER BY
             for (int i = 0; i < nonPrimaryKeyColumnInfos.Count; i++)
             {
                 SqlColumnInfo nonPrimaryKeyColumnInfo = nonPrimaryKeyColumnInfos[i];
-#if HealthCareCDR // HealthCare special threatment: remove FirstInsertDateTime which for first insert only
-                if (nonPrimaryKeyColumnInfo.Name.Equals("FirstInsertDateTime", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-#endif
                 builder.Append($"    [{destinationTableName}].[{nonPrimaryKeyColumnInfo.Name}] = [{sourceTableName}].[{nonPrimaryKeyColumnInfo.Name}]");
 
                 if (i < nonPrimaryKeyColumnInfos.Count - 1)

@@ -42,10 +42,6 @@ namespace Meision.VisualStudio.CustomCommands
                 builder.AppendLine($"        public virtual DbSet<{dataModel.Name}> {dataModel.Name} {{ get; set; }}");
             }
             builder.AppendLine($"");
-            builder.AppendLine($"        public {this.Config.Generation.Main.Class.Name}()");
-            builder.AppendLine($"        {{");
-            builder.AppendLine($"        }}");
-            builder.AppendLine($"");
             builder.AppendLine($"        public {this.Config.Generation.Main.Class.Name}(DbContextOptions options) : base(options)");
             builder.AppendLine($"        {{");
             builder.AppendLine($"        }}");
