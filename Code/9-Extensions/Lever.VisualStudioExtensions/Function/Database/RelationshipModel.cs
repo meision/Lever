@@ -205,5 +205,16 @@ namespace Meision.Database
             }
         }
         #endregion IXmlSerializable Members
+
+        public bool IsUnique()
+        {
+            PrimaryKeyConstraintModel primaryKeyModel = this.Database.Tables[this.DependentEnd.Schema, this.DependentEnd.Table].Constraints.OfType<PrimaryKeyConstraintModel>().FirstOrDefault();
+            if (primaryKeyModel == null)
+            {
+                return false;
+            }
+
+            return this.DependentEnd.Columns.All(p => primaryKeyModel.Columns.Contains(p));
+        }
     }
 }

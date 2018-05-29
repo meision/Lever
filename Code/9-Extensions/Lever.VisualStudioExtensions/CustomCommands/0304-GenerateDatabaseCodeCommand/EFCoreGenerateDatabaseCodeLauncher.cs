@@ -210,9 +210,8 @@ namespace Meision.VisualStudio.CustomCommands
                     {
                         builder.Append($"                ");
                         builder.Append($"entity.HasOne(_ => _.{dependentModel.PrincipalEnd.Table})");
-                        bool isUnique = dependentModel.DependentEnd.Columns.All(p => primaryKeyModel.Columns.Contains(p));
-                        builder.Append($".{(isUnique ? "WithOne" : "WithMany")}(_ => _.{dependentModel.DependentEnd.Table})");
-                        builder.Append($".HasForeignKey(_ => new {{ { string.Join(", ", dependentModel.DependentEnd.Columns.Select(p => "_." + p))} }})");
+                        builder.Append($".{(dependentModel.IsUnique() ? "WithOne" : "WithMany")}(_ => _.{dependentModel.DependentEnd.Table})");
+                        builder.Append($".HasForeignKey{(dependentModel.IsUnique() ? "<" + dependentModel.DependentEnd.Table + ">" : "")}(_ => new {{ { string.Join(", ", dependentModel.DependentEnd.Columns.Select(p => "_." + p))} }})");
                         if (dependentModel.DeleteCascade)
                         {
                             builder.Append($".OnDelete(DeleteBehavior.Cascade)");
@@ -368,7 +367,10 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 foreach (RelationshipModel relationshipModel in principalModels)
                 {
-                    builder.AppendLine($"            this.{relationshipModel.DependentEnd.Table} = new HashSet<{relationshipModel.DependentEnd.Table}>();");
+                    if (!relationshipModel.IsUnique())
+                    {
+                        builder.AppendLine($"            this.{relationshipModel.DependentEnd.Table} = new HashSet<{relationshipModel.DependentEnd.Table}>();");
+                    }
                 }
             }
             builder.AppendLine($"        }}");
@@ -391,7 +393,14 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 foreach (RelationshipModel relationshipModel in principalModels)
                 {
-                    builder.AppendLine($"        public virtual ICollection<{relationshipModel.DependentEnd.Table}> {relationshipModel.DependentEnd.Table} {{ get; set; }}");
+                    if (!relationshipModel.IsUnique())
+                    {
+                        builder.AppendLine($"        public virtual ICollection<{relationshipModel.DependentEnd.Table}> {relationshipModel.DependentEnd.Table} {{ get; set; }}");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"        public virtual {relationshipModel.DependentEnd.Table} {relationshipModel.DependentEnd.Table} {{ get; set; }}");
+                    }
                 }
             }
             builder.AppendLine($"    }}");
