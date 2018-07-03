@@ -32,7 +32,7 @@ namespace Meision.VisualStudio
                 // Filter files in same directory.
                 string directory = Path.GetDirectoryName((string)projectItem.Properties.Item("LocalPath").Value);
                 IEnumerable<string> validFiles = files.Where(p => directory.Equals(Path.GetDirectoryName(p), StringComparison.OrdinalIgnoreCase));
-                
+
                 XDocument document = XDocument.Load(projectPath);
                 // Item Group
                 XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
@@ -79,7 +79,7 @@ namespace Meision.VisualStudio
                     XElement eItem = XElement.Parse($"<{itemType} Update=\"{itemIdentity}\"><DesignTime>True</DesignTime><AutoGen>True</AutoGen><DependentUpon>{projectItemName}</DependentUpon></{itemType}>");
                     eItemGroup.Add(eItem);
                 }
-                 
+
                 //project.Save();
                 //project.IsDirty = false;
                 document.Save(projectPath);
@@ -116,7 +116,7 @@ namespace Meision.VisualStudio
             {
                 throw new ArgumentNullException(nameof(instance));
             }
-                     
+
             if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
             {
                 for (int i = instance.ProjectItems.Count; i >= 1; i--)
@@ -129,7 +129,7 @@ namespace Meision.VisualStudio
                 string projectItemName = (string)projectItem.Properties.Item("FileName").Value;
                 Project project = projectItem.ContainingProject;
                 string projectPath = System.IO.Path.Combine((string)project.Properties.Item("LocalPath").Value, (string)project.Properties.Item("FileName").Value);
-                
+
                 XDocument document = XDocument.Load(projectPath);
                 // Item Group
                 XElement eItemGroup = document.XPathSelectElements($"//ItemGroup[@Label='DependentUpon:{projectItemIdentity}']").FirstOrDefault();
@@ -152,7 +152,15 @@ namespace Meision.VisualStudio
         {
             string fullPath = (string)instance.Properties.Item("FullPath").Value;
             return fullPath;
-        }        
+        }
 
+        public static bool IsCSharpProject(this ProjectItem instance)
+        {
+            bool result =
+                instance.ContainingProject.Kind.Equals(Parameters.guidCSharpProject, StringComparison.OrdinalIgnoreCase)
+             || instance.ContainingProject.Kind.Equals(Parameters.guidCSharpProject2, StringComparison.OrdinalIgnoreCase)
+             || instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase);
+            return result;
+        }
     }
 }

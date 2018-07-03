@@ -36,8 +36,7 @@ namespace Meision.VisualStudio
 
         public static string GetNamespace(ProjectItem item)
         {
-            if (item.ContainingProject.Kind.Equals(Parameters.guidCSharpProject, StringComparison.OrdinalIgnoreCase)
-             || item.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
+            if (item.IsCSharpProject())
             {
                 string @namespace = (string)item.Properties.Item("CustomToolNamespace")?.Value;
                 if (string.IsNullOrWhiteSpace(@namespace))

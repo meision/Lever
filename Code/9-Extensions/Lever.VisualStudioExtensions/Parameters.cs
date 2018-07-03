@@ -8,7 +8,8 @@ namespace Meision.VisualStudio
 {
     public class Parameters
     {
-        public const string guidCSharpProject = "{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}";
+        public const string guidCSharpProject = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
+        public const string guidCSharpProject2 = "{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}";
         public const string guidDotNetCoreProject = "{9A19103F-16F7-4668-BE54-9A1E7A4F7556}";
         public const string guidSQLServerDatabaseProject = "{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}";
 
