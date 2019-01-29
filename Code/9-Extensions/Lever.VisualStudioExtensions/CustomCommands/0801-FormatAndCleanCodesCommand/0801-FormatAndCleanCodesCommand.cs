@@ -74,12 +74,12 @@ namespace Meision.VisualStudio.CustomCommands
         {
             foreach (ProjectItem projectItem in projectItems)
             {
-                if ((projectItem.Kind == EnvDTE.Constants.vsProjectItemKindPhysicalFile)
+                if ((projectItem.Kind == Constants.vsProjectItemKindPhysicalFile)
                  && projectItem.Name.EndsWith(".cs", StringComparison.InvariantCultureIgnoreCase))
                 {
                     // cs code file
                     bool alreadyOpen = projectItem.IsOpen;
-                    Window window = projectItem.Open(EnvDTE.Constants.vsViewKindCode);
+                    Window window = projectItem.Open(Constants.vsViewKindCode);
                     window.Activate();
                     window.DTE.ExecuteCommand("Edit.RemoveAndSort");
                     window.DTE.ExecuteCommand("Edit.FormatDocument");

@@ -132,7 +132,7 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 return false;
             }
-            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)EnvDTE.Constants.vsProjectItemKindPhysicalFile)
+            if (this.DTE.SelectedItems.Item(1).ProjectItem.Kind != (string)Constants.vsProjectItemKindPhysicalFile)
             {
                 return false;
             }
