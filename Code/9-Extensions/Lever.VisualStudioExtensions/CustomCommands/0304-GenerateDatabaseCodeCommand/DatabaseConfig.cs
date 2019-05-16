@@ -100,11 +100,25 @@ namespace Meision.VisualStudio.CustomCommands
             public ClassConfig Class { get; set; }
         }
 
+        public class DefaultValueConfig
+        {
+            public string Type { get; set; }
+            public string Value { get; set; }
+        }
+
+        public class TypeConversationConfig
+        {
+            public string SourceType { get; set; }
+            public string SourceName { get; set; }
+            public string DestinationType { get; set; }
+        }
+
         public class EntityGenerationConfig
         {
             public List<string> Imports { get; set; }
-            public Dictionary<string, string> DefaultValues { get; set; }
+            public List<DefaultValueConfig> DefaultValues { get; set; }
             public ClassConfig Class { get; set; }
+            public List<TypeConversationConfig> TypeConversations { get; set; }
         }
 
         public DefinationConfig Defination { get; set; }
@@ -373,31 +387,85 @@ namespace Meision.VisualStudio.CustomCommands
                 };
                 Func<XElement, ClassConfig> GetClassConfig = (element) =>
                 {
-                    ClassConfig @class = new ClassConfig();
+                    ClassConfig config = new ClassConfig();
                     foreach (XAttribute aItem in element.Attributes())
                     {
                         switch (aItem.Name.LocalName)
                         {
                             case "namespace":
-                                @class.Namespace = aItem.Value;
+                                config.Namespace = aItem.Value;
                                 break;
                             case "accessModifier":
-                                @class.AccessModifier = (AccessModifier)Enum.Parse(typeof(AccessModifier), aItem.Value, true);
+                                config.AccessModifier = (AccessModifier)Enum.Parse(typeof(AccessModifier), aItem.Value, true);
                                 break;
                             case "name":
-                                @class.Name = aItem.Value;
+                                config.Name = aItem.Value;
                                 break;
                             case "base":
-                                @class.Base = aItem.Value;
+                                config.Base = aItem.Value;
                                 break;
                             case "useConventionalInterfaces":
-                                @class.UseConventionalInterfaces = Convert.ToBoolean(aItem.Value);
+                                config.UseConventionalInterfaces = Convert.ToBoolean(aItem.Value);
                                 break;
                         }
                     }
-                    return @class;
+                    return config;
                 };
-
+                Func<XElement, List<DefaultValueConfig>> GetDefaultValueConfigs = (element) =>
+                {
+                    List<DefaultValueConfig> configs = new List<DefaultValueConfig>();
+                    foreach (XElement eItem in element.Elements("item"))
+                    {
+                        DefaultValueConfig config = new DefaultValueConfig();
+                        // Type
+                        XAttribute aType = eItem.Attribute("type");
+                        if (aType == null)
+                        {
+                            throw new ArgumentException("Invalid type attribute or not found.");
+                        }
+                        else
+                        {
+                            config.Type = aType.Value;
+                        }
+                        // Value
+                        XAttribute aValue = eItem.Attribute("value");
+                        if (aValue == null)
+                        {
+                            throw new ArgumentException("Invalid value attribute or not found.");
+                        }
+                        else
+                        {
+                            config.Value = aValue.Value;
+                        }
+                        configs.Add(config);
+                    }
+                    return configs;
+                };
+                Func<XElement, List<TypeConversationConfig>> GetTypeConversationConfigs = (element) =>
+                {
+                    List<TypeConversationConfig> configs = new List<TypeConversationConfig>();
+                    foreach (XElement eItem in element.Elements("add"))
+                    {
+                        TypeConversationConfig config = new TypeConversationConfig();
+                        foreach (XAttribute aItem in eItem.Attributes())
+                        {
+                            switch (aItem.Name.LocalName)
+                            {
+                                case "sourceType":
+                                    config.SourceType = aItem.Value;
+                                    break;
+                                case "sourceName":
+                                    config.SourceName = aItem.Value;
+                                    break;
+                                case "destinationType":
+                                    config.DestinationType = aItem.Value;
+                                    break;
+                            }
+                        }
+                        configs.Add(config);
+                    }
+                    return configs;
+                };
 
                 this.Generation = new GenerationConfig();
                 XAttribute aEnable = eGeneration.Attribute("enable");
@@ -446,7 +514,6 @@ namespace Meision.VisualStudio.CustomCommands
                     }
                     else
                     {
-
                         this.Generation.Main.Class = GetClassConfig(eClass);
                     }
                 }
@@ -466,10 +533,9 @@ namespace Meision.VisualStudio.CustomCommands
                     }
                     else
                     {
-                        this.Generation.Entity.Imports = new List<string>();
-                        this.Generation.Entity.Imports.AddRange(GetImports(eImports));
+                        this.Generation.Entity.Imports = GetImports(eImports);
                     }
-                    // class
+                    // Class
                     XElement eClass = eEntity.Element("class");
                     if (eClass == null)
                     {
@@ -486,57 +552,16 @@ namespace Meision.VisualStudio.CustomCommands
                     }
                     else
                     {
-                        this.Generation.Entity.DefaultValues = new Dictionary<string, string>();
-                        foreach (XElement eItem in eDefaultValues.Elements())
-                        {
-                            switch (eItem.Name.LocalName)
-                            {
-                                case "add":
-                                    {
-                                        string type;
-                                        XAttribute aType = eItem.Attribute("type");
-                                        if (aType == null)
-                                        {
-                                            throw new ArgumentException("Invalid type attribute or not found.");
-                                        }
-                                        else
-                                        {
-                                            type = aType.Value;
-                                        }
-                                        string value;
-                                        XAttribute aValue = eItem.Attribute("value");
-                                        if (aValue == null)
-                                        {
-                                            throw new ArgumentException("Invalid value attribute or not found.");
-                                        }
-                                        else
-                                        {
-                                            value = aValue.Value;
-                                        }
-
-                                        this.Generation.Entity.DefaultValues.Add(type, value);
-                                    }
-                                    break;
-                                case "remove":
-                                    {
-                                        string type;
-                                        XAttribute aType = eItem.Attribute("type");
-                                        if (aType == null)
-                                        {
-                                            throw new ArgumentException("Invalid type attribute or not found.");
-                                        }
-                                        else
-                                        {
-                                            type = aType.Value;
-                                        }
-
-                                        this.Generation.Entity.DefaultValues.Remove(type);
-                                    }
-                                    break;
-                                default:
-                                    throw new ArgumentException("Invalid element under defaultValues.");
-                            }
-                        }
+                        this.Generation.Entity.DefaultValues = GetDefaultValueConfigs(eDefaultValues);
+                    }
+                    // TypeConversations
+                    XElement eTypeConversations = eEntity.Element("typeConversations");
+                    if (eTypeConversations == null)
+                    {
+                    }
+                    else
+                    {
+                        this.Generation.Entity.TypeConversations = GetTypeConversationConfigs(eTypeConversations);
                     }
                 }
             }

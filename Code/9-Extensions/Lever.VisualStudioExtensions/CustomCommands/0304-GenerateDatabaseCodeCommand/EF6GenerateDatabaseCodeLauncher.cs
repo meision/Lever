@@ -354,9 +354,10 @@ namespace Meision.VisualStudio.CustomCommands
                 foreach (ColumnModel columnModel in dataModel.Columns)
                 {
                     string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
-                    if (this.Config.Generation.Entity.DefaultValues.ContainsKey(type))
+                    DatabaseConfig.DefaultValueConfig config = this.Config.Generation.Entity.DefaultValues.FirstOrDefault(p => p.Type == type);
+                    if (config != null)
                     {
-                        builder.AppendLine($"            this.{columnModel.Name} = {this.Config.Generation.Entity.DefaultValues[type]};");
+                        builder.AppendLine($"            this.{columnModel.Name} = {config.Value};");
                     }
                 }
             }

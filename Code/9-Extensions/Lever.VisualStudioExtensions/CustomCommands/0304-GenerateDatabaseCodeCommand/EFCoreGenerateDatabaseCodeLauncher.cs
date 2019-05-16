@@ -181,6 +181,13 @@ namespace Meision.VisualStudio.CustomCommands
                         default:
                             break;
                     }
+                    string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
+                    string name = (((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name);
+                    DatabaseConfig.TypeConversationConfig config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceType == type) && (p.SourceName == name));
+                    if (config != null)
+                    {
+                        builder.Append($".HasConversion(p => ({type})p, p => ({config.DestinationType})p)");
+                    }
                     builder.AppendLine(";");
                 }
                 // Index
@@ -356,9 +363,10 @@ namespace Meision.VisualStudio.CustomCommands
                 foreach (ColumnModel columnModel in dataModel.Columns)
                 {
                     string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
-                    if (this.Config.Generation.Entity.DefaultValues.ContainsKey(type))
+                    DatabaseConfig.DefaultValueConfig config = this.Config.Generation.Entity.DefaultValues.FirstOrDefault(p => p.Type == type);
+                    if (config != null)
                     {
-                        builder.AppendLine($"            this.{columnModel.Name} = {this.Config.Generation.Entity.DefaultValues[type]};");
+                        builder.AppendLine($"            this.{columnModel.Name} = {config.Value};");
                     }
                 }
             }
@@ -379,7 +387,14 @@ namespace Meision.VisualStudio.CustomCommands
             foreach (ColumnModel columnModel in dataModel.Columns)
             {
                 builder.AppendLine($"        /// <summary>{columnModel.Description ?? string.Empty}</summary>");
-                builder.AppendLine($"        {((!string.IsNullOrEmpty(baseClass) && (primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable)} {(((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name)} {{ get; set; }}");
+                string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
+                string name = (((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name);
+                DatabaseConfig.TypeConversationConfig config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceType == type) && (p.SourceName == name));
+                if (config != null)
+                {
+                    type = config.DestinationType;
+                }
+                builder.AppendLine($"        {((!string.IsNullOrEmpty(baseClass) && (primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {type} {name} {{ get; set; }}");
             }
             builder.AppendLine($"");
             if (dependentModels != null)
