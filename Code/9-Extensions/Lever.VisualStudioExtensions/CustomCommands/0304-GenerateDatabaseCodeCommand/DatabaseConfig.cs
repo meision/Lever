@@ -444,7 +444,7 @@ namespace Meision.VisualStudio.CustomCommands
                 Func<XElement, List<TypeConversationConfig>> GetTypeConversationConfigs = (element) =>
                 {
                     List<TypeConversationConfig> configs = new List<TypeConversationConfig>();
-                    foreach (XElement eItem in element.Elements("add"))
+                    foreach (XElement eItem in element.Elements("item"))
                     {
                         TypeConversationConfig config = new TypeConversationConfig();
                         foreach (XAttribute aItem in eItem.Attributes())
