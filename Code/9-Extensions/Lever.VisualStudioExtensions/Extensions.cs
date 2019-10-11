@@ -119,7 +119,9 @@ namespace Meision.VisualStudio
                 throw new ArgumentNullException(nameof(instance));
             }
 
-            if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
+            //if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
+            string targetFrameworkMoniker = instance.ContainingProject.Properties.Item("TargetFrameworkMoniker")?.Value;
+            if ((targetFrameworkMoniker != null) && (targetFrameworkMoniker.IndexOf(".NETCore") >= 0))
             {
                 for (int i = instance.ProjectItems.Count; i >= 1; i--)
                 {
