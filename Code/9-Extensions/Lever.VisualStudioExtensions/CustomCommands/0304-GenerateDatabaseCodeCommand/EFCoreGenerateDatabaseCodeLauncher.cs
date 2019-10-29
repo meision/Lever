@@ -256,6 +256,8 @@ namespace Meision.VisualStudio.CustomCommands
             RelationshipModel[] principalModels = null;
             RelationshipModel[] dependentModels = null;
             PrimaryKeyConstraintModel primaryKeyModel = null;
+            ColumnModel[] idColumnModels = null;
+
             if (tableModel != null)
             {
                 principalModels = this.RelationshipModels.Where(p => tableModel.Schema.Equals(p.PrincipalEnd.Schema, StringComparison.OrdinalIgnoreCase) && tableModel.Name.Equals(p.PrincipalEnd.Table, StringComparison.OrdinalIgnoreCase)).ToArray();
@@ -269,11 +271,10 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 if (this.Config.Generation.Entity.Class.Base.EndsWith("<>"))
                 {
-
                     // generic type
                     if (primaryKeyModel != null)
                     {
-                        ColumnModel[] idColumnModels = dataModel.Columns.Where(p => primaryKeyModel.Columns.Contains(p.Name)).ToArray();
+                        idColumnModels = dataModel.Columns.Where(p => primaryKeyModel.Columns.Contains(p.Name)).ToArray();
                         string[] idTypes = idColumnModels.Select(p => DatabaseHelper.GetCLRTypeString(p.Type, p.Nullable)).ToArray();
                         baseClass = $"{this.Config.Generation.Entity.Class.Base.Substring(0, this.Config.Generation.Entity.Class.Base.Length - "<>".Length)}<{string.Join(", ", idTypes)}>";
                     }
@@ -355,7 +356,55 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"    /// </summary>");
             builder.AppendLine($"    {this.Config.Generation.Entity.Class.AccessModifier.ToString().ToLowerInvariant()} partial class {dataModel.Name}{((!string.IsNullOrEmpty(baseClass) || (interfaceNames.Count > 0)) ? " : " : string.Empty)}{(!string.IsNullOrEmpty(baseClass) ? baseClass : string.Empty)}{((interfaceNames.Count > 0) ? ", " + string.Join(", ", interfaceNames.ToArray()) : string.Empty)}");
             builder.AppendLine($"    {{");
-            builder.AppendLine($"        public {dataModel.Name}()");
+            if (idColumnModels != null)
+            {
+                builder.Append($"        public {dataModel.Name}() : this(");
+                for (int i = 0; i < idColumnModels.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        builder.Append($", ");
+                    }
+
+                    ColumnModel idColumnModel = idColumnModels[i];
+                    string clrType = DatabaseHelper.GetCLRTypeString(idColumnModel.Type, idColumnModel.Nullable);
+                    builder.Append($"default({clrType})");
+                }
+                builder.AppendLine($")");
+
+                builder.AppendLine($"        {{");
+                builder.AppendLine($"        }}");
+                builder.AppendLine($"");
+
+                builder.Append($"        public {dataModel.Name}(");
+                for (int i = 0; i < idColumnModels.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        builder.Append($", ");
+                    }
+
+                    ColumnModel idColumnModel = idColumnModels[i];
+                    string clrType = DatabaseHelper.GetCLRTypeString(idColumnModel.Type, idColumnModel.Nullable);
+                    builder.Append($"{clrType} {idColumnModel.Name}");
+                }
+                builder.Append($") : base(");
+                for (int i = 0; i < idColumnModels.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        builder.Append($", ");
+                    }
+
+                    ColumnModel idColumnModel = idColumnModels[i];
+                    builder.Append($"{idColumnModel.Name}");
+                }
+                builder.AppendLine($")");
+            }
+            else
+            {
+                builder.AppendLine($"        public {dataModel.Name}()");
+            }
             builder.AppendLine($"        {{");
             if ((this.Config.Generation.Entity.DefaultValues != null) && (this.Config.Generation.Entity.DefaultValues.Count > 0))
             {
