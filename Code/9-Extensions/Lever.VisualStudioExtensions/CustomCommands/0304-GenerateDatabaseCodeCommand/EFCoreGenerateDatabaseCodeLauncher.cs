@@ -183,10 +183,19 @@ namespace Meision.VisualStudio.CustomCommands
                     }
                     string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
                     string name = (((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name);
-                    DatabaseConfig.TypeConversationConfig config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceType == type) && (p.SourceName == name));
+                    DatabaseConfig.TypeConversationConfig config;
+                    config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceClass == dataModel.Name) && (p.SourceName == name));
                     if (config != null)
                     {
                         builder.Append($".HasConversion(p => ({type})p, p => ({config.DestinationType})p)");
+                    }
+                    else
+                    {
+                        config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceClass == "*") && (p.SourceName == name));
+                        if (config != null)
+                        {
+                            builder.Append($".HasConversion(p => ({type})p, p => ({config.DestinationType})p)");
+                        }
                     }
                     builder.AppendLine(";");
                 }
@@ -438,10 +447,19 @@ namespace Meision.VisualStudio.CustomCommands
                 builder.AppendLine($"        /// <summary>{columnModel.Description ?? string.Empty}</summary>");
                 string type = DatabaseHelper.GetCLRTypeString(columnModel.Type, columnModel.Nullable);
                 string name = (((primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "Id" : columnModel.Name);
-                DatabaseConfig.TypeConversationConfig config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceType == type) && (p.SourceName == name));
+                DatabaseConfig.TypeConversationConfig config;
+                config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceClass == dataModel.Name) && (p.SourceName == name));
                 if (config != null)
                 {
                     type = config.DestinationType;
+                }
+                else
+                {
+                    config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceClass == "*") && (p.SourceName == name));
+                    if (config!=null)
+                    {
+                        type = config.DestinationType;
+                    }
                 }
                 builder.AppendLine($"        {((!string.IsNullOrEmpty(baseClass) && (primaryKeyModel != null) && (primaryKeyModel.Columns.Contains(columnModel.Name))) ? "//" : string.Empty)}public {type} {name} {{ get; set; }}");
             }

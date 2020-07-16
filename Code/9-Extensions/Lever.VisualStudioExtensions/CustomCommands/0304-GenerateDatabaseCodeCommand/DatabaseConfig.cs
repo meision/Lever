@@ -108,7 +108,7 @@ namespace Meision.VisualStudio.CustomCommands
 
         public class TypeConversationConfig
         {
-            public string SourceType { get; set; }
+            public string SourceClass { get; set; }
             public string SourceName { get; set; }
             public string DestinationType { get; set; }
         }
@@ -451,8 +451,8 @@ namespace Meision.VisualStudio.CustomCommands
                         {
                             switch (aItem.Name.LocalName)
                             {
-                                case "sourceType":
-                                    config.SourceType = aItem.Value;
+                                case "sourceClass":
+                                    config.SourceClass = aItem.Value;
                                     break;
                                 case "sourceName":
                                     config.SourceName = aItem.Value;
