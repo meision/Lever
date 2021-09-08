@@ -237,12 +237,12 @@ namespace Meision.VisualStudio.CustomCommands
             foreach (var pair in dict)
             {
                 System.IO.File.WriteAllText(pair.Key, pair.Value);
-                this.ProjectItem.Collection.AddFromFile(pair.Key);
+                ProjectItem item = this.ProjectItem.Collection.AddFromFile(pair.Key);
+                this.ProjectItem.AddDependentItems(item);
             }
-            this.ProjectItem.AddDependentFromFiles(dict.Keys.ToArray());
             return true;
         }
-        
+
         public virtual void GenerateMain(Dictionary<string, string> dict)
         {
             string filename = Path.Combine(this.WorkingDictionary, $"{this.Config.Generation.Main.Class.Name}.cs");

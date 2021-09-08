@@ -59,6 +59,7 @@
     <Compile Include="CustomCommands\0300-RunCustomToolCommand\0300-RunCustomToolCommand.cs" />
     <Compile Include="CustomCommands\0301-GenerateXUnitTestDataCommand\0301-GenerateXUnitTestDataCommand.cs" />
     <Compile Include="CustomCommands\0301-GenerateXUnitTestDataCommand\GenerateXUnitTestDataLauncher.cs" />
+    <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\GenerateLanguagesConfig.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\GenerateLanguagesLauncher.cs" />
     <Compile Include="CustomCommands\0302-GenerateLanguagesCommand\LanguageManager.cs" />
     <Compile Include="CustomCommands\0303-SyncDatabaseCommand\SyncDatabaseLauncher.cs" />

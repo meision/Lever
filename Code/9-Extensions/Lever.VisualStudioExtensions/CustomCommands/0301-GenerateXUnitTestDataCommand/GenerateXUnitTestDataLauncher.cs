@@ -24,14 +24,14 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 throw new InvalidDataException("Input file should be excel file.");
             }
-            
+
             string outputFilePath = this.GetOutputFilePathByExtension(".cs");
             byte[] data = this.GenerateData();
 
             this.ProjectItem.DeleteDependentFiles();
             System.IO.File.WriteAllBytes(outputFilePath, data);
-            this.ProjectItem.Collection.AddFromFile(outputFilePath);
-            this.ProjectItem.AddDependentFromFiles(outputFilePath);
+            ProjectItem item = this.ProjectItem.Collection.AddFromFile(outputFilePath);
+            this.ProjectItem.AddDependentItems(item);
 
             return true;
         }
@@ -148,7 +148,7 @@ namespace Meision.VisualStudio.CustomCommands
 
             return null;
         }
-        
+
         private Dictionary<string, Func<string, string>> _convertFuncs;
         private Dictionary<string, Func<string, string>> ConvertFuncs
         {

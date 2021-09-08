@@ -29,8 +29,6 @@ namespace Meision.VisualStudio.CustomCommands
         private SyncDatabaseConfig _config;
         private DataSet _dataSet;
 
-
-
         public SyncDatabaseLauncher(ProjectItem projectItem) : base(projectItem)
         {
         }
@@ -82,8 +80,8 @@ namespace Meision.VisualStudio.CustomCommands
                         {
                             this.ProjectItem.DeleteDependentFiles();
                             System.IO.File.WriteAllText(outputFilePath, script);
-                            this.ProjectItem.Collection.AddFromFile(outputFilePath);
-                            this.ProjectItem.AddDependentFromFiles(outputFilePath);
+                            ProjectItem item = this.ProjectItem.Collection.AddFromFile(outputFilePath);
+                            this.ProjectItem.AddDependentItems(item);
                         }
                     }
                     break;

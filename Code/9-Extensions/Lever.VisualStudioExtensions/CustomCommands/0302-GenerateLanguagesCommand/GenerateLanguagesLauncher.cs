@@ -14,7 +14,13 @@ namespace Meision.VisualStudio.CustomCommands
 {
     public class GenerateLanguagesLauncher : Launcher
     {
-        private const string TABLENAME_LANGUAGES = "Languages";
+        private const string TableName_Languages = "Languages";
+        private const string TableName_References = "References";
+        private const string ColumnName_References_Name = "Name";
+        private const string ColumnName_References_NativeName = "NativeName";
+
+        private GenerateLanguagesConfig _config;
+        private DataSet _dataSet;
 
         public GenerateLanguagesLauncher(ProjectItem projectItem) : base(projectItem)
         {
@@ -26,31 +32,44 @@ namespace Meision.VisualStudio.CustomCommands
             {
                 throw new InvalidDataException("Input file should be excel file.");
             }
-            
-            string outputFilePath = this.GetOutputFilePathByExtension(".cs");
-            byte[] data = this.GenerateData();
 
-            this.ProjectItem.DeleteDependentFiles();
-            System.IO.File.WriteAllBytes(outputFilePath, data);
-            this.ProjectItem.Collection.AddFromFile(outputFilePath);
-            this.ProjectItem.AddDependentFromFiles(outputFilePath);
-
-            return true;
-        }
-
-        private byte[] GenerateData()
-        {
-            DataTable table;
             using (FileStream stream = new FileStream(this.InputFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                DataSet dataSet = EPPlusHelper.ReadExcelToDataSet(stream);
-                if (!dataSet.Tables.Contains(TABLENAME_LANGUAGES))
-                {
-                    throw new InvalidDataException("Excel sheet \"Languages\" could not be found.");            
-                }
-
-                table = dataSet.Tables[TABLENAME_LANGUAGES];
+                this._dataSet = EPPlusHelper.ReadExcelToDataSet(stream);
             }
+            this._config = GenerateLanguagesConfig.CreateFromExcel(this.InputFilePath, this._dataSet);
+
+            switch (this._config.Action)
+            {
+                case GenerateLanguagesAction.GenerateStrings:
+                    this.GenerateStrings();
+                    return true;
+                case GenerateLanguagesAction.GenerateJsons:
+                    this.GenerateJsons();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private void GenerateStrings()
+        {
+            string outputFilePath = this.GetOutputFilePathByExtension(".cs");
+            DataTable table;
+            if (!this._dataSet.Tables.Contains(TableName_Languages))
+            {
+                throw new InvalidDataException("Excel sheet \"Languages\" could not be found.");
+            }
+            table = this._dataSet.Tables[TableName_Languages];
+
+            this.ProjectItem.DeleteDependentFiles();
+            byte[] data = this.GenerateStringsData(table);
+            System.IO.File.WriteAllBytes(outputFilePath, data);
+            ProjectItem item = this.ProjectItem.Collection.AddFromFile(outputFilePath);
+            this.ProjectItem.AddDependentItems(item);
+        }
+        private byte[] GenerateStringsData(DataTable table)
+        {
             // update locale info.
             string className = Path.GetFileNameWithoutExtension(this.InputFilePath);
             List<string> locales = new List<string>();
@@ -214,6 +233,57 @@ namespace Meision.VisualStudio.CustomCommands
 
             string code = builder.ToString();
             return Encoding.UTF8.GetBytes(code);
+        }
+
+        private void GenerateJsons()
+        {
+            DataTable table;
+            if (!this._dataSet.Tables.Contains(TableName_Languages))
+            {
+                throw new InvalidDataException($"Excel sheet \"{TableName_Languages}\" could not be found.");
+            }
+            table = this._dataSet.Tables[TableName_Languages];
+
+            DataTable referenceTable;
+            if (!this._dataSet.Tables.Contains(TableName_References))
+            {
+                throw new InvalidDataException($"Excel sheet \"{TableName_References}\" could not be found.");
+            }
+            referenceTable = this._dataSet.Tables[TableName_References];
+
+            string GetLanguageName(string nativeName)
+            {
+                foreach (DataRow row in referenceTable.Rows)
+                {
+                    if ((string)row[ColumnName_References_NativeName] == nativeName)
+                    {
+                        return (string)row[ColumnName_References_Name];
+                    }
+                }
+
+                return null;
+            }
+
+            string directory = Path.GetDirectoryName(this.InputFilePath);
+            this.ProjectItem.DeleteDependentFiles();
+            for (int columnIndex = 2; columnIndex < table.Columns.Count; columnIndex++)
+            {
+                string name = GetLanguageName((string)table.Columns[columnIndex].ColumnName);
+                List<string> items = new List<string>();
+                for (int rowIndex = 0; rowIndex < table.Rows.Count; rowIndex++)
+                {
+                    //"Key": "Value",
+                    items.Add($"\"{(string)table.Rows[rowIndex][0]}\":\"{(string)table.Rows[rowIndex][columnIndex]}\"");
+                }
+                string json = $"{{\"Culture\":\"en\",\"Texts\":{{{string.Join(",", items)}}}}}";
+                string outputFilePath = Path.Combine(directory, $"{name}.json");
+                File.WriteAllText(outputFilePath, json);
+                ProjectItem projectItem = this.ProjectItem.Collection.AddFromFile(outputFilePath);
+                projectItem.Properties.Item("BuildAction").Value = VSLangProj.prjBuildAction.prjBuildActionEmbeddedResource;
+                this.ProjectItem.AddDependentItems(projectItem);
+
+                //this.ProjectItem.AddDependentFromFiles(outputFilePath);
+            }
         }
 
     }

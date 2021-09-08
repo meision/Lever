@@ -30,7 +30,7 @@ namespace Meision.VisualStudio.CustomCommands
         {
             ProjectItem projectItem = this.DTE.SelectedItems.Item(1).ProjectItem;
             this.EnsureNotDirty(projectItem.ContainingProject);
-            
+
             if (string.IsNullOrEmpty((string)projectItem.Properties.Item("CustomToolNamespace").Value))
             {
                 projectItem.DeleteDependentFiles();
@@ -40,13 +40,12 @@ namespace Meision.VisualStudio.CustomCommands
                 string fullPath = (string)projectItem.Properties.Item("FullPath").Value;
                 string directory = Path.GetDirectoryName(fullPath);
                 System.IO.File.WriteAllBytes(Path.Combine(directory, "1.cs"), new byte[0]);
-                projectItem.Collection.AddFromFile(Path.Combine(directory, "1.cs"));
-                projectItem.AddDependentFromFiles(Path.Combine(directory, "1.cs"));
-    
+                ProjectItem item1 = projectItem.Collection.AddFromFile(Path.Combine(directory, "1.cs"));
+                projectItem.AddDependentItems(item1);
 
                 System.IO.File.WriteAllBytes(Path.Combine(directory, "2.txt"), new byte[0]);
-                projectItem.Collection.AddFromFile(Path.Combine(directory, "2.txt"));
-                projectItem.AddDependentFromFiles(Path.Combine(directory, "2.txt"));
+                ProjectItem item2 = projectItem.Collection.AddFromFile(Path.Combine(directory, "2.txt"));
+                projectItem.AddDependentItems(item2);
             }
             projectItem.ContainingProject.Save();
 
