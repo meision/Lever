@@ -19,6 +19,12 @@ namespace Meision.VisualStudio.CustomCommands
         private const string ColumnName_References_Name = "Name";
         private const string ColumnName_References_NativeName = "NativeName";
 
+        private static int[][] __duplicateLCIDs = new int[][]
+        {
+            new int[] {4, 2052}, // zh-Hans
+            new int[] {1028, 31748},  // zh-Hant
+        };
+
         private GenerateLanguagesConfig _config;
         private DataSet _dataSet;
 
@@ -117,10 +123,21 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"        private static Dictionary<int, int> GetColumnMappings()");
             builder.AppendLine($"        {{");
             builder.AppendLine($"            Dictionary<int, int> columnMappings = new Dictionary<int, int>();");
-
             for (int i = 1; i < table.Columns.Count; i++)
             {
-                builder.AppendLine($"            columnMappings.Add({table.Columns[i].ColumnName}, {i - 1});");
+                int lcid = Convert.ToInt32(table.Columns[i].ColumnName);
+                int[] lcids = GenerateLanguagesLauncher.__duplicateLCIDs.FirstOrDefault(p => p.Contains(lcid));
+                if (lcids == null)
+                {
+                    builder.AppendLine($"            columnMappings.Add({table.Columns[i].ColumnName}, {i - 1});");
+                }
+                else
+                {
+                    foreach (int l in lcids)
+                    {
+                        builder.AppendLine($"            columnMappings.Add({l}, {i - 1});");
+                    }
+                }
             }
             builder.AppendLine($"            return columnMappings;");
             builder.AppendLine($"        }}");

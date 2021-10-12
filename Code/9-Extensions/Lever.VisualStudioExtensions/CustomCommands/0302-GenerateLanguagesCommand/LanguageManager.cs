@@ -229,11 +229,11 @@ iu-Latn
 tzm-Latn
 ha-Latn";
             // Get all cultures.
-            string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] lines = text.Split(new string[] { "\n" }, StringSplitOptions.None);
             CultureInfo[] cultures = new CultureInfo[lines.Length];
             for (int i = 0; i < lines.Length; i++)
             {
-                cultures[i] = new CultureInfo(lines[i]);
+                cultures[i] = new CultureInfo(lines[i].Trim());
             }
             Array.Sort(cultures, CompareByName);
             this._cultures = new ReadOnlyCollection<CultureInfo>(cultures);
