@@ -274,13 +274,13 @@ namespace Meision.VisualStudio.CustomCommands
                                     case SqlColumnType.@text:
                                     case SqlColumnType.@varchar:
                                     case SqlColumnType.@char:
-                                        text = $"'{value}'";
+                                        text = $"'{value.Replace("'","''")}'";
                                         break;
                                     case SqlColumnType.@ntext:
                                     case SqlColumnType.@nvarchar:
                                     case SqlColumnType.@nchar:
                                     case SqlColumnType.@xml:
-                                        text = $"N'{value}'";
+                                        text = $"N'{value.Replace("'", "''")}'";
                                         break;
                                     case SqlColumnType.@bit:
                                         text = $"{Convert.ToInt32(Convert.ToBoolean(value))}";
