@@ -12,6 +12,7 @@ namespace Meision.VisualStudio.CustomCommands
     internal enum GenerateLanguagesAction
     {
         GenerateStrings,
+        GenerateInternalStrings,
         GenerateJsons
     }
 

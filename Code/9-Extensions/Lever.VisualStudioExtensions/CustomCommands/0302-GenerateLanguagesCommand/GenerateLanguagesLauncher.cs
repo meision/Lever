@@ -48,7 +48,10 @@ namespace Meision.VisualStudio.CustomCommands
             switch (this._config.Action)
             {
                 case GenerateLanguagesAction.GenerateStrings:
-                    this.GenerateStrings();
+                    this.GenerateStrings("public");
+                    return true;
+                case GenerateLanguagesAction.GenerateInternalStrings:
+                    this.GenerateStrings("internal");
                     return true;
                 case GenerateLanguagesAction.GenerateJsons:
                     this.GenerateJsons();
@@ -58,7 +61,7 @@ namespace Meision.VisualStudio.CustomCommands
             }
         }
 
-        private void GenerateStrings()
+        private void GenerateStrings(string modifier)
         {
             string outputFilePath = this.GetOutputFilePathByExtension(".cs");
             DataTable table;
@@ -69,12 +72,12 @@ namespace Meision.VisualStudio.CustomCommands
             table = this._dataSet.Tables[TableName_Languages];
 
             this.ProjectItem.DeleteDependentFiles();
-            byte[] data = this.GenerateStringsData(table);
+            byte[] data = this.GenerateStringsData(table, modifier);
             System.IO.File.WriteAllBytes(outputFilePath, data);
             ProjectItem item = this.ProjectItem.Collection.AddFromFile(outputFilePath);
             this.ProjectItem.AddDependentItems(item);
         }
-        private byte[] GenerateStringsData(DataTable table)
+        private byte[] GenerateStringsData(DataTable table, string modifier)
         {
             // update locale info.
             string className = Path.GetFileNameWithoutExtension(this.InputFilePath);
@@ -100,7 +103,7 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"");
             builder.AppendLine($"namespace {this.CodeNamespace}");
             builder.AppendLine($"{{");
-            builder.AppendLine($"    static partial class {className}");
+            builder.AppendLine($"    {modifier} static partial class {className}");
             builder.AppendLine($"    {{");
             builder.AppendLine($"        private static readonly ReadOnlyCollection<CultureInfo> __locales = new ReadOnlyCollection<CultureInfo>(new CultureInfo[]");
             builder.AppendLine($"        {{");
