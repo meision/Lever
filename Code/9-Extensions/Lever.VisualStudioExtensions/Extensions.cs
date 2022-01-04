@@ -139,7 +139,7 @@ namespace Meision.VisualStudio
             }
 
             //if (instance.ContainingProject.Kind.Equals(Parameters.guidDotNetCoreProject, StringComparison.OrdinalIgnoreCase))
-            string targetFrameworkMoniker = instance.ContainingProject.Properties.Item("TargetFrameworkMoniker")?.Value;
+            string targetFrameworkMoniker = instance.ContainingProject.Properties.Item("TargetFrameworkMoniker")?.Value as string;
             if ((targetFrameworkMoniker != null) && (targetFrameworkMoniker.IndexOf(".NETCore") >= 0))
             {
                 for (int i = instance.ProjectItems.Count; i >= 1; i--)
