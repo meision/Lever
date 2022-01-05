@@ -209,7 +209,7 @@ namespace Meision.VisualStudio.CustomCommands
                         builder.Append($"entity.HasIndex(_ => new {{ { string.Join(", ", indexModel.ColumnSorts.Select(p => "_." + p.Column))} }})");
                         if (!string.IsNullOrEmpty(indexModel.Name))
                         {
-                            builder.Append($".HasName(\"{indexModel.Name}\")");
+                            builder.Append($".HasDatabaseName(\"{indexModel.Name}\")");
                         }
                         if (indexModel.IsUnique)
                         {
