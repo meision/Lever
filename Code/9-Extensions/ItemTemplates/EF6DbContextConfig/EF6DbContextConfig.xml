@@ -28,7 +28,7 @@
         <add import="System.Data.Entity.Infrastructure.Annotations" />
         <add import="System.Linq" />
       </imports>
-      <class namespace="Meision.Core" accessModifier="public" name="$safeitemrootname$" base="DbContext" />
+      <class namespace="Meision.Core" accessModifier="public" name="$safeitemrootname$DbContext" base="DbContext" />
     </main>
     <entity>
       <imports>

@@ -25,7 +25,7 @@
         <add import="Microsoft.EntityFrameworkCore" />
         <add import="Microsoft.EntityFrameworkCore.Metadata" />
       </imports>
-      <class namespace="Meision.Core" accessModifier="public" name="RushQuantDbContext" base="DbContext" />
+      <class namespace="Meision.Core" accessModifier="public" name="$safeitemrootname$DbContext" base="DbContext" />
     </main>
     <entity>
       <imports>
