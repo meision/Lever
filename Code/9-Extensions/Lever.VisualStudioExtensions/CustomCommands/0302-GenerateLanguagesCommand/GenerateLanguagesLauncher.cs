@@ -295,7 +295,7 @@ namespace Meision.VisualStudio.CustomCommands
                     //"Key": "Value",
                     items.Add($"\"{(string)table.Rows[rowIndex][0]}\":\"{(string)table.Rows[rowIndex][columnIndex]}\"");
                 }
-                string json = $"{{\"Culture\":\"en\",\"Texts\":{{{string.Join(",", items)}}}}}";
+                string json = $"{{\"Culture\":\"{name}\",\"Texts\":{{{string.Join(",", items)}}}}}";
                 string outputFilePath = Path.Combine(directory, $"{name}.json");
                 File.WriteAllText(outputFilePath, json);
                 ProjectItem projectItem = this.ProjectItem.Collection.AddFromFile(outputFilePath);
