@@ -48,6 +48,8 @@ namespace Meision.VisualStudio.CustomCommands
             builder.AppendLine($"");
             builder.AppendLine($"        protected override void OnModelCreating(ModelBuilder modelBuilder)");
             builder.AppendLine($"        {{");
+            builder.AppendLine($"            base.OnModelCreating(modelBuilder);");
+            builder.AppendLine($"");
             foreach (DataModel dataModel in this.DataModels)
             {
                 TableModel tableModel = dataModel as TableModel;
@@ -247,7 +249,7 @@ namespace Meision.VisualStudio.CustomCommands
                 builder.AppendLine($"            }});");
                 builder.AppendLine($"");
             }
-            builder.AppendLine($"            base.OnModelCreating(modelBuilder);");
+
             builder.AppendLine($"        }}");
             builder.AppendLine($"");
             builder.AppendLine($"    }}");
