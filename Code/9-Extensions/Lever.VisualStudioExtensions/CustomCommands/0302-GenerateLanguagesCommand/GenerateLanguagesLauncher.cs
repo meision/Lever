@@ -293,11 +293,17 @@ namespace Meision.VisualStudio.CustomCommands
                 for (int rowIndex = 0; rowIndex < table.Rows.Count; rowIndex++)
                 {
                     //"Key": "Value",
-                    items.Add($"\"{(string)table.Rows[rowIndex][0]}\":\"{(string)table.Rows[rowIndex][columnIndex]}\"");
+                    items.Add($"          \"{(string)table.Rows[rowIndex][0]}\": \"{(string)table.Rows[rowIndex][columnIndex]}\"");
                 }
-                string json = $"{{\"Culture\":\"{name}\",\"Texts\":{{{string.Join(",", items)}}}}}";
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine($"{{");
+                builder.AppendLine($"    \"Culture\": \"{name}\",");
+                builder.AppendLine($"    \"Texts\": {{");
+                builder.AppendLine(string.Join(",\r\n", items));
+                builder.AppendLine($"    }}");
+                builder.AppendLine($"}}");
                 string outputFilePath = Path.Combine(directory, $"{name}.json");
-                File.WriteAllText(outputFilePath, json);
+                File.WriteAllText(outputFilePath, builder.ToString());
                 ProjectItem projectItem = this.ProjectItem.Collection.AddFromFile(outputFilePath);
                 projectItem.Properties.Item("BuildAction").Value = VSLangProj.prjBuildAction.prjBuildActionEmbeddedResource;
                 this.ProjectItem.AddDependentItems(projectItem);
