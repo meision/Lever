@@ -175,6 +175,9 @@
     <PackageReference Include="EPPlus">
       <Version>4.5.3</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Build">
+      <Version>17.9.5</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5233" />
   </ItemGroup>

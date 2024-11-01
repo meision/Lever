@@ -73,7 +73,7 @@ namespace Meision.VisualStudio.CustomCommands
                 // Key
                 if (primaryKeyModel != null)
                 {
-                    builder.AppendLine($"                entity.HasKey(_ => new {{ { string.Join(", ", primaryKeyModel.Columns.Select(p => "_." + p))} }});");
+                    builder.AppendLine($"                entity.HasKey(_ => new {{ {string.Join(", ", primaryKeyModel.Columns.Select(p => "_." + p))} }});");
                 }
                 // Columns
                 builder.AppendLine($"                // Columns");
@@ -208,7 +208,7 @@ namespace Meision.VisualStudio.CustomCommands
                     foreach (IndexModel indexModel in tableModel.Indexes)
                     {
                         builder.Append($"                ");
-                        builder.Append($"entity.HasIndex(_ => new {{ { string.Join(", ", indexModel.ColumnSorts.Select(p => "_." + p.Column))} }})");
+                        builder.Append($"entity.HasIndex(_ => new {{ {string.Join(", ", indexModel.ColumnSorts.Select(p => "_." + p.Column))} }})");
                         if (!string.IsNullOrEmpty(indexModel.Name))
                         {
                             builder.Append($".HasDatabaseName(\"{indexModel.Name}\")");
@@ -229,7 +229,7 @@ namespace Meision.VisualStudio.CustomCommands
                         builder.Append($"                ");
                         builder.Append($"entity.HasOne(_ => _.{dependentModel.PrincipalEnd.Table})");
                         builder.Append($".{(dependentModel.IsUnique() ? "WithOne" : "WithMany")}(_ => _.{dependentModel.DependentEnd.Table})");
-                        builder.Append($".HasForeignKey{(dependentModel.IsUnique() ? "<" + dependentModel.DependentEnd.Table + ">" : "")}(_ => new {{ { string.Join(", ", dependentModel.DependentEnd.Columns.Select(p => "_." + p))} }})");
+                        builder.Append($".HasForeignKey{(dependentModel.IsUnique() ? "<" + dependentModel.DependentEnd.Table + ">" : "")}(_ => new {{ {string.Join(", ", dependentModel.DependentEnd.Columns.Select(p => "_." + p))} }})");
                         if (dependentModel.DeleteCascade)
                         {
                             builder.Append($".OnDelete(DeleteBehavior.Cascade)");
@@ -399,24 +399,19 @@ namespace Meision.VisualStudio.CustomCommands
                     string clrType = DatabaseHelper.GetCLRTypeString(idColumnModel.Type, idColumnModel.Nullable);
                     builder.Append($"{clrType} {idColumnModel.Name}");
                 }
-                builder.Append($") : base(");
+                builder.AppendLine($")");
+                builder.AppendLine($"        {{");
                 for (int i = 0; i < idColumnModels.Length; i++)
                 {
-                    if (i > 0)
-                    {
-                        builder.Append($", ");
-                    }
-
                     ColumnModel idColumnModel = idColumnModels[i];
-                    builder.Append($"{idColumnModel.Name}");
+                    builder.AppendLine($"            this.{idColumnModel.Name} = {idColumnModel.Name};");
                 }
-                builder.AppendLine($")");
             }
             else
             {
                 builder.AppendLine($"        public {dataModel.Name}()");
+                builder.AppendLine($"        {{");
             }
-            builder.AppendLine($"        {{");
             if ((this.Config.Generation.Entity.DefaultValues != null) && (this.Config.Generation.Entity.DefaultValues.Count > 0))
             {
                 builder.AppendLine($"            // Set default value");
@@ -458,7 +453,7 @@ namespace Meision.VisualStudio.CustomCommands
                 else
                 {
                     config = this.Config.Generation.Entity.TypeConversations.FirstOrDefault(p => (p.SourceClass == "*") && (p.SourceName == name));
-                    if (config!=null)
+                    if (config != null)
                     {
                         type = config.DestinationType;
                     }
